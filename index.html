@@ -3,73 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gruppo Gizzi | Cilento Authentic Taste</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Gruppo Gizzi | Cilento Market</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <nav class="navbar">
-    <a href="#" class="logo">GRUPPO GIZZI 2026</a>
-    <div class="nav-actions">
+    <a href="#" class="logo">GRUPPO GIZZI</a>
+    <div style="display:flex; gap:10px; align-items:center;">
         <select id="lang-picker" onchange="setLang(this.value)">
             <option value="it">🇮🇹 IT</option>
             <option value="en">🇬🇧 EN</option>
             <option value="de">🇩🇪 DE</option>
         </select>
-        <div class="cart-trigger" onclick="toggleCart()">
-            <span class="cart-icon">🛒</span>
-            <span id="cart-count">0</span>
-        </div>
+        <div onclick="toggleCart()" style="cursor:pointer; font-size:1.4rem;">🛒 <span id="cart-count">0</span></div>
     </div>
 </nav>
 
-<header class="hero">
-    <h1 id="hero-title">Eccellenze del Cilento</h1>
-    <p id="hero-sub">Dall'orto di Gruppo Gizzi alla tua tavola, ovunque tu sia.</p>
-</header>
-
-<main class="container">
-    <div id="shop-grid" class="grid">
-        </div>
-</main>
+<div class="container">
+    <div id="shop-grid" class="grid">Caricamento prodotti in corso...</div>
+</div>
 
 <div id="cart-panel">
     <div class="cart-header">
-        <h3 id="txt-cart">Il tuo Carrello</h3>
-        <button class="close-btn" onclick="toggleCart()">×</button>
+        <h3>Carrello</h3>
+        <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
     </div>
     <div id="cart-items-list"></div>
     <div class="cart-footer">
-        <div class="total-row">
-            <span id="txt-total">Totale:</span>
-            <span id="cart-total-value">€ 0.00</span>
+        <div style="display:flex; justify-content:space-between; font-weight:700; margin-bottom:15px;">
+            <span>Totale:</span> <span id="cart-total-value">€ 0.00</span>
         </div>
-        <button class="btn-primary" onclick="openCheckout()" id="btn-go-checkout">Procedi all'ordine</button>
+        <button class="btn-primary" onclick="openCheckout()">Vai al Checkout</button>
     </div>
 </div>
 
 <div id="checkout-modal" class="modal">
     <div class="modal-content">
-        <h2 id="txt-shipping">Dati di Spedizione</h2>
-        <form id="order-form" onsubmit="event.preventDefault();">
-            <input type="text" id="c-name" placeholder="Nome e Cognome" required>
-            <input type="email" id="c-email" placeholder="Email" required>
-            <input type="tel" id="c-phone" placeholder="Cellulare (+39...)" required>
-            <input type="text" id="c-address" placeholder="Via e Numero Civico" required>
-            <div class="form-row">
-                <input type="text" id="c-city" placeholder="Città" required>
-                <input type="text" id="c-cap" placeholder="CAP" required>
-            </div>
-            <textarea id="c-notes" placeholder="Note per il corriere (es. interno, scala...)"></textarea>
-            
-            <div class="payment-selection">
-                <p id="txt-pay-method">Metodo di pagamento preferito:</p>
-                <button type="button" class="btn-paypal" onclick="processOrder('PayPal')">Paga con Carta / PayPal</button>
-                <button type="button" class="btn-wa" onclick="processOrder('WhatsApp')">Ordina su WhatsApp</button>
-            </div>
-        </form>
-        <button class="btn-text" onclick="closeCheckout()">Annulla</button>
+        <h3>Dati di Spedizione</h3>
+        <input type="text" id="c-name" placeholder="Nome e Cognome" style="width:100%; padding:10px; margin:5px 0;">
+        <input type="email" id="c-email" placeholder="Email" style="width:100%; padding:10px; margin:5px 0;">
+        <input type="text" id="c-address" placeholder="Indirizzo Completo" style="width:100%; padding:10px; margin:5px 0;">
+        <input type="tel" id="c-phone" placeholder="Telefono" style="width:100%; padding:10px; margin:5px 0;">
+        <button class="btn-wa" onclick="processOrder('WhatsApp')">Invia Ordine su WhatsApp</button>
+        <button onclick="closeCheckout()" style="width:100%; background:none; border:none; margin-top:10px; cursor:pointer; color:#666;">Annulla</button>
     </div>
 </div>
 
