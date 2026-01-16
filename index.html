@@ -3,70 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gruppo Gizzi | Eccellenza Cilentana</title>
+    <title>Gruppo Gizzi | Cilento Authentic Experience</title>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --gizzi-deep: #1b4332; --gizzi-gold: #b08d57; --bg: #fdfaf5; --white: #ffffff; }
         * { box-sizing: border-box; scroll-behavior: smooth; }
         body { font-family: 'Montserrat', sans-serif; margin: 0; background: var(--bg); color: #2d2d2d; line-height: 1.6; }
 
-        /* HEADER & NAVIGATION */
-        header {
-            position: fixed; top: 0; width: 100%;
-            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px);
-            z-index: 2000; border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
+        header { position: fixed; top: 0; width: 100%; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); z-index: 2000; border-bottom: 1px solid rgba(0,0,0,0.05); }
         .nav-top { height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; }
         .logo { font-family: 'Fraunces', serif; font-size: 1.6rem; color: var(--gizzi-deep); text-decoration: none; font-weight: 700; }
         
-        .category-menu {
-            display: flex; justify-content: center; gap: 20px; padding: 10px 0;
-            background: var(--white); border-top: 1px solid #f0f0f0;
-            overflow-x: auto; white-space: nowrap;
-        }
-        .category-menu a {
-            text-decoration: none; color: #666; font-size: 0.75rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 1px; padding: 5px 10px; transition: 0.3s;
-        }
+        .category-menu { display: flex; justify-content: center; gap: 20px; padding: 10px 0; background: var(--white); border-top: 1px solid #f0f0f0; overflow-x: auto; white-space: nowrap; }
+        .category-menu a { text-decoration: none; color: #666; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 5px 10px; transition: 0.3s; }
         .category-menu a:hover { color: var(--gizzi-gold); }
 
-        /* HERO BANNER - Immagine Richiesta */
         .hero {
             height: 75vh; margin-top: 115px;
             background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
                         url('https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1240&hei=500&fit=constrain,1&fmt=webp');
             background-size: cover; background-position: center;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: white; text-align: center; padding: 0 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 0 20px;
         }
         .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(2rem, 6vw, 4rem); margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
         .hero p { font-size: 1.2rem; max-width: 800px; margin-top: 15px; font-weight: 400; text-shadow: 1px 1px 5px rgba(0,0,0,0.5); }
 
-        /* GRID PRODOTTI */
         .container { max-width: 1300px; margin: 0 auto; padding: 0 20px; }
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
-            gap: 25px; margin-bottom: 60px; 
-        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; margin-bottom: 60px; }
         .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #f2f2f2; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-        .card img { width: 100%; height: 220px; object-fit: cover; }
+        .card:hover { transform: translateY(-5px); }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
         .card-body { padding: 15px; text-align: center; }
         .card-body h3 { font-family: 'Fraunces', serif; font-size: 1.1rem; margin: 10px 0; color: var(--gizzi-deep); height: 2.4em; overflow: hidden; }
         .price-tag { font-size: 1.3rem; font-weight: 700; color: var(--gizzi-gold); margin: 5px 0; }
 
-        /* CARRELLO & MODALE */
         #cart-panel { position: fixed; right: -100%; top: 0; width: 400px; max-width: 100%; height: 100vh; background: white; z-index: 3000; transition: 0.5s; box-shadow: -15px 0 50px rgba(0,0,0,0.1); padding: 30px; display: flex; flex-direction: column; }
         #cart-panel.active { right: 0; }
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 4000; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 35px; border-radius: 20px; width: 95%; max-width: 500px; }
+        .modal-content { background: white; padding: 35px; border-radius: 20px; width: 95%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
         input, select, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ddd; font-family: inherit; }
 
-        /* FOOTER */
         footer { background: var(--gizzi-deep); color: white; padding: 60px 5%; text-align: center; margin-top: 80px; border-top: 4px solid var(--gizzi-gold); }
         .footer-logo { font-family: 'Fraunces', serif; font-size: 1.8rem; margin-bottom: 15px; color: var(--gizzi-gold); }
-        .footer-links { margin-top: 20px; font-size: 0.8rem; opacity: 0.7; }
     </style>
 </head>
 <body>
@@ -110,7 +88,7 @@
         <input type="text" id="f-name" placeholder="Nome e Cognome *">
         <input type="email" id="f-email" placeholder="Email *">
         <input type="tel" id="f-phone" placeholder="Cellulare *">
-        <input type="text" id="f-street" placeholder="Indirizzo *">
+        <input type="text" id="f-street" placeholder="Indirizzo (Via e Civico) *">
         <div style="display:flex; gap:10px;">
             <input type="text" id="f-cap" placeholder="CAP *" style="flex:1;">
             <input type="text" id="f-city" placeholder="Città *" style="flex:2;">
@@ -127,15 +105,12 @@
 
 <footer>
     <div class="footer-logo">GRUPPO GIZZI</div>
-    <p id="footer-text">Eccellenza Gastronomica del Parco Nazionale del Cilento.<br>Prodotti genuini dalla nostra terra alla tua tavola.</p>
-    <div class="footer-links">
-        Cilento, Italia | Spedizioni Espresse Europee | torre.michele@gmail.com<br>
-        &copy; 2026 Gruppo Gizzi. Tutti i diritti riservati.
-    </div>
+    <p id="footer-text">Eccellenza Gastronomica del Parco Nazionale del Cilento.<br>© 2026 Gruppo Gizzi. Tutti i diritti riservati.</p>
 </footer>
 
 <script>
     const CONFIG = {
+        webapp: "https://script.google.com/macros/s/AKfycbz7FDFHSZ0Njd_cHhq7EPZHwOpw6hz4yHCZ5joVkneedzWb-zKgCTerTg965zljq9nY/exec",
         catalog: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIumwZulbMAuesmG69DB8Y1bx2Y-NQXfyG7_m1-rdpZ-SoOxM0JyZtnj0_eV_K4t4drULTwV44nE5Y/pub?gid=0&single=true&output=csv",
         wa: "393358060715"
     };
@@ -149,19 +124,17 @@
     let products = [], cart = [], lang = 'it';
 
     async function load() {
-        try {
-            const res = await fetch(CONFIG.catalog);
-            const csv = await res.text();
-            const rows = csv.split('\n').filter(r => r.trim() !== "");
-            const headers = rows[0].split(',').map(h => h.trim());
-            products = rows.slice(1).map(row => {
-                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                let o = {};
-                headers.forEach((h, i) => o[h] = cols[i]?.replace(/"/g, '').trim());
-                return o;
-            });
-            render();
-        } catch(e) { console.error("Errore caricamento catalogo"); }
+        const res = await fetch(CONFIG.catalog);
+        const text = await res.text();
+        const rows = text.split('\n').filter(r => r.trim() !== "");
+        const headers = rows[0].split(',').map(h => h.trim());
+        products = rows.slice(1).map(row => {
+            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            let o = {};
+            headers.forEach((h, i) => o[h] = cols[i]?.replace(/"/g, '').trim());
+            return o;
+        });
+        render();
     }
 
     function updateLang(val) {
@@ -178,7 +151,6 @@
     function render() {
         const container = document.getElementById('negozio');
         const menu = document.getElementById('anchor-menu');
-        
         const catKey = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
         const categories = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p[catKey] || p.Categoria))];
         
@@ -188,7 +160,7 @@
             const catProds = products.filter(p => p.Disponibile === 'SI' && (p[catKey] === cat || p.Categoria === cat));
             return `
             <div id="cat-${cat.replace(/\s+/g, '')}" style="padding-top:130px; margin-top:-130px;">
-                <h2 style="text-align:center; font-family:'Fraunces'; color:var(--gizzi-deep); font-size:1.8rem; margin-bottom:30px;">${cat}</h2>
+                <h2 style="text-align:center; font-family:'Fraunces'; color:var(--gizzi-deep); font-size:1.6rem; margin-bottom:30px;">${cat}</h2>
                 <div class="container"><div class="grid">
                     ${catProds.map(p => {
                         const name = lang === 'it' ? p.Nome : (p[`Nome_${lang.toUpperCase()}`] || p.Nome);
@@ -235,15 +207,39 @@
     function openCheckout() { document.getElementById('modal').style.display = 'flex'; }
     function closeCheckout() { document.getElementById('modal').style.display = 'none'; }
 
-    function processOrder() {
+    async function processOrder() {
         const name = document.getElementById('f-name').value;
+        const street = document.getElementById('f-street').value;
+        const city = document.getElementById('f-city').value;
+        const cap = document.getElementById('f-cap').value;
+        const country = document.getElementById('f-country').value;
         const totalText = document.getElementById('cart-total-display').innerText;
-        if(!name) return alert("Inserisci il nome.");
 
+        if(!name || !street || !city) return alert("Per favore, compila i campi obbligatori.");
+
+        const orderData = {
+            orderID: "GZ-" + Date.now().toString().slice(-6),
+            customerName: name,
+            customerEmail: document.getElementById('f-email').value,
+            customerPhone: document.getElementById('f-phone').value,
+            customerAddress: `${street}, ${cap} ${city}, ${country}`,
+            items: cart.map(c => `${c.qty}x ${c.Nome}`).join(", "),
+            total: totalText
+        };
+
+        // Registrazione su Google Sheets
+        fetch(CONFIG.webapp, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+        });
+
+        // Invio WhatsApp
         const msg = `*ORDINE GRUPPO GIZZI*\nCliente: ${name}\n\n*PRODOTTI:*\n${cart.map(c => `- ${c.qty}x ${c.Nome}`).join("\n")}\n\n*${totalText}*`;
         window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`);
         
-        cart = []; updateUI(); closeCheckout();
+        cart = []; updateUI(); closeCheckout(); toggleCart();
     }
 
     load();
