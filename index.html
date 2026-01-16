@@ -2,56 +2,57 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gruppo Gizzi | Cilento Excellence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Gruppo Gizzi | Cilento Authentic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
+<nav>
     <a href="#" class="logo">GRUPPO GIZZI</a>
-    <div style="display:flex; gap:20px; align-items:center;">
-        <select id="lang-picker" onchange="changeLang(this.value)">
-            <option value="it">🇮🇹 IT</option>
-            <option value="en">🇬🇧 EN</option>
-            <option value="de">🇩🇪 DE</option>
+    <div style="display:flex; gap:20px;">
+        <select onchange="setLang(this.value)" class="lang-sel">
+            <option value="it">Italiano</option>
+            <option value="en">English</option>
+            <option value="de">Deutsch</option>
         </select>
-        <div onclick="toggleCart()" style="cursor:pointer; font-size:1.6rem; position:relative;">
-            🛒 <span id="cart-count" style="position:absolute; top:-10px; right:-10px; background:var(--accent); color:white; border-radius:50%; padding:2px 6px; font-size:0.75rem;">0</span>
-        </div>
+        <div onclick="toggleCart()" style="cursor:pointer; font-size:1.5rem;">🛒 <span id="cart-count">0</span></div>
     </div>
-</header>
+</nav>
 
 <section class="hero">
-    <h1 id="hero-h1">Dall'Orto alla Tavola</h1>
-    <p id="hero-p">L'essenza del Cilento spedita in tutto il mondo.</p>
+    <h1 id="hero-title">Cilento, Pura Terra.</h1>
+    <p id="hero-sub">L'eccellenza di Gruppo Gizzi consegnata in 48 ore in tutta Europa.</p>
 </section>
 
 <div class="container">
     <div id="shop-grid" class="grid"></div>
 </div>
 
-<div id="cart-panel">
-    <div style="padding:25px; background:var(--gizzi-green); color:white; display:flex; justify-content:space-between;">
-        <h2 style="margin:0;">Carrello</h2>
-        <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:2rem; cursor:pointer;">&times;</button>
-    </div>
-    <div id="cart-items" style="flex-grow:1; overflow-y:auto; padding:20px;"></div>
-    <div style="padding:20px; border-top:2px solid #eee;">
-        <h3 id="total-price" style="display:flex; justify-content:space-between; margin-bottom:20px;">Totale: <span>€ 0.00</span></h3>
-        <button class="btn-checkout" onclick="openCheckout()">PROCEDI ALL'ACQUISTO</button>
-    </div>
-</div>
-
-<div id="checkout-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:10001; align-items:center; justify-content:center;">
-    <div style="background:white; padding:40px; border-radius:15px; width:90%; max-width:500px;">
-        <h2>Dati Spedizione</h2>
-        <input type="text" id="name" placeholder="Nome e Cognome" style="width:100%; padding:12px; margin:10px 0;">
-        <input type="text" id="address" placeholder="Indirizzo e Città" style="width:100%; padding:12px; margin:10px 0;">
-        <input type="tel" id="phone" placeholder="Cellulare per il corriere" style="width:100%; padding:12px; margin:10px 0;">
-        <button class="btn-checkout" onclick="sendOrder()">INVIA ORDINE (WhatsApp & Foglio)</button>
-        <button onclick="document.getElementById('checkout-modal').style.display='none'" style="width:100%; background:none; border:none; margin-top:15px; cursor:pointer; color:red;">Annulla</button>
+<div id="checkout-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2 id="modal-title">Dati di Spedizione</h2>
+        <div id="order-summary" style="margin-bottom:20px; font-size:0.9rem; color:#666;"></div>
+        
+        <form id="checkout-form">
+            <input type="text" id="cust-name" placeholder="Nome e Cognome" required>
+            <input type="email" id="cust-email" placeholder="Email (per ricevuta)" required>
+            <input type="tel" id="cust-phone" placeholder="Telefono con prefisso (es. +39)" required>
+            <input type="text" id="cust-address" placeholder="Indirizzo e Numero Civico" required>
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="cust-city" placeholder="Città" required>
+                <input type="text" id="cust-cap" placeholder="CAP" required>
+            </div>
+            <select id="cust-country">
+                <option value="Italia">Italia</option>
+                <option value="Germany">Germany</option>
+                <option value="United Kingdom">United Kingdom</option>
+            </select>
+            
+            <button type="button" class="btn-main" onclick="finalize('Paypal')">PAGA CON CARTA / PAYPAL</button>
+            <button type="button" class="btn-wa" onclick="finalize('WhatsApp')">ORDINA SU WHATSAPP</button>
+        </form>
+        <button onclick="closeModal()" style="border:none; background:none; width:100%; margin-top:20px; color:#0071e3; cursor:pointer;">Torna al negozio</button>
     </div>
 </div>
 
