@@ -3,48 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gruppo Gizzi | Cilento Authentic Taste</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Gruppo Gizzi | Eccellenze Cilentane</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<nav class="navbar">
-    <div class="container" style="display:flex; justify-content:space-between; align-items:center; padding:15px 0;">
-        <a href="#" class="logo" style="font-family:'Fraunces'; font-size:1.8rem; color:var(--gizzi-green); text-decoration:none;">GRUPPO GIZZI</a>
-        <div class="nav-right" style="display:flex; gap:20px; align-items:center;">
-            <select onchange="setLang(this.value)" id="lang-switcher">
+<header>
+    <div class="header-container">
+        <a href="#" class="logo">GRUPPO GIZZI</a>
+        <div style="display:flex; gap:20px; align-items:center;">
+            <select onchange="cambiaLingua(this.value)" id="lang-select">
                 <option value="it">🇮🇹 IT</option>
                 <option value="en">🇬🇧 EN</option>
                 <option value="de">🇩🇪 DE</option>
             </select>
-            <div onclick="toggleCart()" style="cursor:pointer; font-size:1.5rem; position:relative;">
-                🛒 <span id="cart-count" style="position:absolute; top:-10px; right:-10px; background:var(--accent); color:white; border-radius:50%; padding:2px 7px; font-size:0.7rem;">0</span>
+            <div onclick="apriCarrello()" style="cursor:pointer; font-size:1.5rem; position:relative;">
+                🛒 <span id="cart-count" style="position:absolute; top:-10px; right:-10px; background:var(--accent); color:white; border-radius:50%; padding:2px 6px; font-size:0.7rem;">0</span>
             </div>
         </div>
     </div>
-</nav>
+</header>
 
-<section class="banner">
-    <h1 id="b-title">GRUPPO GIZZI</h1>
-    <p id="b-sub" style="font-size:1.2rem; letter-spacing:2px;">CILENTO - ITALY</p>
-</section>
-
-<div class="container">
-    <div id="shop-grid" class="grid">Caricamento eccellenze cilentane...</div>
+<div class="main-container">
+    <div id="shop-grid" class="grid">Caricamento in corso...</div>
 </div>
 
 <div id="cart-panel">
-    <div style="padding:20px; background:var(--gizzi-green); color:white; display:flex; justify-content:space-between;">
-        <h2 style="margin:0; font-family:'Fraunces';">Cart</h2>
-        <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:2rem; cursor:pointer;">&times;</button>
+    <div style="padding:20px; background:var(--gizzi-green); color:white; display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0;">Il tuo Carrello</h3>
+        <button onclick="chiudiCarrello()" style="background:none; border:none; color:white; font-size:2rem; cursor:pointer;">&times;</button>
     </div>
-    <div id="cart-items-list" style="flex-grow:1; overflow-y:auto; padding:20px;"></div>
+    <div id="cart-items" style="flex-grow:1; overflow-y:auto; padding:20px;"></div>
     <div style="padding:20px; border-top:1px solid #eee;">
-        <h3 id="cart-total-display" style="display:flex; justify-content:space-between;">Total: <span>€ 0.00</span></h3>
-        <button class="btn-primary" onclick="openCheckout()" style="background:var(--accent); color:white; border:none; width:100%; padding:15px; font-weight:700; cursor:pointer; border-radius:4px;">PROCEED TO CHECKOUT</button>
+        <h3 id="cart-total" style="display:flex; justify-content:space-between;">Totale: <span>€ 0.00</span></h3>
+        <button class="btn-checkout" onclick="mostraCheckout()">ORDINA ORA</button>
     </div>
 </div>
+
+<div id="checkout-modal" class="modal">
+    <div class="modal-content">
+        <h3>Dati di Spedizione</h3>
+        <input type="text" id="cust-name" placeholder="Nome e Cognome" required>
+        <input type="email" id="cust-email" placeholder="Email">
+        <input type="tel" id="cust-phone" placeholder="Cellulare">
+        <textarea id="cust-address" placeholder="Indirizzo completo per il corriere"></textarea>
+        <button class="btn-checkout" onclick="inviaOrdine()">CONFERMA E PAGA</button>
+        <button onclick="chiudiCheckout()" style="width:100%; background:none; border:none; margin-top:10px; cursor:pointer;">Annulla</button>
+    </div>
+</div>
+
+<footer>
+    &copy; 2026 Gruppo Gizzi - Sapori Autentici del Cilento
+</footer>
 
 <script src="config.js"></script>
 <script src="database.js"></script>
