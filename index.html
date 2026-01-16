@@ -6,68 +6,103 @@
     <title>Gruppo Gizzi | Eccellenza Cilentana</title>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --gizzi: #1b4332; --gold: #b08d57; --bg: #fdfaf5; }
-        body { font-family: 'Montserrat', sans-serif; margin: 0; background: var(--bg); color: #333; overflow-x: hidden; }
+        :root { --gizzi: #1b4332; --gold: #b08d57; --bg: #fdfaf5; --white: #ffffff; }
         
+        * { box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; margin: 0; background: var(--bg); color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* NAVBAR */
         nav { position: fixed; top: 0; width: 100%; height: 75px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; z-index: 2000; border-bottom: 1px solid #eee; }
         .logo { font-family: 'Fraunces', serif; color: var(--gizzi); font-size: 1.8rem; text-decoration: none; font-weight: bold; }
 
-        .hero { height: 60vh; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=2070'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; }
-        .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(2.5rem, 6vw, 4rem); margin: 0; }
+        /* MAIN CONTENT */
+        main { flex: 1; margin-top: 75px; }
 
-        .container { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
-        .card { background: white; border-radius: 25px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #f0f0f0; }
-        .card:hover { transform: translateY(-10px); }
-        .card img { width: 100%; height: 250px; object-fit: cover; }
-        .card-body { padding: 25px; }
+        .hero { height: 50vh; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=2070'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; }
+        .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(2rem, 5vw, 3.5rem); margin: 0; }
 
-        .btn { background: var(--gizzi); color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-block; cursor: pointer; border: none; width: 100%; text-align: center; }
-        .btn-wa { background: #25D366; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
         
+        /* CARDS */
+        .card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #f0f0f0; display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 220px; object-fit: cover; background: #eee; }
+        .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-body h3 { font-family: 'Fraunces', serif; margin: 0 0 10px; font-size: 1.3rem; color: var(--gizzi); }
+        .card-body p { color: #666; font-size: 0.85rem; line-height: 1.4; flex-grow: 1; }
+        .price { font-size: 1.4rem; font-weight: 700; color: var(--gold); margin: 15px 0; }
+
+        /* BUTTONS */
+        .btn { background: var(--gizzi); color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-block; cursor: pointer; border: none; width: 100%; text-align: center; font-family: inherit; }
+        .btn-wa { background: #25D366; margin-top: 10px; }
+
+        /* CARRELLO SIDEBAR */
         #cart-panel { position: fixed; right: -400px; top: 0; width: 380px; height: 100vh; background: white; z-index: 3000; transition: 0.4s; box-shadow: -10px 0 30px rgba(0,0,0,0.1); padding: 30px; display: flex; flex-direction: column; }
         #cart-panel.active { right: 0; }
+        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
 
+        /* MODALE CHECKOUT */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 4000; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 40px; border-radius: 30px; width: 90%; max-width: 500px; }
-        input, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; font-family: inherit; }
+        .modal-content { background: white; padding: 35px; border-radius: 25px; width: 90%; max-width: 450px; }
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 1rem; }
+
+        /* FOOTER */
+        footer { background: var(--gizzi); color: white; padding: 40px 5%; text-align: center; }
+        .footer-logo { font-family: 'Fraunces', serif; font-size: 1.5rem; margin-bottom: 10px; }
+        .footer-info { font-size: 0.8rem; opacity: 0.7; line-height: 1.6; }
     </style>
 </head>
 <body>
 
 <nav>
     <a href="#" class="logo">GRUPPO GIZZI</a>
-    <div onclick="toggleCart()" style="cursor:pointer; font-size:1.5rem;">🛒 <span id="count">0</span></div>
+    <div onclick="toggleCart()" style="cursor:pointer; font-size:1.5rem; position: relative;">
+        🛒 <span id="count" style="position: absolute; top: -10px; right: -10px; background: var(--gold); color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7rem;">0</span>
+    </div>
 </nav>
 
-<section class="hero">
-    <h1>Sapori del Cilento</h1>
-    <p>Dal produttore direttamente a casa tua.</p>
-</section>
+<main>
+    <section class="hero">
+        <h1>Sapori del Cilento</h1>
+        <p>Tradizione e freschezza, direttamente a casa tua.</p>
+    </section>
 
-<div class="container">
-    <div id="grid" class="grid"></div>
-</div>
+    <div class="container">
+        <div id="grid" class="grid">Caricamento eccellenze...</div>
+    </div>
+</main>
 
 <div id="cart-panel">
-    <h2 style="font-family:'Fraunces'">Il tuo Carrello</h2>
+    <h2 style="font-family:'Fraunces'; color: var(--gizzi);">Carrello</h2>
     <div id="cart-items" style="flex-grow:1; overflow-y:auto; margin: 20px 0;"></div>
-    <h3 id="cart-total">Totale: € 0.00</h3>
-    <button class="btn" onclick="openCheckout()">PROCEDI AL CHECKOUT</button>
-    <button onclick="toggleCart()" style="background:none; border:none; margin-top:10px; cursor:pointer; color:#999;">Chiudi</button>
+    <h3 id="cart-total" style="border-top: 2px solid #eee; padding-top: 15px;">Totale: € 0.00</h3>
+    <button class="btn" style="background: var(--gold);" onclick="openCheckout()">PROCEDI ALL'ORDINE</button>
+    <button onclick="toggleCart()" style="background:none; border:none; margin-top:15px; cursor:pointer; color:#999; font-size: 0.9rem;">Continua lo shopping</button>
 </div>
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <h2 style="font-family:'Fraunces'">Dati Spedizione</h2>
+        <h2 style="font-family:'Fraunces'; color: var(--gizzi); margin-top: 0;">Spedizione</h2>
         <input type="text" id="name" placeholder="Nome e Cognome">
         <input type="email" id="email" placeholder="Email">
         <input type="tel" id="phone" placeholder="Cellulare / WhatsApp">
-        <textarea id="addr" placeholder="Indirizzo Completo" rows="3"></textarea>
-        <button class="btn btn-wa" onclick="finish('WhatsApp')">ORDINA VIA WHATSAPP</button>
-        <button onclick="document.getElementById('modal').style.display='none'" style="border:none; background:none; width:100%; margin-top:15px; color:#999; cursor:pointer;">Annulla</button>
+        <textarea id="addr" placeholder="Indirizzo Completo (Via, Civico, Città, CAP)" rows="3"></textarea>
+        <button class="btn btn-wa" onclick="finishOrder()">ORDINA VIA WHATSAPP</button>
+        <button onclick="closeModal()" style="border:none; background:none; width:100%; margin-top:15px; color:#999; cursor:pointer;">Annulla</button>
     </div>
 </div>
+
+<footer>
+    <div class="footer-logo">GRUPPO GIZZI</div>
+    <div class="footer-info">
+        Cilento, Italia | Spedizioni in tutta Europa<br>
+        © 2026 Gruppo Gizzi - Tutti i diritti riservati.<br>
+        Prodotti freschi e genuini dalla nostra terra alla tua tavola.
+    </div>
+</footer>
+
+
 
 <script>
     const CONFIG = {
@@ -78,32 +113,40 @@
     let products = [], cart = [];
 
     async function load() {
-        const res = await fetch(CONFIG.catalog);
-        const csv = await res.text();
-        const rows = csv.split('\n').filter(r => r.trim() !== "");
-        const headers = rows[0].split(',').map(h => h.trim());
-        
-        products = rows.slice(1).map(row => {
-            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            let o = {};
-            headers.forEach((h, i) => o[h] = cols[i]?.replace(/"/g, '').trim());
-            return o;
-        });
-        render();
+        try {
+            const res = await fetch(CONFIG.catalog);
+            const csv = await res.text();
+            const rows = csv.split('\n').filter(r => r.trim() !== "");
+            const headers = rows[0].split(',').map(h => h.trim());
+            
+            products = rows.slice(1).map(row => {
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                let o = {};
+                headers.forEach((h, i) => o[h] = cols[i]?.replace(/"/g, '').trim());
+                return o;
+            });
+            render();
+        } catch (e) {
+            document.getElementById('grid').innerText = "Errore nel caricamento dei prodotti.";
+        }
     }
 
     function render() {
         const grid = document.getElementById('grid');
-        // FILTRO: Mostra solo se Disponibile è SI
         const available = products.filter(p => p.Disponibile && p.Disponibile.toUpperCase() === 'SI');
         
+        if (available.length === 0) {
+            grid.innerHTML = "<p>Nessun prodotto disponibile al momento.</p>";
+            return;
+        }
+
         grid.innerHTML = available.map(p => `
             <div class="card">
-                <img src="${p.Immagine}">
+                <img src="${p.Immagine}" onerror="this.src='https://via.placeholder.com/300x200?text=Immagine+In+Arrivo'">
                 <div class="card-body">
-                    <h3 style="font-family:'Fraunces'; margin:0;">${p.Nome}</h3>
-                    <p style="color:#666; font-size:0.9rem;">${p.Descrizione}</p>
-                    <div style="font-size:1.4rem; font-weight:700; color:var(--gold); margin:15px 0;">€ ${p.Prezzo}</div>
+                    <h3>${p.Nome}</h3>
+                    <p>${p.Descrizione}</p>
+                    <div class="price">€ ${p.Prezzo}</div>
                     <button class="btn" onclick="add('${p.ID}')">Aggiungi</button>
                 </div>
             </div>
@@ -124,9 +167,9 @@
         document.getElementById('cart-items').innerHTML = cart.map((c, i) => {
             const sub = parseFloat(c.Prezzo.replace(',','.')) * c.qty;
             tot += sub;
-            return `<div style="margin-bottom:15px; display:flex; justify-content:space-between;">
-                <div><strong>${c.Nome}</strong><br>${c.qty}x €${c.Prezzo}</div>
-                <div>€ ${sub.toFixed(2)} <span onclick="rem(${i})" style="cursor:pointer; color:red;">&times;</span></div>
+            return `<div class="cart-item">
+                <div><strong>${c.Nome}</strong><br><small>${c.qty}x €${c.Prezzo}</small></div>
+                <div>€ ${sub.toFixed(2)} <span onclick="rem(${i})" style="cursor:pointer; color:red; margin-left:10px;">&times;</span></div>
             </div>`;
         }).join('');
         document.getElementById('cart-total').innerText = "Totale: € " + tot.toFixed(2);
@@ -135,10 +178,11 @@
     function rem(i) { cart.splice(i,1); updateUI(); }
     function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); }
     function openCheckout() { document.getElementById('modal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
-    async function finish() {
+    async function finishOrder() {
         const d = {
-            orderID: "GIZZI-" + Date.now().toString().slice(-4),
+            orderID: "GZ-" + Date.now().toString().slice(-4),
             customerName: document.getElementById('name').value,
             customerEmail: document.getElementById('email').value,
             customerPhone: document.getElementById('phone').value,
@@ -147,18 +191,26 @@
             total: document.getElementById('cart-total').innerText
         };
 
-        if(!d.customerName || !d.customerAddress) return alert("Inserisci nome e indirizzo!");
+        if(!d.customerName || !d.customerAddress || !d.customerPhone) return alert("Per favore, compila i dati di contatto e spedizione!");
 
-        // SALVATAGGIO SUL FOGLIO (Pre-invio WA)
-        await fetch(CONFIG.webapp, { method: 'POST', mode: 'no-cors', body: JSON.stringify(d) });
+        // SALVATAGGIO SUL FOGLIO GOOGLE
+        // Uso un approccio fetch più robusto
+        fetch(CONFIG.webapp, {
+            method: 'POST',
+            mode: 'no-cors',
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(d)
+        }).then(() => console.log("Registrazione tentata..."));
 
         // APERTURA WHATSAPP
-        const msg = `*NUOVO ORDINE ${d.orderID}*\n\n*Cliente:* ${d.customerName}\n*Indirizzo:* ${d.customerAddress}\n*Prodotti:* ${d.items}\n\n*TOTALE:* ${d.total}`;
+        const msg = `*NUOVO ORDINE ${d.orderID}*\n\n*Cliente:* ${d.customerName}\n*Indirizzo:* ${d.customerAddress}\n*Tel:* ${d.customerPhone}\n*Prodotti:* ${d.items}\n\n*TOTALE:* ${d.total}`;
         window.open(`https://wa.me/393358060715?text=${encodeURIComponent(msg)}`);
         
+        // Reset
         cart = []; updateUI();
-        document.getElementById('modal').style.display = 'none';
-        document.getElementById('cart-panel').classList.remove('active');
+        closeModal();
+        toggleCart();
     }
 
     load();
