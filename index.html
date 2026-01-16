@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root { --gizzi: #1b4332; --gold: #b08d57; --bg: #fdfaf5; --white: #ffffff; }
-        
         * { box-sizing: border-box; }
         body { font-family: 'Montserrat', sans-serif; margin: 0; background: var(--bg); color: #333; display: flex; flex-direction: column; min-height: 100vh; }
         
@@ -15,10 +14,10 @@
         nav { position: fixed; top: 0; width: 100%; height: 75px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; z-index: 2000; border-bottom: 1px solid #eee; }
         .logo { font-family: 'Fraunces', serif; color: var(--gizzi); font-size: 1.8rem; text-decoration: none; font-weight: bold; }
 
-        /* MAIN CONTENT */
         main { flex: 1; margin-top: 75px; }
 
-        .hero { height: 50vh; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=2070'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; }
+        /* HERO */
+        .hero { height: 40vh; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=2070'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; }
         .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(2rem, 5vw, 3.5rem); margin: 0; }
 
         .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
@@ -26,38 +25,37 @@
         
         /* CARDS */
         .card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #f0f0f0; display: flex; flex-direction: column; }
-        .card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-        .card img { width: 100%; height: 220px; object-fit: cover; background: #eee; }
+        .card:hover { transform: translateY(-8px); }
+        .card img { width: 100%; height: 220px; object-fit: cover; }
         .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
         .card-body h3 { font-family: 'Fraunces', serif; margin: 0 0 10px; font-size: 1.3rem; color: var(--gizzi); }
-        .card-body p { color: #666; font-size: 0.85rem; line-height: 1.4; flex-grow: 1; }
-        .price { font-size: 1.4rem; font-weight: 700; color: var(--gold); margin: 15px 0; }
+        .price-tag { font-size: 1.4rem; font-weight: 700; color: var(--gold); margin: 10px 0; }
+        .unit { font-size: 0.9rem; color: #888; font-weight: 400; margin-left: 5px; font-style: italic; }
 
         /* BUTTONS */
-        .btn { background: var(--gizzi); color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-block; cursor: pointer; border: none; width: 100%; text-align: center; font-family: inherit; }
-        .btn-wa { background: #25D366; margin-top: 10px; }
+        .btn { background: var(--gizzi); color: white; padding: 12px; border-radius: 50px; border: none; width: 100%; cursor: pointer; font-weight: 600; font-family: inherit; transition: 0.3s; }
+        .btn:hover { opacity: 0.9; }
 
-        /* CARRELLO SIDEBAR */
+        /* CARRELLO */
         #cart-panel { position: fixed; right: -400px; top: 0; width: 380px; height: 100vh; background: white; z-index: 3000; transition: 0.4s; box-shadow: -10px 0 30px rgba(0,0,0,0.1); padding: 30px; display: flex; flex-direction: column; }
         #cart-panel.active { right: 0; }
-        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 0.9rem; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
-        /* MODALE CHECKOUT */
+        /* MODALE */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 4000; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 35px; border-radius: 25px; width: 90%; max-width: 450px; }
-        input, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 1rem; }
+        .modal-content { background: white; padding: 30px; border-radius: 25px; width: 90%; max-width: 400px; }
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; font-family: inherit; }
 
         /* FOOTER */
-        footer { background: var(--gizzi); color: white; padding: 40px 5%; text-align: center; }
+        footer { background: var(--gizzi); color: white; padding: 40px 20px; text-align: center; margin-top: auto; }
         .footer-logo { font-family: 'Fraunces', serif; font-size: 1.5rem; margin-bottom: 10px; }
-        .footer-info { font-size: 0.8rem; opacity: 0.7; line-height: 1.6; }
     </style>
 </head>
 <body>
 
 <nav>
     <a href="#" class="logo">GRUPPO GIZZI</a>
-    <div onclick="toggleCart()" style="cursor:pointer; font-size:1.5rem; position: relative;">
+    <div onclick="toggleCart()" style="cursor:pointer; font-size: 1.5rem; position: relative;">
         🛒 <span id="count" style="position: absolute; top: -10px; right: -10px; background: var(--gold); color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7rem;">0</span>
     </div>
 </nav>
@@ -65,48 +63,45 @@
 <main>
     <section class="hero">
         <h1>Sapori del Cilento</h1>
-        <p>Tradizione e freschezza, direttamente a casa tua.</p>
+        <p>Tradizione e qualità sulla tua tavola.</p>
     </section>
 
     <div class="container">
-        <div id="grid" class="grid">Caricamento eccellenze...</div>
+        <div id="grid" class="grid">Caricamento prodotti...</div>
     </div>
 </main>
 
 <div id="cart-panel">
-    <h2 style="font-family:'Fraunces'; color: var(--gizzi);">Carrello</h2>
-    <div id="cart-items" style="flex-grow:1; overflow-y:auto; margin: 20px 0;"></div>
+    <h2 style="font-family:'Fraunces'; color: var(--gizzi);">Il tuo Carrello</h2>
+    <div id="cart-items" style="flex-grow:1; overflow-y:auto;"></div>
     <h3 id="cart-total" style="border-top: 2px solid #eee; padding-top: 15px;">Totale: € 0.00</h3>
     <button class="btn" style="background: var(--gold);" onclick="openCheckout()">PROCEDI ALL'ORDINE</button>
-    <button onclick="toggleCart()" style="background:none; border:none; margin-top:15px; cursor:pointer; color:#999; font-size: 0.9rem;">Continua lo shopping</button>
+    <button onclick="toggleCart()" style="background:none; border:none; margin-top:15px; cursor:pointer; color:#999;">Continua lo shopping</button>
 </div>
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <h2 style="font-family:'Fraunces'; color: var(--gizzi); margin-top: 0;">Spedizione</h2>
+        <h3 style="font-family:'Fraunces'; margin-top:0;">Dati Spedizione</h3>
         <input type="text" id="name" placeholder="Nome e Cognome">
         <input type="email" id="email" placeholder="Email">
         <input type="tel" id="phone" placeholder="Cellulare / WhatsApp">
-        <textarea id="addr" placeholder="Indirizzo Completo (Via, Civico, Città, CAP)" rows="3"></textarea>
-        <button class="btn btn-wa" onclick="finishOrder()">ORDINA VIA WHATSAPP</button>
-        <button onclick="closeModal()" style="border:none; background:none; width:100%; margin-top:15px; color:#999; cursor:pointer;">Annulla</button>
+        <textarea id="addr" placeholder="Indirizzo (Via, Civico, Città, CAP)" rows="3"></textarea>
+        <button class="btn" style="background:#25D366" onclick="sendOrder()">CONFERMA E INVIA SU WHATSAPP</button>
+        <button onclick="closeModal()" style="border:none; background:none; width:100%; margin-top:10px; color:#999; cursor:pointer;">Annulla</button>
     </div>
 </div>
 
 <footer>
     <div class="footer-logo">GRUPPO GIZZI</div>
-    <div class="footer-info">
-        Cilento, Italia | Spedizioni in tutta Europa<br>
-        © 2026 Gruppo Gizzi - Tutti i diritti riservati.<br>
-        Prodotti freschi e genuini dalla nostra terra alla tua tavola.
+    <div style="font-size: 0.8rem; opacity: 0.8;">
+        Cilento, Italia | Eccellenza Gastronomica Tradizionale<br>
+        © 2026 Tutti i diritti riservati.
     </div>
 </footer>
 
-
-
 <script>
     const CONFIG = {
-        webapp: "https://script.google.com/macros/s/AKfycbzXcmzBDf9u062i53s6XQXcoaJrUEMztHrvWeSorpZXKbQaCGo1L23ndn3EYoN_vVBI/exec",
+        webapp: "https://script.google.com/macros/s/AKfycbw-qBBXe1CMCk8TTC-B1u-P2MteptVmCG6bsdyfxMqYz4qwaZ-afH7ZrJfySiqsWyRT/exec",
         catalog: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIumwZulbMAuesmG69DB8Y1bx2Y-NQXfyG7_m1-rdpZ-SoOxM0JyZtnj0_eV_K4t4drULTwV44nE5Y/pub?gid=0&single=true&output=csv"
     };
 
@@ -115,8 +110,8 @@
     async function load() {
         try {
             const res = await fetch(CONFIG.catalog);
-            const csv = await res.text();
-            const rows = csv.split('\n').filter(r => r.trim() !== "");
+            const text = await res.text();
+            const rows = text.split('\n').filter(r => r.trim() !== "");
             const headers = rows[0].split(',').map(h => h.trim());
             
             products = rows.slice(1).map(row => {
@@ -126,27 +121,20 @@
                 return o;
             });
             render();
-        } catch (e) {
-            document.getElementById('grid').innerText = "Errore nel caricamento dei prodotti.";
-        }
+        } catch (e) { console.error("Errore caricamento", e); }
     }
 
     function render() {
         const grid = document.getElementById('grid');
         const available = products.filter(p => p.Disponibile && p.Disponibile.toUpperCase() === 'SI');
         
-        if (available.length === 0) {
-            grid.innerHTML = "<p>Nessun prodotto disponibile al momento.</p>";
-            return;
-        }
-
         grid.innerHTML = available.map(p => `
             <div class="card">
                 <img src="${p.Immagine}" onerror="this.src='https://via.placeholder.com/300x200?text=Immagine+In+Arrivo'">
                 <div class="card-body">
                     <h3>${p.Nome}</h3>
-                    <p>${p.Descrizione}</p>
-                    <div class="price">€ ${p.Prezzo}</div>
+                    <p style="font-size:0.85rem; color:#666;">${p.Descrizione}</p>
+                    <div class="price-tag">€ ${p.Prezzo}<span class="unit">/ ${p.Unità || ''}</span></div>
                     <button class="btn" onclick="add('${p.ID}')">Aggiungi</button>
                 </div>
             </div>
@@ -165,7 +153,8 @@
         let tot = 0;
         document.getElementById('count').innerText = cart.reduce((a,b) => a + b.qty, 0);
         document.getElementById('cart-items').innerHTML = cart.map((c, i) => {
-            const sub = parseFloat(c.Prezzo.replace(',','.')) * c.qty;
+            const priceNum = parseFloat(c.Prezzo.replace(',', '.'));
+            const sub = priceNum * c.qty;
             tot += sub;
             return `<div class="cart-item">
                 <div><strong>${c.Nome}</strong><br><small>${c.qty}x €${c.Prezzo}</small></div>
@@ -180,7 +169,7 @@
     function openCheckout() { document.getElementById('modal').style.display = 'flex'; }
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
-    async function finishOrder() {
+    async function sendOrder() {
         const d = {
             orderID: "GZ-" + Date.now().toString().slice(-4),
             customerName: document.getElementById('name').value,
@@ -191,23 +180,21 @@
             total: document.getElementById('cart-total').innerText
         };
 
-        if(!d.customerName || !d.customerAddress || !d.customerPhone) return alert("Per favore, compila i dati di contatto e spedizione!");
+        if(!d.customerName || !d.customerAddress || !d.customerPhone) return alert("Per favore, compila tutti i campi!");
 
-        // SALVATAGGIO SUL FOGLIO GOOGLE
-        // Uso un approccio fetch più robusto
+        // INVIO DATI A GOOGLE (Senza attendere per evitare blocchi popup)
         fetch(CONFIG.webapp, {
             method: 'POST',
             mode: 'no-cors',
-            cache: 'no-cache',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(d)
-        }).then(() => console.log("Registrazione tentata..."));
+        });
 
-        // APERTURA WHATSAPP
+        // MESSAGGIO WHATSAPP
         const msg = `*NUOVO ORDINE ${d.orderID}*\n\n*Cliente:* ${d.customerName}\n*Indirizzo:* ${d.customerAddress}\n*Tel:* ${d.customerPhone}\n*Prodotti:* ${d.items}\n\n*TOTALE:* ${d.total}`;
         window.open(`https://wa.me/393358060715?text=${encodeURIComponent(msg)}`);
         
-        // Reset
+        // Reset e chiusura
         cart = []; updateUI();
         closeModal();
         toggleCart();
