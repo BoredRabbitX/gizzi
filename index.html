@@ -1,63 +1,41 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>Gruppo Gizzi | Cilento Authentic</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<nav>
-    <a href="#" class="logo">GRUPPO GIZZI</a>
-    <div style="display:flex; gap:20px;">
-        <select onchange="setLang(this.value)" class="lang-sel">
-            <option value="it">Italiano</option>
-            <option value="en">English</option>
-            <option value="de">Deutsch</option>
-        </select>
-        <div onclick="toggleCart()" style="cursor:pointer; font-size:1.5rem;">🛒 <span id="cart-count">0</span></div>
-    </div>
-</nav>
-
-<section class="hero">
-    <h1 id="hero-title">Cilento, Pura Terra.</h1>
-    <p id="hero-sub">L'eccellenza di Gruppo Gizzi consegnata in 48 ore in tutta Europa.</p>
-</section>
-
-<div class="container">
-    <div id="shop-grid" class="grid"></div>
-</div>
-
 <div id="checkout-modal" class="modal-overlay">
-    <div class="modal-content">
-        <h2 id="modal-title">Dati di Spedizione</h2>
-        <div id="order-summary" style="margin-bottom:20px; font-size:0.9rem; color:#666;"></div>
+    <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+        <h2 style="font-family:'Fraunces'; color:var(--gizzi-green);">Conferma il tuo Ordine</h2>
         
-        <form id="checkout-form">
-            <input type="text" id="cust-name" placeholder="Nome e Cognome" required>
-            <input type="email" id="cust-email" placeholder="Email (per ricevuta)" required>
-            <input type="tel" id="cust-phone" placeholder="Telefono con prefisso (es. +39)" required>
-            <input type="text" id="cust-address" placeholder="Indirizzo e Numero Civico" required>
+        <div class="form-group">
+            <input type="text" id="cust-name" placeholder="Nome e Cognome">
+            <input type="email" id="cust-email" placeholder="Email">
+            <input type="tel" id="cust-phone" placeholder="Cellulare (con prefisso)">
+            <input type="text" id="cust-address" placeholder="Via e Numero Civico">
             <div style="display:flex; gap:10px;">
-                <input type="text" id="cust-city" placeholder="Città" required>
-                <input type="text" id="cust-cap" placeholder="CAP" required>
+                <input type="text" id="cust-city" placeholder="Città" style="flex:2;">
+                <input type="text" id="cust-cap" placeholder="CAP" style="flex:1;">
             </div>
             <select id="cust-country">
                 <option value="Italia">Italia</option>
-                <option value="Germany">Germany</option>
-                <option value="United Kingdom">United Kingdom</option>
+                <option value="Germania">Germania</option>
+                <option value="UK">Regno Unito</option>
             </select>
-            
-            <button type="button" class="btn-main" onclick="finalize('Paypal')">PAGA CON CARTA / PAYPAL</button>
-            <button type="button" class="btn-wa" onclick="finalize('WhatsApp')">ORDINA SU WHATSAPP</button>
-        </form>
-        <button onclick="closeModal()" style="border:none; background:none; width:100%; margin-top:20px; color:#0071e3; cursor:pointer;">Torna al negozio</button>
+        </div>
+
+        <div style="background:#f9f9f9; padding:15px; border-radius:10px; margin:15px 0; font-size:0.9rem;">
+            <p><strong>Riepilogo:</strong> <span id="summary-items"></span></p>
+            <p style="font-size:1.2rem; color:var(--gizzi-green);"><strong>Totale: € <span id="summary-total">0.00</span></strong></p>
+        </div>
+
+        <div style="margin-bottom:20px; font-size:0.8rem;">
+            <label><input type="checkbox" id="check-privacy" checked> Accetto i termini e la spedizione dal Cilento.</label>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <button class="btn-wa" onclick="processaAzioneOrdine('WhatsApp')">
+                <i class="fab fa-whatsapp"></i> INVIA ORDINE
+            </button>
+            <button class="btn-main" style="background:#0070ba;" onclick="processaAzioneOrdine('Paypal')">
+                PAGA ORA
+            </button>
+        </div>
+        
+        <button onclick="closeModal()" style="border:none; background:none; width:100%; margin-top:15px; color:#666; cursor:pointer;">Annulla e torna al carrello</button>
     </div>
 </div>
-
-<script src="config.js"></script>
-<script src="database.js"></script>
-<script src="shop.js"></script>
-</body>
-</html>
