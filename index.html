@@ -3,58 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gruppo Gizzi | Cilento International Market</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Gruppo Gizzi | Cilento Authentic Taste</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
 
-<nav>
+<nav class="navbar">
     <a href="#" class="logo">GRUPPO GIZZI</a>
-    <div class="nav-right">
-        <select id="lang-select" onchange="changeLanguage(this.value)">
-            <option value="it">🇮🇹 Italiano</option>
-            <option value="en">🇬🇧 English</option>
-            <option value="de">🇩🇪 Deutsch</option>
+    <div class="nav-actions">
+        <select id="lang-picker" onchange="setLang(this.value)">
+            <option value="it">🇮🇹 IT</option>
+            <option value="en">🇬🇧 EN</option>
+            <option value="de">🇩🇪 DE</option>
         </select>
-        <div class="cart-icon" onclick="toggleCart()">
-            🛒 <span id="cart-count">0</span>
+        <div class="cart-trigger" onclick="toggleCart()">
+            <span class="cart-icon">🛒</span>
+            <span id="cart-count">0</span>
         </div>
     </div>
 </nav>
 
-<div id="shop-grid" class="container grid"></div>
+<header class="hero">
+    <h1 id="hero-title">Eccellenze del Cilento</h1>
+    <p id="hero-sub">Dall'orto di Gruppo Gizzi alla tua tavola, ovunque tu sia.</p>
+</header>
+
+<main class="container">
+    <div id="shop-grid" class="grid">
+        </div>
+</main>
 
 <div id="cart-panel">
     <div class="cart-header">
-        <h2 id="txt-cart-title">Il tuo Carrello</h2>
-        <span onclick="toggleCart()" style="cursor:pointer">✕</span>
+        <h3 id="txt-cart">Il tuo Carrello</h3>
+        <button class="close-btn" onclick="toggleCart()">×</button>
     </div>
-    <div id="cart-items"></div>
+    <div id="cart-items-list"></div>
     <div class="cart-footer">
-        <h3 id="cart-total">Totale: € 0.00</h3>
-        <button class="btn-checkout" onclick="openCheckout()" id="txt-checkout">Procedi al Checkout</button>
+        <div class="total-row">
+            <span id="txt-total">Totale:</span>
+            <span id="cart-total-value">€ 0.00</span>
+        </div>
+        <button class="btn-primary" onclick="openCheckout()" id="btn-go-checkout">Procedi all'ordine</button>
     </div>
 </div>
 
-<div id="checkout-modal">
+<div id="checkout-modal" class="modal">
     <div class="modal-content">
-        <h2 id="txt-order-details">Dettagli Ordine</h2>
-        <form id="order-form">
-            <input type="text" id="name" placeholder="Nome e Cognome" required>
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="text" id="address" placeholder="Indirizzo (Via, Civico, Città, CAP, Nazione)" required>
-            <input type="tel" id="phone" placeholder="Telefono (+ prefisso internazionale)" required>
-            <textarea id="notes" placeholder="Note per la consegna"></textarea>
+        <h2 id="txt-shipping">Dati di Spedizione</h2>
+        <form id="order-form" onsubmit="event.preventDefault();">
+            <input type="text" id="c-name" placeholder="Nome e Cognome" required>
+            <input type="email" id="c-email" placeholder="Email" required>
+            <input type="tel" id="c-phone" placeholder="Cellulare (+39...)" required>
+            <input type="text" id="c-address" placeholder="Via e Numero Civico" required>
+            <div class="form-row">
+                <input type="text" id="c-city" placeholder="Città" required>
+                <input type="text" id="c-cap" placeholder="CAP" required>
+            </div>
+            <textarea id="c-notes" placeholder="Note per il corriere (es. interno, scala...)"></textarea>
             
-            <div class="payment-methods">
-                <p id="txt-payment">Scegli il metodo di pagamento:</p>
-                <button type="button" class="btn-pay" onclick="processOrder('Paypal')">PayPal / Credit Card</button>
-                <button type="button" class="btn-wa" onclick="processOrder('WhatsApp')">WhatsApp Order</button>
+            <div class="payment-selection">
+                <p id="txt-pay-method">Metodo di pagamento preferito:</p>
+                <button type="button" class="btn-paypal" onclick="processOrder('PayPal')">Paga con Carta / PayPal</button>
+                <button type="button" class="btn-wa" onclick="processOrder('WhatsApp')">Ordina su WhatsApp</button>
             </div>
         </form>
-        <button onclick="closeCheckout()" class="btn-cancel">Annulla</button>
+        <button class="btn-text" onclick="closeCheckout()">Annulla</button>
     </div>
 </div>
 
