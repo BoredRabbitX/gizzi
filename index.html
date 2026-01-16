@@ -9,107 +9,153 @@
         :root {
             --gizzi-deep: #1b4332;
             --gizzi-gold: #b08d57;
-            --bg: #f9f9f7;
+            --bg: #fdfaf5;
             --white: #ffffff;
         }
 
         * { box-sizing: border-box; scroll-behavior: smooth; }
-        body { font-family: 'Montserrat', sans-serif; margin: 0; background: var(--bg); color: #2d2d2d; }
+        body { font-family: 'Montserrat', sans-serif; margin: 0; background: var(--bg); color: #2d2d2d; line-height: 1.6; }
 
-        /* NAVBAR */
-        nav {
+        /* HEADER */
+        header {
             position: fixed; top: 0; width: 100%; height: 80px;
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 5%; z-index: 2000; border-bottom: 1px solid rgba(0,0,0,0.05);
         }
         .logo { font-family: 'Fraunces', serif; font-size: 1.8rem; color: var(--gizzi-deep); text-decoration: none; font-weight: 700; }
 
-        /* CATEGORY HEADER */
-        .cat-header {
-            padding: 80px 5% 40px; text-align: center; background: var(--white);
-            margin-bottom: 40px; border-bottom: 1px solid #eee;
+        /* BANNER HERO EVOCATIVO */
+        .hero {
+            height: 90vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1532931899774-604369e5d666?q=80&w=2070');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: white; text-align: center; padding: 0 20px;
         }
-        .cat-header h2 { font-family: 'Fraunces', serif; font-size: 2.5rem; color: var(--gizzi-deep); margin: 0; }
-        .cat-header p { max-width: 600px; margin: 15px auto; color: #666; font-style: italic; }
+        .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(2.5rem, 8vw, 5rem); margin: 0; line-height: 1.1; }
+        .hero p { font-size: 1.3rem; max-width: 700px; margin: 25px 0 40px; font-weight: 300; letter-spacing: 1px; }
 
-        /* GRID */
-        .container { max-width: 1300px; margin: 0 auto 80px; padding: 0 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        /* CATEGORIE */
+        .cat-section { padding: 60px 0 20px; text-align: center; }
+        .cat-title { font-family: 'Fraunces', serif; font-size: 2.5rem; color: var(--gizzi-deep); margin-bottom: 10px; }
+        .cat-desc { max-width: 700px; margin: 0 auto 40px; color: #666; font-style: italic; padding: 0 20px; }
+
+        /* GRIGLIA */
+        .container { max-width: 1300px; margin: 0 auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px; margin-bottom: 80px; }
         
         .card { 
-            background: var(--white); border-radius: 15px; overflow: hidden; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s;
+            background: white; border-radius: 20px; overflow: hidden; 
+            box-shadow: 0 15px 45px rgba(0,0,0,0.05); transition: 0.4s;
         }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .card img { width: 100%; height: 250px; object-fit: cover; }
-        .card-body { padding: 25px; }
-        .price-tag { font-size: 1.4rem; font-weight: 700; color: var(--gizzi-gold); margin: 15px 0; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 25px 60px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 300px; object-fit: cover; }
+        .card-body { padding: 30px; }
+        .price-tag { font-size: 1.6rem; font-weight: 700; color: var(--gizzi-gold); margin: 15px 0; }
 
-        /* CARRELLO */
+        /* CARRELLO LATERALE */
         #cart-panel {
             position: fixed; right: -100%; top: 0; width: 450px; max-width: 100%; height: 100vh;
-            background: white; z-index: 3000; transition: 0.5s ease;
-            box-shadow: -15px 0 50px rgba(0,0,0,0.1); padding: 30px; display: flex; flex-direction: column;
+            background: white; z-index: 3000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: -20px 0 50px rgba(0,0,0,0.15); display: flex; flex-direction: column;
         }
         #cart-panel.active { right: 0; }
+        .cart-header { background: var(--gizzi-deep); color: white; padding: 30px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* FORM CHECKOUT STRUTTURATO */
+        /* MODALE CHECKOUT */
         .modal { 
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); 
-            z-index: 4000; align-items: center; justify-content: center; padding: 20px;
+            display: none; position: fixed; inset: 0; background: rgba(27, 67, 50, 0.9); 
+            backdrop-filter: blur(10px); z-index: 4000; align-items: center; justify-content: center; padding: 20px;
         }
         .modal-content { 
-            background: white; padding: 35px; border-radius: 20px; width: 100%; max-width: 600px; 
+            background: white; padding: 40px; border-radius: 30px; width: 100%; max-width: 550px; 
             max-height: 90vh; overflow-y: auto;
         }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .full-width { grid-column: span 2; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        input, textarea, select { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 12px; font-family: inherit; font-size: 1rem; background: #fafafa; }
         
-        .btn { background: var(--gizzi-deep); color: white; padding: 15px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; width: 100%; }
-        .btn-wa { background: #25D366; margin-top: 10px; font-weight: 700; }
+        .btn { background: var(--gizzi-deep); color: white; padding: 18px; border-radius: 50px; border: none; cursor: pointer; font-weight: 700; width: 100%; transition: 0.3s; }
+        .btn-wa { background: #25D366; margin-top: 15px; font-size: 1.1rem; }
+        .btn:hover { transform: scale(1.02); opacity: 0.9; }
+
+        /* FOOTER */
+        footer { background: var(--gizzi-deep); color: white; padding: 80px 5%; text-align: center; margin-top: 100px; }
+        .footer-logo { font-family: 'Fraunces', serif; font-size: 2rem; margin-bottom: 20px; color: var(--gizzi-gold); }
     </style>
 </head>
 <body>
 
-<nav>
+<header>
     <a href="#" class="logo">GRUPPO GIZZI</a>
-    <div onclick="toggleCart()" style="cursor:pointer; font-size: 1.5rem;">🛒 <span id="cart-count">0</span></div>
-</nav>
+    <div style="display:flex; gap:25px; align-items:center;">
+        <select id="lang-sel" onchange="updateLang(this.value)" style="border:none; background:none; font-weight:700; cursor:pointer; font-size:1rem;">
+            <option value="it">🇮🇹 IT</option>
+            <option value="en">🇬🇧 EN</option>
+            <option value="de">🇩🇪 DE</option>
+        </select>
+        <div onclick="toggleCart()" style="cursor:pointer; position: relative;">
+            <span style="font-size: 1.8rem;">🛒</span>
+            <span id="cart-count" style="position: absolute; top: -10px; right: -12px; background: var(--gizzi-gold); color: white; border-radius: 50%; padding: 2px 8px; font-size: 0.8rem; font-weight: 700;">0</span>
+        </div>
+    </div>
+</header>
 
-<div style="margin-top: 80px;" id="shop-content">
+<section class="hero">
+    <h1 id="hero-h1">Cilento, Pura Terra.</h1>
+    <p id="hero-p">L'essenza della Dieta Mediterranea, coltivata con rispetto e spedita con amore in tutta Europa.</p>
+    <a href="#negozio" class="btn" style="width:auto; padding: 18px 45px;">ESPLORA LA DISPENSA</a>
+</section>
+
+<div id="negozio">
     </div>
 
 <div id="cart-panel">
-    <h2 style="font-family:'Fraunces'">Carrello</h2>
-    <div id="cart-items" style="flex-grow:1; overflow-y:auto;"></div>
-    <h3 id="cart-total">Totale: € 0.00</h3>
-    <button class="btn" style="background:var(--gizzi-gold)" onclick="openCheckout()">Vai alla Cassa</button>
-    <button onclick="toggleCart()" style="background:none; border:none; margin-top:10px; cursor:pointer;">Chiudi</button>
+    <div class="cart-header">
+        <h2 style="margin:0; font-family:'Fraunces'">Il Tuo Ordine</h2>
+        <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:2.5rem; cursor:pointer;">&times;</button>
+    </div>
+    <div id="cart-items" style="flex-grow:1; padding:30px; overflow-y:auto;"></div>
+    <div style="padding:40px; border-top:1px solid #eee;">
+        <h3 id="cart-total" style="font-size: 1.8rem; margin-bottom: 25px; display: flex; justify-content: space-between;"><span>Totale:</span> <span>€ 0.00</span></h3>
+        <button class="btn" style="background: var(--gizzi-gold);" onclick="openCheckout()">VAI AL CHECKOUT</button>
+    </div>
 </div>
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <h2 style="font-family:'Fraunces'; margin-top:0;">Dati Spedizione</h2>
+        <h2 style="font-family:'Fraunces'; margin:0; color: var(--gizzi-deep);">Spedizione & Contatti</h2>
+        <p style="color:#666; font-size:0.9rem;">Compila i dati per la consegna internazionale.</p>
+        
         <div class="form-grid">
-            <input type="text" id="f-name" class="full-width" placeholder="Nome e Cognome *">
-            <input type="email" id="f-email" class="full-width" placeholder="Email *">
-            <input type="tel" id="f-phone" class="full-width" placeholder="Telefono / WhatsApp *">
-            <input type="text" id="f-addr" class="full-width" placeholder="Via e Numero Civico *">
+            <input type="text" id="f-name" style="grid-column: span 2;" placeholder="Nome e Cognome *">
+            <input type="email" id="f-email" style="grid-column: span 2;" placeholder="Indirizzo Email *">
+            <input type="tel" id="f-phone" style="grid-column: span 2;" placeholder="Cellulare / WhatsApp *">
+            <input type="text" id="f-street" style="grid-column: span 2;" placeholder="Via e Numero Civico *">
             <input type="text" id="f-city" placeholder="Città *">
             <input type="text" id="f-cap" placeholder="CAP *">
-            <input type="text" id="f-prov" placeholder="Provincia (es. SA) *">
+            <input type="text" id="f-prov" placeholder="Provincia (es. SA)">
             <select id="f-country">
                 <option value="Italia">Italia</option>
-                <option value="Germania">Germania</option>
-                <option value="UK">Regno Unito</option>
+                <option value="Germany">Germania</option>
+                <option value="United Kingdom">Regno Unito</option>
+                <option value="France">Francia</option>
             </select>
         </div>
-        <button class="btn btn-wa" onclick="processOrder()">CONFERMA E INVIA ORDINE</button>
-        <button onclick="closeCheckout()" style="background:none; border:none; width:100%; margin-top:10px; color:#999; cursor:pointer;">Annulla</button>
+
+        <button class="btn btn-wa" onclick="processOrder()">CONFERMA E ORDINA SU WHATSAPP</button>
+        <button onclick="closeCheckout()" style="background:none; border:none; width:100%; margin-top:15px; color:#999; cursor:pointer;">&larr; Torna al carrello</button>
     </div>
 </div>
+
+<footer>
+    <div class="footer-logo">GRUPPO GIZZI</div>
+    <p style="opacity: 0.8; font-weight: 300;">Tradizione Agricola Cilentana dal 1950.</p>
+    <div style="margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px; font-size: 0.8rem; opacity: 0.6;">
+        Cilento, Italia | Spedizioni Espresse in tutta Europa | torre.michele@gmail.com<br>
+        &copy; 2026 Gruppo Gizzi. Tutti i diritti riservati.
+    </div>
+</footer>
 
 <script>
     const CONFIG = {
@@ -126,7 +172,7 @@
         "Freschi": "La purezza del latte: eccellenze casearie prodotte quotidianamente con amore."
     };
 
-    let products = [], cart = [];
+    let products = [], cart = [], lang = 'it';
 
     async function load() {
         const res = await fetch(CONFIG.catalog);
@@ -143,31 +189,33 @@
     }
 
     function render() {
-        const container = document.getElementById('shop-content');
+        const container = document.getElementById('negozio');
         const categories = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p.Categoria))];
         
         container.innerHTML = categories.map(cat => `
-            <section class="cat-header">
-                <h2>${cat}</h2>
-                <p>${CAT_INFO[cat] || "Eccellenze selezionate del Gruppo Gizzi."}</p>
-            </section>
-            <div class="container"><div class="grid">
-                ${products.filter(p => p.Categoria === cat && p.Disponibile === 'SI').map(p => `
-                    <div class="card">
-                        <img src="${p.Immagine}">
-                        <div class="card-body">
-                            <h3>${p.Nome}</h3>
-                            <p>${p.Descrizione}</p>
-                            <div class="price-tag">€ ${p.Prezzo} <small style="font-size:0.8rem; color:#999;">/ ${p.Unità}</small></div>
-                            <button class="btn" onclick="addToCart('${p.ID}')">Aggiungi</button>
-                        </div>
+            <section class="cat-section">
+                <div class="container">
+                    <h2 class="cat-title">${cat}</h2>
+                    <p class="cat-desc">${CAT_INFO[cat] || "Eccellenze selezionate del Gruppo Gizzi."}</p>
+                    <div class="grid">
+                        ${products.filter(p => p.Categoria === cat && p.Disponibile === 'SI').map(p => `
+                            <div class="card">
+                                <img src="${p.Immagine}">
+                                <div class="card-body">
+                                    <h3>${lang === 'it' ? p.Nome : p['Nome_'+lang.toUpperCase()]}</h3>
+                                    <p style="font-size:0.9rem; color:#666;">${lang === 'it' ? p.Descrizione : p['Desc_'+lang.toUpperCase()]}</p>
+                                    <div class="price-tag">€ ${p.Prezzo} <small style="font-size:0.8rem; color:#999;">/ ${p.Unità}</small></div>
+                                    <button class="btn" onclick="add('${p.ID}')">AGGIUNGI AL CARRELLO</button>
+                                </div>
+                            </div>
+                        `).join('')}
                     </div>
-                `).join('')}
-            </div></div>
+                </div>
+            </section>
         `).join('');
     }
 
-    function addToCart(id) {
+    function add(id) {
         const p = products.find(x => x.ID == id);
         const ex = cart.find(c => c.ID == id);
         if(ex) ex.qty++; else cart.push({...p, qty: 1});
@@ -181,12 +229,12 @@
         document.getElementById('cart-items').innerHTML = cart.map((c, i) => {
             const sub = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
             tot += parseFloat(sub);
-            return `<div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
+            return `<div style="display:flex; justify-content:space-between; margin-bottom:20px;">
                 <div><strong>${c.Nome}</strong><br><small>${c.qty}x €${c.Prezzo}</small></div>
-                <div>€ ${sub} <span onclick="rem(${i})" style="color:red; cursor:pointer;">&times;</span></div>
+                <div>€ ${sub} <span onclick="rem(${i})" style="color:red; cursor:pointer; margin-left:10px;">&times;</span></div>
             </div>`;
         }).join('');
-        document.getElementById('cart-total').innerText = "Totale: € " + tot.toFixed(2);
+        document.getElementById('cart-total').querySelector('span:last-child').innerText = "€ " + tot.toFixed(2);
     }
 
     function rem(i) { cart.splice(i,1); updateUI(); }
@@ -195,19 +243,29 @@
     function closeCheckout() { document.getElementById('modal').style.display = 'none'; }
 
     async function processOrder() {
+        const name = document.getElementById('f-name').value;
+        const street = document.getElementById('f-street').value;
+        const city = document.getElementById('f-city').value;
+        const cap = document.getElementById('f-cap').value;
+        const country = document.getElementById('f-country').value;
+        const total = document.getElementById('cart-total').querySelector('span:last-child').innerText;
+
+        if(!name || !street || !city) return alert("Per favore, completa i campi obbligatori.");
+
+        const fullAddress = `${street}, ${cap} ${city} (${document.getElementById('f-prov').value}), ${country}`;
+        
+        // COSTRUZIONE DATI PER LO SCRIPT (Nomi chiavi allineati al Code.gs)
         const d = {
-            orderID: "GZ-" + Date.now().toString().slice(-4),
-            customerName: document.getElementById('f-name').value,
+            orderID: "GZ-" + Date.now().toString().slice(-6),
+            customerName: name,
             customerEmail: document.getElementById('f-email').value,
             customerPhone: document.getElementById('f-phone').value,
-            customerAddress: `${document.getElementById('f-addr').value}, ${document.getElementById('f-cap').value} ${document.getElementById('f-city').value} (${document.getElementById('f-prov').value}), ${document.getElementById('f-country').value}`,
-            items: cart.map(c => `${c.qty}x ${c.Nome} (unit. €${c.Prezzo})`).join(", "),
-            total: document.getElementById('cart-total').innerText
+            customerAddress: fullAddress,
+            items: cart.map(c => `${c.qty}x ${c.Nome} (€${c.Prezzo})`).join(", "),
+            total: total
         };
 
-        if(!d.customerName || !document.getElementById('f-addr').value) return alert("Completa tutti i campi con l'asterisco!");
-
-        // 1. REGISTRAZIONE SUL FOGLIO GOOGLE (Fondamentale!)
+        // INVIO DATI AL FOGLIO GOOGLE
         fetch(CONFIG.webapp, { 
             method: 'POST', 
             mode: 'no-cors', 
@@ -215,9 +273,9 @@
             body: JSON.stringify(d) 
         });
 
-        // 2. MESSAGGIO WHATSAPP STRUTTURATO
+        // MESSAGGIO WHATSAPP
         let itemDetails = cart.map(c => `- ${c.qty}x ${c.Nome}: €${(parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2)}`).join("\n");
-        const msg = `*NUOVO ORDINE ${d.orderID}*\n\n*CLIENTE:* ${d.customerName}\n*TEL:* ${d.customerPhone}\n*INDIRIZZO:* ${d.customerAddress}\n\n*DETTAGLIO PRODOTTI:*\n${itemDetails}\n\n*TOTALE ORDINE:* ${d.total}`;
+        const msg = `*NUOVO ORDINE ${d.orderID}*\n\n*CLIENTE:* ${d.customerName}\n*TEL:* ${d.customerPhone}\n*INDIRIZZO:* ${d.customerAddress}\n\n*DETTAGLIO PRODOTTI:*\n${itemDetails}\n\n*TOTALE:* ${d.total}`;
         
         window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`);
         
