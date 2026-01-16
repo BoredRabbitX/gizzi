@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gruppo Gizzi | Cilento Authentic Experience</title>
-    
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;1,400&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -13,205 +12,189 @@
             --gold: #b08d57;
             --silk: #fdfaf5;
             --white: #ffffff;
-            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
         * { box-sizing: border-box; scroll-behavior: smooth; }
         body { font-family: 'Montserrat', sans-serif; margin: 0; background: var(--silk); color: #2d2d2d; overflow-x: hidden; }
 
-        /* --- NAVIGATION --- */
+        /* NAVBAR */
         nav {
-            position: fixed; top: 0; width: 100%; height: 75px;
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            position: fixed; top: 0; width: 100%; height: 80px;
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 5%; z-index: 2000; border-bottom: 1px solid rgba(0,0,0,0.05);
         }
-        .logo { font-family: 'Fraunces', serif; font-size: 1.8rem; color: var(--gizzi-green); text-decoration: none; font-weight: 700; }
-        .nav-right { display: flex; gap: 20px; align-items: center; }
+        .logo { font-family: 'Fraunces', serif; font-size: 1.8rem; color: var(--gizzi-green); text-decoration: none; font-weight: 700; letter-spacing: -1px; }
 
-        /* --- HERO BANNER --- */
+        /* HERO */
         .hero {
-            height: 85vh;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1532931899774-604369e5d666?q=80&w=2070');
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=2070');
             background-size: cover; background-position: center;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: var(--white); text-align: center; padding: 0 20px;
+            color: white; text-align: center; padding: 0 20px;
         }
-        .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(2.5rem, 7vw, 5rem); margin: 0; }
-        .hero p { font-size: 1.3rem; max-width: 800px; margin: 20px 0 40px; font-weight: 300; }
-        .btn-cta { 
-            background: var(--gold); color: white; padding: 18px 45px; border-radius: 50px; 
-            text-decoration: none; font-weight: 600; transition: 0.3s; border: none; cursor: pointer;
-            box-shadow: 0 10px 20px rgba(176, 141, 87, 0.3);
-        }
+        .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(2.5rem, 8vw, 5rem); margin: 0; }
+        .hero p { font-size: 1.2rem; max-width: 700px; margin: 20px 0 40px; font-weight: 300; }
 
-        /* --- PRODOTTI --- */
-        .container { max-width: 1300px; margin: 100px auto; padding: 0 20px; }
+        /* SHOP GRID */
+        .container { max-width: 1300px; margin: 80px auto; padding: 0 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
         .card { 
-            background: var(--white); border-radius: 25px; overflow: hidden; 
-            box-shadow: var(--shadow); transition: 0.4s ease; border: 1px solid rgba(0,0,0,0.03);
+            background: white; border-radius: 30px; overflow: hidden; 
+            box-shadow: var(--shadow); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(0,0,0,0.02);
         }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
-        .card img { width: 100%; height: 300px; object-fit: cover; }
-        .card-content { padding: 30px; }
+        .card:hover { transform: translateY(-12px); box-shadow: 0 30px 60px rgba(0,0,0,0.15); }
+        .card img { width: 100%; height: 320px; object-fit: cover; }
+        .card-info { padding: 30px; }
         .card-title { font-family: 'Fraunces', serif; font-size: 1.6rem; color: var(--gizzi-green); margin: 0; }
         .card-price { font-size: 1.5rem; font-weight: 700; color: var(--gold); margin: 15px 0; }
         
-        /* --- CARRELLO LATERALE --- */
+        /* BUTTONS */
+        .btn { 
+            background: var(--gizzi-green); color: white; padding: 16px 32px; border-radius: 50px; 
+            text-decoration: none; font-weight: 600; border: none; cursor: pointer; transition: 0.3s;
+            display: inline-block; width: 100%; text-align: center;
+        }
+        .btn:hover { opacity: 0.9; transform: scale(1.02); }
+        .btn-gold { background: var(--gold); margin-top: 10px; }
+
+        /* CARRELLO */
         #cart-panel {
-            position: fixed; right: -450px; top: 0; width: 420px; max-width: 100%; height: 100vh;
-            background: var(--white); z-index: 3000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: -20px 0 50px rgba(0,0,0,0.15); display: flex; flex-direction: column;
+            position: fixed; right: -450px; top: 0; width: 400px; max-width: 100%; height: 100vh;
+            background: white; z-index: 3000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: -20px 0 50px rgba(0,0,0,0.1); display: flex; flex-direction: column;
         }
         #cart-panel.active { right: 0; }
         .cart-header { background: var(--gizzi-green); color: white; padding: 30px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* --- MODALE CHECKOUT --- */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(27, 67, 50, 0.85); backdrop-filter: blur(10px); z-index: 4000; align-items: center; justify-content: center; }
-        .modal-content { background: var(--white); width: 95%; max-width: 550px; padding: 50px; border-radius: 35px; position: relative; }
-        input, select, textarea { width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #ddd; font-family: inherit; }
-
-        .btn-wa { background: #25D366; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 10px; }
-        .btn-pay { background: #0070ba; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 10px; }
+        /* MODALE CHECKOUT */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(27, 67, 50, 0.8); backdrop-filter: blur(10px); z-index: 4000; align-items: center; justify-content: center; }
+        .modal-content { background: white; width: 95%; max-width: 550px; padding: 40px; border-radius: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+        input, textarea { width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 15px; border: 1px solid #ddd; font-family: inherit; font-size: 1rem; }
     </style>
 </head>
 <body>
 
 <nav>
     <a href="#" class="logo">GRUPPO GIZZI</a>
-    <div class="nav-right">
-        <select id="lang" onchange="updateLang(this.value)" style="border:none; font-weight:600; cursor:pointer; background:none; font-size:1rem;">
+    <div style="display: flex; gap: 20px; align-items: center;">
+        <select id="lang-sel" onchange="changeLang(this.value)" style="border:none; background:none; font-weight:700; cursor:pointer;">
             <option value="it">🇮🇹 IT</option>
             <option value="en">🇬🇧 EN</option>
             <option value="de">🇩🇪 DE</option>
         </select>
-        <div onclick="toggleCart()" style="cursor:pointer; position:relative; font-size:1.6rem;">
-            🛒 <span id="cart-count" style="position:absolute; top:-10px; right:-12px; background:var(--gold); color:white; border-radius:50%; padding:2px 7px; font-size:0.75rem;">0</span>
+        <div onclick="toggleCart()" style="cursor: pointer; position: relative; font-size: 1.5rem;">
+            🛒 <span id="cart-count" style="position: absolute; top: -10px; right: -10px; background: var(--gold); color: white; border-radius: 50%; padding: 2px 8px; font-size: 0.7rem; font-weight: 700;">0</span>
         </div>
     </div>
 </nav>
 
 <section class="hero">
-    <h1 id="hero-h">Dall'Orto alla Tavola</h1>
-    <p id="hero-p">L'essenza del Cilento spedita con amore in tutta Europa.</p>
-    <a href="#negozio" class="btn-cta" id="hero-btn">Sfoglia la Collezione</a>
+    <h1 id="h-title">Cilento nel Cuore</h1>
+    <p id="h-sub">Le eccellenze della nostra terra, coltivate con amore e spedite in tutta Europa.</p>
+    <a href="#prodotti" class="btn" style="width: auto;" id="h-btn">Scopri la Dispensa</a>
 </section>
 
-<div class="container" id="negozio">
+<div class="container" id="prodotti">
     <div id="shop-grid" class="grid"></div>
 </div>
 
 <div id="cart-panel">
     <div class="cart-header">
-        <h2 style="margin:0; font-family:'Fraunces'">Carrello</h2>
+        <h2 style="margin:0; font-family:'Fraunces'">Il Tuo Ordine</h2>
         <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:2.5rem; cursor:pointer;">&times;</button>
     </div>
     <div id="cart-items" style="flex-grow:1; padding:30px; overflow-y:auto;"></div>
-    <div style="padding:40px; border-top:1px solid #eee;">
-        <div style="display:flex; justify-content:space-between; font-size:1.5rem; font-weight:700; margin-bottom:30px;">
-            <span id="txt-tot">Totale</span> <span id="cart-total">€ 0.00</span>
+    <div style="padding:30px; border-top:1px solid #eee;">
+        <div style="display:flex; justify-content:space-between; font-size:1.5rem; font-weight:700; margin-bottom:20px;">
+            <span>Totale</span> <span id="cart-total">€ 0.00</span>
         </div>
-        <button class="btn-cta" style="width:100%" onclick="openCheckout()">Procedi al Checkout</button>
+        <button class="btn btn-gold" onclick="openCheckout()">VAI ALLA CASSA</button>
     </div>
 </div>
 
 <div id="checkout-modal" class="modal">
     <div class="modal-content">
-        <h2 style="font-family:'Fraunces'; color:var(--gizzi-green); margin-top:0;">Dati di Spedizione</h2>
-        <input type="text" id="o-name" placeholder="Nome e Cognome">
-        <input type="email" id="o-email" placeholder="Email">
-        <input type="tel" id="o-phone" placeholder="Telefono / WhatsApp">
-        <textarea id="o-addr" placeholder="Indirizzo Completo (Via, N., Città, CAP, Stato)"></textarea>
+        <h2 style="font-family:'Fraunces'; color:var(--gizzi-green); margin:0 0 20px 0;">Dati di Consegna</h2>
+        <input type="text" id="c-name" placeholder="Nome e Cognome">
+        <input type="email" id="c-email" placeholder="Email">
+        <input type="tel" id="c-phone" placeholder="Cellulare / WhatsApp">
+        <textarea id="c-address" placeholder="Indirizzo Completo (Via, Civico, CAP, Città, Stato)" rows="3"></textarea>
         
-        <div style="margin-top:20px;">
-            <label style="font-size:0.8rem;"><input type="checkbox" checked id="o-check"> Confermo i dati e scelgo il metodo:</label>
-            <button class="btn-wa" onclick="finish('WhatsApp')">INVIA ORDINE & WHATSAPP</button>
-            <button class="btn-pay" onclick="finish('Paypal')">PAGA ORA (CARTA/PAYPAL)</button>
+        <div style="margin-top:20px; display: grid; gap: 10px;">
+            <button class="btn" style="background:#25D366;" onclick="finishOrder('WhatsApp')">ORDINA SU WHATSAPP</button>
+            <button class="btn" style="background:#0070ba;" onclick="finishOrder('PayPal')">PAGA CON PAYPAL / CARTA</button>
         </div>
-        <button onclick="closeCheckout()" style="border:none; background:none; width:100%; margin-top:15px; color:#999; cursor:pointer;">&larr; Indietro</button>
+        <button onclick="closeCheckout()" style="border:none; background:none; width:100%; margin-top:20px; color:#999; cursor:pointer;">Annulla</button>
     </div>
 </div>
 
 <script>
     const CONFIG = {
-        catalogo: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR0aLcG9mPmNexSlEt-5MaNlpIPUF7LPvdlsJwDhoa_1PZfsvFbw9eQu4uBpsrqwTng9TrkqvxcoQRm/pub?gid=118341302&single=true&output=csv",
-        recensioni: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR0aLcG9mPmNexSlEt-5MaNlpIPUF7LPvdlsJwDhoa_1PZfsvFbw9eQu4uBpsrqwTng9TrkqvxcoQRm/pub?gid=534419137&single=true&output=csv",
-        script: "https://script.google.com/macros/s/AKfycbxRRpm4b5KVsAGIrcZulzqgmAGuU3cG8r-5p1DoCdrM87w4kCLCeDsNZD1WSAq5TdrA/exec",
+        catalog: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIumwZulbMAuesmG69DB8Y1bx2Y-NQXfyG7_m1-rdpZ-SoOxM0JyZtnj0_eV_K4t4drULTwV44nE5Y/pub?gid=0&single=true&output=csv",
+        webapp: "https://script.google.com/macros/s/AKfycbwWB94nyl8SKtoF-tuVxthKGYpcjVTPtwcSvPPXu6bNbI4nTafODD-bd3um59Y96FJa/exec",
         wa: "393358060715"
     };
 
-    const TRANSLATIONS = {
-        it: { h: "Dall'Orto alla Tavola", p: "L'essenza del Cilento spedita in tutta Europa.", btn: "Sfoglia la Collezione", add: "Aggiungi", tot: "Totale" },
-        en: { h: "From Field to Table", p: "The essence of Cilento shipped across Europe.", btn: "Browse Collection", add: "Add to Cart", tot: "Total" },
-        de: { h: "Vom Feld zum Tisch", p: "Die Essenz des Cilento in ganz Europa versandt.", btn: "Kollektion durchsuchen", add: "In den Warenkorb", tot: "Gesamt" }
+    const STRINGS = {
+        it: { h1: "Cilento nel Cuore", p: "Eccellenze locali spedite in tutta Europa.", btn: "Scopri la Dispensa", add: "Aggiungi al carrello" },
+        en: { h1: "Heart of Cilento", p: "Local excellence shipped across Europe.", btn: "Explore Pantry", add: "Add to cart" },
+        de: { h1: "Herz des Cilento", p: "Lokale Exzellenz in ganz Europa versandt.", btn: "Speisekammer erkunden", add: "In den Warenkorb" }
     };
 
-    let products = [], reviews = [], cart = [], lang = 'it';
+    let products = [], cart = [], currentLang = 'it';
 
     async function init() {
-        try {
-            const [resP, resR] = await Promise.all([fetch(CONFIG.catalogo), fetch(CONFIG.recensioni)]);
-            products = parseCSV(await resP.text());
-            reviews = parseCSV(await resR.text());
-            render();
-        } catch(e) { console.error("Errore caricamento."); }
+        const res = await fetch(CONFIG.catalog);
+        const text = await res.text();
+        products = parseCSV(text);
+        render();
     }
 
     function parseCSV(t) {
-        const lines = t.split(/\r?\n/).filter(l => l.trim() !== "");
-        const sep = lines[0].includes('\t') ? '\t' : ',';
-        const head = lines[0].split(sep).map(h => h.trim());
-        return lines.slice(1).map(l => {
-            const cols = l.split(sep);
-            let o = {};
-            head.forEach((h, i) => o[h] = cols[i]?.trim() || "");
-            return o;
+        const rows = t.split('\n').filter(r => r.trim() !== "");
+        const headers = rows[0].split(',').map(h => h.trim());
+        return rows.slice(1).map(row => {
+            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/); // Gestisce virgole dentro virgolette
+            let obj = {};
+            headers.forEach((h, i) => obj[h] = cols[i]?.replace(/"/g, '').trim());
+            return obj;
         });
     }
 
-    function updateLang(l) {
-        lang = l;
-        document.getElementById('hero-h').innerText = TRANSLATIONS[l].h;
-        document.getElementById('hero-p').innerText = TRANSLATIONS[l].p;
-        document.getElementById('hero-btn').innerText = TRANSLATIONS[l].btn;
+    function changeLang(l) {
+        currentLang = l;
+        document.getElementById('h-title').innerText = STRINGS[l].h1;
+        document.getElementById('h-sub').innerText = STRINGS[l].p;
+        document.getElementById('h-btn').innerText = STRINGS[l].btn;
         render();
     }
 
     function render() {
         const grid = document.getElementById('shop-grid');
         grid.innerHTML = products.map(p => {
-            const n = lang === 'it' ? p.Nome : p[`Nome_${lang.toUpperCase()}`] || p.Nome;
-            const d = lang === 'it' ? p.Descrizione : p[`Desc_${lang.toUpperCase()}`] || p.Descrizione;
-            const pRev = reviews.filter(r => r.ID_Prodotto == p.ID);
-            
-            return `<div class="card">
-                <img src="${p.Immagine}" alt="${n}">
-                <div class="card-content">
-                    <h3 class="card-title">${n}</h3>
-                    <p style="font-size:0.9rem; color:#666; margin:10px 0;">${d}</p>
-                    <div class="card-price">€ ${p.Prezzo}</div>
-                    <div style="display:flex; gap:10px;">
-                        <input type="number" id="qty-${p.ID}" value="1" min="1" style="width:60px; padding:10px; border-radius:10px; border:1px solid #ddd;">
-                        <button class="btn-cta" style="flex-grow:1; padding:12px;" onclick="add('${p.ID}')">${TRANSLATIONS[lang].add}</button>
+            const name = currentLang === 'it' ? p.Nome : (p[`Nome_${currentLang.toUpperCase()}`] || p.Nome);
+            const desc = currentLang === 'it' ? p.Descrizione : (p[`Desc_${currentLang.toUpperCase()}`] || p.Descrizione);
+            return `
+                <div class="card">
+                    <img src="${p.Immagine}" alt="${name}">
+                    <div class="card-info">
+                        <h3 class="card-title">${name}</h3>
+                        <p style="font-size:0.9rem; color:#666; margin:10px 0; min-height:40px;">${desc}</p>
+                        <div class="card-price">€ ${p.Prezzo}</div>
+                        <button class="btn" onclick="addToCart('${p.ID}')">${STRINGS[currentLang].add}</button>
                     </div>
-                    <div style="margin-top:20px; font-size:0.8rem; border-top:1px dotted #ccc; padding-top:10px;">
-                        ${pRev.map(r => `<div><strong>${r.Cliente}:</strong> ${r.Commento} ${r.Risposta_Gizi ? `<br><i style="color:green">Gizzi: ${r.Risposta_Gizi}</i>` : ''}</div>`).join('')}
-                    </div>
-                </div>
-            </div>`;
+                </div>`;
         }).join('');
     }
 
-    function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); }
-    function openCheckout() { document.getElementById('checkout-modal').style.display = 'flex'; }
-    function closeCheckout() { document.getElementById('checkout-modal').style.display = 'none'; }
-
-    function add(id) {
+    function addToCart(id) {
         const p = products.find(x => x.ID == id);
-        const q = parseInt(document.getElementById(`qty-${id}`).value);
-        const ex = cart.find(c => c.ID == id);
-        if(ex) ex.qty += q; else cart.push({...p, qty: q});
+        const exists = cart.find(c => c.ID == id);
+        if(exists) exists.qty++; else cart.push({...p, qty: 1});
         updateUI();
         document.getElementById('cart-panel').classList.add('active');
     }
@@ -221,39 +204,48 @@
         let total = 0;
         document.getElementById('cart-count').innerText = cart.reduce((a,b) => a + b.qty, 0);
         list.innerHTML = cart.map((c, i) => {
-            const s = parseFloat(c.Prezzo.replace(',','.')) * c.qty;
-            total += s;
-            return `<div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                <div><strong>${c.Nome}</strong><br>${c.qty} x €${c.Prezzo}</div>
-                <div>€ ${s.toFixed(2)} <button onclick="rem(${i})" style="border:none; color:red; background:none; cursor:pointer;">&times;</button></div>
+            const sub = parseFloat(c.Prezzo.replace(',','.')) * c.qty;
+            total += sub;
+            return `<div style="display:flex; justify-content:space-between; margin-bottom:20px; align-items:center;">
+                <div><strong>${c.Nome}</strong><br><small>${c.qty}x €${c.Prezzo}</small></div>
+                <div>€ ${sub.toFixed(2)} <button onclick="remove(${i})" style="border:none; color:red; background:none; cursor:pointer; font-size:1.2rem;">&times;</button></div>
             </div>`;
         }).join('');
         document.getElementById('cart-total').innerText = `€ ${total.toFixed(2)}`;
     }
 
-    function rem(i) { cart.splice(i,1); updateUI(); }
+    function remove(i) { cart.splice(i,1); updateUI(); }
+    function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); }
+    function openCheckout() { document.getElementById('checkout-modal').style.display = 'flex'; }
+    function closeCheckout() { document.getElementById('checkout-modal').style.display = 'none'; }
 
-    async function finish(method) {
-        const name = document.getElementById('o-name').value;
-        const addr = document.getElementById('o-addr').value;
-        const phone = document.getElementById('o-phone').value;
-        const email = document.getElementById('o-email').value;
-        if(!name || !addr) return alert("Inserisci i dati richiesti.");
+    async function finishOrder(method) {
+        const name = document.getElementById('c-name').value;
+        const addr = document.getElementById('c-address').value;
+        if(!name || !addr) return alert("Per favore, inserisci Nome e Indirizzo.");
 
-        const orderID = "GIZZI-" + Date.now().toString().slice(-6);
-        const tot = document.getElementById('cart-total').innerText;
+        const orderID = "GZ-" + Date.now().toString().slice(-6);
+        const total = document.getElementById('cart-total').innerText;
         const items = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
 
         const payload = {
-            action: "newOrder", orderID, customerName: name, customerEmail: email,
-            customerPhone: phone, customerAddress: addr, items, total: tot
+            orderID, customerName: name, customerEmail: document.getElementById('c-email').value,
+            customerPhone: document.getElementById('c-phone').value, customerAddress: addr,
+            items, total
         };
 
-        // SALVATAGGIO SUL FOGLIO GOOGLE
-        fetch(CONFIG.script, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+        // INVIO AL FOGLIO GOOGLE
+        fetch(CONFIG.webapp, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
 
         if(method === 'WhatsApp') {
-            const msg = `*ORDINE ${orderID}*\nCliente: ${name}\nIndirizzo: ${addr}\nProdotti: ${items}\nTotale: ${tot}`;
+            const msg = `*NUOVO ORDINE ${orderID}*\n\n*Cliente:* ${name}\n*Indirizzo:* ${addr}\n*Prodotti:* ${items}\n\n*TOTALE:* ${total}`;
             window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`);
         } else {
-            window.open(`https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=torre.michele@gmail.com&item_name=Ordine_${orderID}&amount=${tot.replace('€ ','')}&currency_code=EUR`);
+            window.open(`https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=torre.michele@gmail.com&item_name=Ordine_${orderID}&amount=${total.replace('€ ','')}&currency_code=EUR`);
+        }
+    }
+
+    init();
+</script>
+</body>
+</html>
