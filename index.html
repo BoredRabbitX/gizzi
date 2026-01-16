@@ -3,226 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gruppo Gizzi | Cilento Market</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --amazon-orange: #ff9900;
-            --gizzi-green: #1b4332;
-            --bg-light: #f3f3f3;
-            --text-main: #111;
-        }
-
-        body { font-family: 'Inter', sans-serif; margin: 0; background: #fff; color: var(--text-main); }
-
-        /* HEADER STILE AMAZON MINIMAL */
-        nav {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 15px 5%; background: #fff; border-bottom: 1px solid #ddd;
-            position: sticky; top: 0; z-index: 100;
-        }
-
-        .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gizzi-green); text-decoration: none; }
-
-        .nav-tools { display: flex; gap: 20px; align-items: center; }
-
-        .lang-btn { background: none; border: 1px solid #ddd; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 0.8rem; }
-
-        /* CARRELLO LATERALE */
-        #cart-panel {
-            position: fixed; right: -400px; top: 0; width: 350px; height: 100%;
-            background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-            transition: 0.3s; z-index: 200; padding: 30px; display: flex; flex-direction: column;
-        }
-        #cart-panel.active { right: 0; }
-
-        /* GRID PRODOTTI */
-        .hero { background: var(--bg-light); padding: 60px 5%; text-align: center; }
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 10px; }
-
-        .container { max-width: 1300px; margin: 40px auto; padding: 0 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-
-        .card { border: 1px solid #eee; transition: 0.2s; position: relative; }
-        .card:hover { border-color: var(--amazon-orange); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-
-        .card img { width: 100%; height: 250px; object-fit: cover; }
-        .card-content { padding: 15px; }
-        .card-category { font-size: 0.7rem; color: #777; text-transform: uppercase; }
-        .card-title { font-size: 1.1rem; margin: 5px 0; font-weight: 600; }
-        .card-price { font-size: 1.2rem; font-weight: 700; margin: 10px 0; }
-
-        .btn-amazon {
-            background: #ffd814; border: 1px solid #fcd200; border-radius: 20px;
-            padding: 8px 15px; cursor: pointer; width: 100%; font-size: 0.9rem;
-        }
-        .btn-amazon:hover { background: #f7ca00; }
-
-        /* CHECKOUT MODALE */
-        #checkout-modal {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-            z-index: 300; align-items: center; justify-content: center;
-        }
-        .modal-content { background: #fff; padding: 40px; border-radius: 8px; width: 90%; max-width: 500px; }
-
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-
-        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-
-        @media (max-width: 768px) { .logo { font-size: 1.2rem; } #cart-panel { width: 100%; right: -100%; } }
-    </style>
+    <title>Gruppo Gizzi | Cilento International Market</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
 
 <nav>
     <a href="#" class="logo">GRUPPO GIZZI</a>
-    <div class="nav-tools">
-        <div class="lang-switcher">
-            <button class="lang-btn" onclick="setLang('it')">IT</button>
-            <button class="lang-btn" onclick="setLang('en')">EN</button>
-            <button class="lang-btn" onclick="setLang('de')">DE</button>
-        </div>
-        <div onclick="toggleCart()" style="cursor:pointer; position:relative;">
-            🛒 <span id="cart-count" style="background:var(--amazon-orange); color:white; border-radius:50%; padding:2px 6px; font-size:0.7rem; position:absolute; top:-10px; right:-10px;">0</span>
+    <div class="nav-right">
+        <select id="lang-select" onchange="changeLanguage(this.value)">
+            <option value="it">🇮🇹 Italiano</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="de">🇩🇪 Deutsch</option>
+        </select>
+        <div class="cart-icon" onclick="toggleCart()">
+            🛒 <span id="cart-count">0</span>
         </div>
     </div>
 </nav>
 
-<div class="hero">
-    <h1 id="hero-title">Sapori Autentici del Cilento</h1>
-    <p id="hero-sub">Dalla terra di Gruppo Gizzi direttamente a casa tua.</p>
-</div>
-
-<div class="container">
-    <div id="shop" class="grid"></div>
-</div>
+<div id="shop-grid" class="container grid"></div>
 
 <div id="cart-panel">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h2>Il tuo Carrello</h2>
-        <button onclick="toggleCart()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+    <div class="cart-header">
+        <h2 id="txt-cart-title">Il tuo Carrello</h2>
+        <span onclick="toggleCart()" style="cursor:pointer">✕</span>
     </div>
-    <div id="cart-items" style="flex-grow:1; overflow-y:auto; margin-top:20px;"></div>
-    <div id="cart-total" style="font-size:1.2rem; font-weight:700; border-top:1px solid #ddd; padding-top:20px;">
-        Totale: € 0.00
+    <div id="cart-items"></div>
+    <div class="cart-footer">
+        <h3 id="cart-total">Totale: € 0.00</h3>
+        <button class="btn-checkout" onclick="openCheckout()" id="txt-checkout">Procedi al Checkout</button>
     </div>
-    <button class="btn-amazon" style="margin-top:20px; background:var(--amazon-orange); color:white;" onclick="openCheckout()">Procedi all'ordine</button>
 </div>
 
 <div id="checkout-modal">
     <div class="modal-content">
-        <h2>Dati di Consegna</h2>
-        <input type="text" id="cust-name" placeholder="Nome e Cognome">
-        <input type="text" id="cust-address" placeholder="Indirizzo completo">
-        <input type="tel" id="cust-phone" placeholder="Cellulare per corriere">
-        <p style="font-size:0.8rem; color:#666;">L'ordine verrà inviato via WhatsApp per una gestione rapida del fresco.</p>
-        <button class="btn-amazon" onclick="confirmOrder()">Invia Ordine su WhatsApp</button>
-        <button onclick="closeCheckout()" style="background:none; border:none; color:#777; width:100%; margin-top:10px; cursor:pointer;">Annulla</button>
+        <h2 id="txt-order-details">Dettagli Ordine</h2>
+        <form id="order-form">
+            <input type="text" id="name" placeholder="Nome e Cognome" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="text" id="address" placeholder="Indirizzo (Via, Civico, Città, CAP, Nazione)" required>
+            <input type="tel" id="phone" placeholder="Telefono (+ prefisso internazionale)" required>
+            <textarea id="notes" placeholder="Note per la consegna"></textarea>
+            
+            <div class="payment-methods">
+                <p id="txt-payment">Scegli il metodo di pagamento:</p>
+                <button type="button" class="btn-pay" onclick="processOrder('Paypal')">PayPal / Credit Card</button>
+                <button type="button" class="btn-wa" onclick="processOrder('WhatsApp')">WhatsApp Order</button>
+            </div>
+        </form>
+        <button onclick="closeCheckout()" class="btn-cancel">Annulla</button>
     </div>
 </div>
 
-<script>
-    const CONFIG = {
-        catalogo: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR0aLcG9mPmNexSlEt-5MaNlpIPUF7LPvdlsJwDhoa_1PZfsvFbw9eQu4uBpsrqwTng9TrkqvxcoQRm/pub?gid=118341302&single=true&output=csv",
-        recensioni: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR0aLcG9mPmNexSlEt-5MaNlpIPUF7LPvdlsJwDhoa_1PZfsvFbw9eQu4uBpsrqwTng9TrkqvxcoQRm/pub?gid=534419137&single=true&output=csv",
-        waNumber: "393330000000"
-    };
-
-    let db = [], reviews = [], cart = [], lang = 'it';
-
-    const uiTexts = {
-        it: { title: "Sapori Autentici del Cilento", sub: "Dalla terra di Gruppo Gizzi direttamente a casa tua.", add: "Aggiungi al carrello" },
-        en: { title: "Authentic Cilento Flavors", sub: "From Gruppo Gizzi fields straight to your home.", add: "Add to Cart" },
-        de: { title: "Authentische Cilento-Aromen", sub: "Vom Gruppo Gizzi Feld direkt zu Ihnen nach Hause.", add: "In den Warenkorb" }
-    };
-
-    async function init() {
-        const [resP, resR] = await Promise.all([fetch(CONFIG.catalogo), fetch(CONFIG.recensioni)]);
-        db = parseCSV(await resP.text());
-        reviews = parseCSV(await resR.text());
-        render();
-    }
-
-    function parseCSV(text) {
-        const lines = text.split('\n');
-        const headers = lines[0].includes('\t') ? lines[0].split('\t') : lines[0].split(',');
-        return lines.slice(1).map(line => {
-            const cols = line.includes('\t') ? line.split('\t') : line.split(',');
-            let obj = {};
-            headers.forEach((h, i) => obj[h.trim()] = cols[i]?.trim());
-            return obj;
-        });
-    }
-
-    function setLang(l) {
-        lang = l;
-        document.getElementById('hero-title').innerText = uiTexts[lang].title;
-        document.getElementById('hero-sub').innerText = uiTexts[lang].sub;
-        render();
-    }
-
-    function render() {
-        const shop = document.getElementById('shop');
-        shop.innerHTML = db.map(p => {
-            const name = p[`Nome_${lang.toUpperCase()}`] || p.Nome;
-            return `
-                <div class="card">
-                    <img src="${p.Immagine}" alt="${name}">
-                    <div class="card-content">
-                        <div class="card-category">${p.Categoria}</div>
-                        <div class="card-title">${name}</div>
-                        <div class="card-price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
-                        <button class="btn-amazon" onclick="addToCart('${p.ID}')">${uiTexts[lang].add}</button>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
-
-    function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); }
-
-    function addToCart(id) {
-        const item = db.find(p => p.ID === id);
-        cart.push(item);
-        updateCartUI();
-        if(!document.getElementById('cart-panel').classList.contains('active')) toggleCart();
-    }
-
-    function updateCartUI() {
-        document.getElementById('cart-count').innerText = cart.length;
-        const list = document.getElementById('cart-items');
-        let total = 0;
-        list.innerHTML = cart.map((item, index) => {
-            total += parseFloat(item.Prezzo);
-            return `<div class="cart-item">
-                <span>${item.Nome}</span>
-                <span>€ ${item.Prezzo} <button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; cursor:pointer;">🗑️</button></span>
-            </div>`;
-        }).join('');
-        document.getElementById('cart-total').innerText = `Totale: € ${total.toFixed(2)}`;
-    }
-
-    function removeFromCart(index) {
-        cart.splice(index, 1);
-        updateCartUI();
-    }
-
-    function openCheckout() { document.getElementById('checkout-modal').style.display = 'flex'; }
-    function closeCheckout() { document.getElementById('checkout-modal').style.display = 'none'; }
-
-    function confirmOrder() {
-        const name = document.getElementById('cust-name').value;
-        const addr = document.getElementById('cust-address').value;
-        if(!name || !addr) return alert("Inserisci i dati di spedizione");
-
-        let msg = `Nuovo Ordine Gruppo Gizzi\n---\nNome: ${name}\nIndirizzo: ${addr}\n---\nProdotti:\n`;
-        cart.forEach(i => msg += `- ${i.Nome} (€${i.Prezzo})\n`);
-        
-        window.open(`https://wa.me/${CONFIG.waNumber}?text=${encodeURIComponent(msg)}`);
-        closeCheckout();
-    }
-
-    init();
-</script>
+<script src="script.js"></script>
 </body>
 </html>
