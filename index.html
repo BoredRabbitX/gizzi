@@ -3,184 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gruppo Gizzi - Cilento Food Experience</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Gruppo Gizzi | Cilento Market</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1b4332; /* Verde foresta cilentano */
-            --accent: #b08d57;  /* Oro brunito/terra */
-            --light: #fdfaf5;   /* Crema pergamena */
-            --text: #2d2d2d;
+            --amazon-orange: #ff9900;
+            --gizzi-green: #1b4332;
+            --bg-light: #f3f3f3;
+            --text-main: #111;
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--light);
-            color: var(--text);
-            margin: 0;
-            line-height: 1.6;
+        body { font-family: 'Inter', sans-serif; margin: 0; background: #fff; color: var(--text-main); }
+
+        /* HEADER STILE AMAZON MINIMAL */
+        nav {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 15px 5%; background: #fff; border-bottom: 1px solid #ddd;
+            position: sticky; top: 0; z-index: 100;
         }
 
-        /* Navigazione e Lingue */
-        .top-bar {
-            background: var(--primary);
-            color: white;
-            padding: 10px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gizzi-green); text-decoration: none; }
+
+        .nav-tools { display: flex; gap: 20px; align-items: center; }
+
+        .lang-btn { background: none; border: 1px solid #ddd; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 0.8rem; }
+
+        /* CARRELLO LATERALE */
+        #cart-panel {
+            position: fixed; right: -400px; top: 0; width: 350px; height: 100%;
+            background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: 0.3s; z-index: 200; padding: 30px; display: flex; flex-direction: column;
         }
+        #cart-panel.active { right: 0; }
 
-        .lang-switcher button {
-            background: transparent;
-            border: 1px solid white;
-            color: white;
-            padding: 5px 10px;
-            cursor: pointer;
-            margin-left: 5px;
-            border-radius: 4px;
+        /* GRID PRODOTTI */
+        .hero { background: var(--bg-light); padding: 60px 5%; text-align: center; }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 10px; }
+
+        .container { max-width: 1300px; margin: 40px auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+
+        .card { border: 1px solid #eee; transition: 0.2s; position: relative; }
+        .card:hover { border-color: var(--amazon-orange); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+        .card img { width: 100%; height: 250px; object-fit: cover; }
+        .card-content { padding: 15px; }
+        .card-category { font-size: 0.7rem; color: #777; text-transform: uppercase; }
+        .card-title { font-size: 1.1rem; margin: 5px 0; font-weight: 600; }
+        .card-price { font-size: 1.2rem; font-weight: 700; margin: 10px 0; }
+
+        .btn-amazon {
+            background: #ffd814; border: 1px solid #fcd200; border-radius: 20px;
+            padding: 8px 15px; cursor: pointer; width: 100%; font-size: 0.9rem;
         }
+        .btn-amazon:hover { background: #f7ca00; }
 
-        .lang-switcher button.active {
-            background: var(--accent);
-            border-color: var(--accent);
+        /* CHECKOUT MODALE */
+        #checkout-modal {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            z-index: 300; align-items: center; justify-content: center;
         }
+        .modal-content { background: #fff; padding: 40px; border-radius: 8px; width: 90%; max-width: 500px; }
 
-        header {
-            background: white;
-            padding: 40px 5%;
-            text-align: center;
-            border-bottom: 4px solid var(--accent);
-        }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
 
-        .logo-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            color: var(--primary);
-            margin: 0;
-            letter-spacing: 1px;
-        }
+        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
 
-        .sub-logo {
-            font-style: italic;
-            color: var(--accent);
-            font-size: 1.1rem;
-        }
-
-        /* Vetrina */
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 2px; /* Look più editoriale, meno "giocattolo" */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: 0.3s;
-            position: relative;
-        }
-
-        .product-card:hover { transform: translateY(-10px); }
-
-        .product-card img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-        }
-
-        .card-content { padding: 25px; }
-
-        .category-tag {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        h3 { font-family: 'Playfair Display', serif; margin: 10px 0; font-size: 1.4rem; }
-
-        .price { font-size: 1.3rem; font-weight: 600; color: var(--primary); }
-
-        .btn-add {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 12px;
-            margin-top: 15px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .btn-add:hover { background: var(--accent); }
-
-        /* Recensioni Merchant */
-        .merchant-reply {
-            margin-top: 15px;
-            font-size: 0.85rem;
-            background: #f9f9f9;
-            padding: 10px;
-            border-left: 2px solid var(--primary);
-        }
-
-        /* Floating Cart */
-        #cart-trigger {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--primary);
-            color: white;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            cursor: pointer;
-            z-index: 99;
-        }
-
-        .cart-badge {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: var(--accent);
-            border-radius: 50%;
-            padding: 5px 8px;
-            font-size: 0.8rem;
-        }
+        @media (max-width: 768px) { .logo { font-size: 1.2rem; } #cart-panel { width: 100%; right: -100%; } }
     </style>
 </head>
 <body>
 
-<div class="top-bar">
-    <div>Cilento, Italy | Gruppo Gizzi</div>
-    <div class="lang-switcher">
-        <button onclick="setLang('it')" id="btn-it" class="active">IT</button>
-        <button onclick="setLang('en')" id="btn-en">EN</button>
-        <button onclick="setLang('de')" id="btn-de">DE</button>
+<nav>
+    <a href="#" class="logo">GRUPPO GIZZI</a>
+    <div class="nav-tools">
+        <div class="lang-switcher">
+            <button class="lang-btn" onclick="setLang('it')">IT</button>
+            <button class="lang-btn" onclick="setLang('en')">EN</button>
+            <button class="lang-btn" onclick="setLang('de')">DE</button>
+        </div>
+        <div onclick="toggleCart()" style="cursor:pointer; position:relative;">
+            🛒 <span id="cart-count" style="background:var(--amazon-orange); color:white; border-radius:50%; padding:2px 6px; font-size:0.7rem; position:absolute; top:-10px; right:-10px;">0</span>
+        </div>
     </div>
-</div>
+</nav>
 
-<header>
-    <div class="logo-text">GRUPPO GIZZI</div>
-    <div class="sub-logo" id="header-sub">Eccellenze Agricole dal Cuore del Cilento</div>
-</header>
+<div class="hero">
+    <h1 id="hero-title">Sapori Autentici del Cilento</h1>
+    <p id="hero-sub">Dalla terra di Gruppo Gizzi direttamente a casa tua.</p>
+</div>
 
 <div class="container">
-    <div id="shop" class="grid">
-        </div>
+    <div id="shop" class="grid"></div>
 </div>
 
-<div id="cart-trigger" onclick="checkout()">
-    🛒 <span class="cart-badge" id="count">0</span>
+<div id="cart-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2>Il tuo Carrello</h2>
+        <button onclick="toggleCart()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+    </div>
+    <div id="cart-items" style="flex-grow:1; overflow-y:auto; margin-top:20px;"></div>
+    <div id="cart-total" style="font-size:1.2rem; font-weight:700; border-top:1px solid #ddd; padding-top:20px;">
+        Totale: € 0.00
+    </div>
+    <button class="btn-amazon" style="margin-top:20px; background:var(--amazon-orange); color:white;" onclick="openCheckout()">Procedi all'ordine</button>
+</div>
+
+<div id="checkout-modal">
+    <div class="modal-content">
+        <h2>Dati di Consegna</h2>
+        <input type="text" id="cust-name" placeholder="Nome e Cognome">
+        <input type="text" id="cust-address" placeholder="Indirizzo completo">
+        <input type="tel" id="cust-phone" placeholder="Cellulare per corriere">
+        <p style="font-size:0.8rem; color:#666;">L'ordine verrà inviato via WhatsApp per una gestione rapida del fresco.</p>
+        <button class="btn-amazon" onclick="confirmOrder()">Invia Ordine su WhatsApp</button>
+        <button onclick="closeCheckout()" style="background:none; border:none; color:#777; width:100%; margin-top:10px; cursor:pointer;">Annulla</button>
+    </div>
 </div>
 
 <script>
@@ -190,85 +128,98 @@
         waNumber: "393330000000"
     };
 
-    let currentLang = 'it';
-    let database = [];
-    let feedback = [];
-    let cart = [];
+    let db = [], reviews = [], cart = [], lang = 'it';
 
-    const i18n = {
-        it: { sub: "Eccellenze Agricole dal Cuore del Cilento", add: "Aggiungi al Carrello", order: "Ciao Gruppo Gizzi, vorrei ordinare:" },
-        en: { sub: "Premium Agricultural Goods from the Heart of Cilento", add: "Add to Cart", order: "Hello Gruppo Gizzi, I'd like to order:" },
-        de: { sub: "Premium Agrarprodukte aus dem Herzen des Cilento", add: "In den Warenkorb", order: "Hallo Gruppo Gizzi, ich möchte bestellen:" }
+    const uiTexts = {
+        it: { title: "Sapori Autentici del Cilento", sub: "Dalla terra di Gruppo Gizzi direttamente a casa tua.", add: "Aggiungi al carrello" },
+        en: { title: "Authentic Cilento Flavors", sub: "From Gruppo Gizzi fields straight to your home.", add: "Add to Cart" },
+        de: { title: "Authentische Cilento-Aromen", sub: "Vom Gruppo Gizzi Feld direkt zu Ihnen nach Hause.", add: "In den Warenkorb" }
     };
 
     async function init() {
         const [resP, resR] = await Promise.all([fetch(CONFIG.catalogo), fetch(CONFIG.recensioni)]);
-        database = parseCSV(await resP.text());
-        feedback = parseCSV(await resR.text());
+        db = parseCSV(await resP.text());
+        reviews = parseCSV(await resR.text());
         render();
     }
 
     function parseCSV(text) {
-        const rows = text.split('\n');
-        const headers = rows[0].includes('\t') ? rows[0].split('\t') : rows[0].split(',');
-        return rows.slice(1).map(row => {
-            const cols = row.includes('\t') ? row.split('\t') : row.split(',');
-            let data = {};
-            headers.forEach((h, i) => data[h.trim()] = cols[i]?.trim());
-            return data;
+        const lines = text.split('\n');
+        const headers = lines[0].includes('\t') ? lines[0].split('\t') : lines[0].split(',');
+        return lines.slice(1).map(line => {
+            const cols = line.includes('\t') ? line.split('\t') : line.split(',');
+            let obj = {};
+            headers.forEach((h, i) => obj[h.trim()] = cols[i]?.trim());
+            return obj;
         });
     }
 
-    function setLang(lang) {
-        currentLang = lang;
-        document.querySelectorAll('.lang-switcher button').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-' + lang).classList.add('active');
-        document.getElementById('header-sub').innerText = i18n[lang].sub;
+    function setLang(l) {
+        lang = l;
+        document.getElementById('hero-title').innerText = uiTexts[lang].title;
+        document.getElementById('hero-sub').innerText = uiTexts[lang].sub;
         render();
     }
 
     function render() {
-        const container = document.getElementById('shop');
-        container.innerHTML = database.map(p => {
-            // Logica per nomi multilingua (se aggiungerai le colonne Nome_EN etc)
-            const nome = p[`Nome_${currentLang.toUpperCase()}`] || p.Nome;
-            const desc = p[`Descrizione_${currentLang.toUpperCase()}`] || p.Descrizione;
-            const recs = feedback.filter(f => f.ID_Prodotto === p.ID);
-
+        const shop = document.getElementById('shop');
+        shop.innerHTML = db.map(p => {
+            const name = p[`Nome_${lang.toUpperCase()}`] || p.Nome;
             return `
-                <div class="product-card">
-                    <img src="${p.Immagine}" alt="${nome}">
+                <div class="card">
+                    <img src="${p.Immagine}" alt="${name}">
                     <div class="card-content">
-                        <span class="category-tag">${p.Categoria}</span>
-                        <h3>${nome}</h3>
-                        <p style="font-size: 0.9rem; color: #666;">${desc}</p>
-                        <div class="price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
-                        <button class="btn-add" onclick="addToCart('${p.ID}')">${i18n[currentLang].add}</button>
-                        
-                        ${recs.map(r => `
-                            <div class="merchant-reply">
-                                <strong>${r.Cliente}:</strong> ⭐ ${r.Voto}<br>
-                                "${r.Commento}"
-                                ${r.Risposta_Gizi ? `<br><small><strong>Gruppo Gizzi:</strong> ${r.Risposta_Gizi}</small>` : ''}
-                            </div>
-                        `).join('')}
+                        <div class="card-category">${p.Categoria}</div>
+                        <div class="card-title">${name}</div>
+                        <div class="card-price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
+                        <button class="btn-amazon" onclick="addToCart('${p.ID}')">${uiTexts[lang].add}</button>
                     </div>
                 </div>
             `;
         }).join('');
     }
 
+    function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); }
+
     function addToCart(id) {
-        const p = database.find(x => x.ID === id);
-        cart.push(p);
-        document.getElementById('count').innerText = cart.length;
+        const item = db.find(p => p.ID === id);
+        cart.push(item);
+        updateCartUI();
+        if(!document.getElementById('cart-panel').classList.contains('active')) toggleCart();
     }
 
-    function checkout() {
-        if(cart.length === 0) return;
-        let msg = i18n[currentLang].order + "\n";
+    function updateCartUI() {
+        document.getElementById('cart-count').innerText = cart.length;
+        const list = document.getElementById('cart-items');
+        let total = 0;
+        list.innerHTML = cart.map((item, index) => {
+            total += parseFloat(item.Prezzo);
+            return `<div class="cart-item">
+                <span>${item.Nome}</span>
+                <span>€ ${item.Prezzo} <button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; cursor:pointer;">🗑️</button></span>
+            </div>`;
+        }).join('');
+        document.getElementById('cart-total').innerText = `Totale: € ${total.toFixed(2)}`;
+    }
+
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCartUI();
+    }
+
+    function openCheckout() { document.getElementById('checkout-modal').style.display = 'flex'; }
+    function closeCheckout() { document.getElementById('checkout-modal').style.display = 'none'; }
+
+    function confirmOrder() {
+        const name = document.getElementById('cust-name').value;
+        const addr = document.getElementById('cust-address').value;
+        if(!name || !addr) return alert("Inserisci i dati di spedizione");
+
+        let msg = `Nuovo Ordine Gruppo Gizzi\n---\nNome: ${name}\nIndirizzo: ${addr}\n---\nProdotti:\n`;
         cart.forEach(i => msg += `- ${i.Nome} (€${i.Prezzo})\n`);
+        
         window.open(`https://wa.me/${CONFIG.waNumber}?text=${encodeURIComponent(msg)}`);
+        closeCheckout();
     }
 
     init();
