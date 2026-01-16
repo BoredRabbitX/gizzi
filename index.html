@@ -1,41 +1,159 @@
-<div id="checkout-modal" class="modal-overlay">
-    <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
-        <h2 style="font-family:'Fraunces'; color:var(--gizzi-green);">Conferma il tuo Ordine</h2>
-        
-        <div class="form-group">
-            <input type="text" id="cust-name" placeholder="Nome e Cognome">
-            <input type="email" id="cust-email" placeholder="Email">
-            <input type="tel" id="cust-phone" placeholder="Cellulare (con prefisso)">
-            <input type="text" id="cust-address" placeholder="Via e Numero Civico">
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="cust-city" placeholder="Città" style="flex:2;">
-                <input type="text" id="cust-cap" placeholder="CAP" style="flex:1;">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gruppo Gizzi | Cilento Authentic Experience</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* Overlay per il caricamento */
+        #loader {
+            position: fixed; inset: 0; background: #fff; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Fraunces', serif; font-size: 1.5rem; color: #1b4332;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">GRUPPO GIZZI...</div>
+
+    <nav>
+        <div class="nav-container" style="width: 90%; max-width: 1300px; margin: auto; display: flex; justify-content: space-between; align-items: center;">
+            <a href="#" class="logo">GRUPPO GIZZI</a>
+            
+            <div class="nav-tools" style="display: flex; gap: 25px; align-items: center;">
+                <select id="lang-picker" onchange="setLang(this.value)" style="background: none; border: 1px solid #ddd; border-radius: 8px; padding: 5px;">
+                    <option value="it">🇮🇹 IT</option>
+                    <option value="en">🇬🇧 EN</option>
+                    <option value="de">🇩🇪 DE</option>
+                </select>
+                
+                <div class="cart-btn" onclick="toggleCart()" style="cursor: pointer; position: relative; font-size: 1.4rem;">
+                    🛒 <span id="cart-count" style="position: absolute; top: -10px; right: -12px; background: #b08d57; color: #fff; border-radius: 50%; padding: 2px 7px; font-size: 0.75rem; font-weight: bold;">0</span>
+                </div>
             </div>
-            <select id="cust-country">
-                <option value="Italia">Italia</option>
-                <option value="Germania">Germania</option>
-                <option value="UK">Regno Unito</option>
-            </select>
         </div>
+    </nav>
 
-        <div style="background:#f9f9f9; padding:15px; border-radius:10px; margin:15px 0; font-size:0.9rem;">
-            <p><strong>Riepilogo:</strong> <span id="summary-items"></span></p>
-            <p style="font-size:1.2rem; color:var(--gizzi-green);"><strong>Totale: € <span id="summary-total">0.00</span></strong></p>
+    <section class="hero">
+        <div class="hero-content" style="z-index: 2;">
+            <h1 id="hero-title">Cilento, Pura Terra.</h1>
+            <p id="hero-sub">L'eccellenza di Gruppo Gizzi consegnata in tutta Europa.</p>
+            <a href="#shop-grid" class="btn-main" style="width: auto; padding: 15px 40px; text-decoration: none; display: inline-block;">SCOPRI I PRODOTTI</a>
         </div>
+    </section>
 
-        <div style="margin-bottom:20px; font-size:0.8rem;">
-            <label><input type="checkbox" id="check-privacy" checked> Accetto i termini e la spedizione dal Cilento.</label>
-        </div>
+    <main class="container">
+        <div id="shop-grid" class="grid">
+            </div>
+    </main>
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <button class="btn-wa" onclick="processaAzioneOrdine('WhatsApp')">
-                <i class="fab fa-whatsapp"></i> INVIA ORDINE
-            </button>
-            <button class="btn-main" style="background:#0070ba;" onclick="processaAzioneOrdine('Paypal')">
-                PAGA ORA
-            </button>
+    <div id="cart-panel">
+        <div class="cart-header">
+            <h2 style="font-family: 'Fraunces'; margin: 0;">Il tuo ordine</h2>
+            <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:2rem; cursor:pointer;">&times;</button>
         </div>
-        
-        <button onclick="closeModal()" style="border:none; background:none; width:100%; margin-top:15px; color:#666; cursor:pointer;">Annulla e torna al carrello</button>
+        <div id="cart-items-list" style="flex-grow: 1; overflow-y: auto; padding: 20px;">
+            </div>
+        <div class="cart-footer">
+            <div style="display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 700; margin-bottom: 20px;">
+                <span>Totale:</span>
+                <span id="cart-total-value">€ 0.00</span>
+            </div>
+            <button class="btn-main" onclick="openCheckout()">PROSEGUI AL CHECKOUT</button>
+        </div>
     </div>
-</div>
+
+    <div id="checkout-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 style="font-family: 'Fraunces'; color: #1b4332; margin-top: 0;">Dettagli di Spedizione</h2>
+            <p style="font-size: 0.85rem; color: #666; margin-bottom: 20px;">Completa i dati per ricevere le eccellenze del Gruppo Gizzi.</p>
+            
+            <form id="checkout-form" onsubmit="return false;">
+                <input type="text" id="cust-name" placeholder="Nome e Cognome *" required>
+                <input type="email" id="cust-email" placeholder="Email (per la conferma ordine) *" required>
+                <input type="tel" id="cust-phone" placeholder="Telefono / WhatsApp *" required>
+                
+                <input type="text" id="cust-address" placeholder="Indirizzo e Numero Civico *" required>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="cust-city" placeholder="Città *" required style="flex: 2;">
+                    <input type="text" id="cust-cap" placeholder="CAP *" required style="flex: 1;">
+                </div>
+                
+                <select id="cust-country" style="width: 100%; margin-bottom: 20px;">
+                    <option value="Italia">Italia</option>
+                    <option value="Germania">Germania (Deutschland)</option>
+                    <option value="Regno Unito">Regno Unito (UK)</option>
+                    <option value="Francia">Francia</option>
+                    <option value="Austria">Austria</option>
+                </select>
+
+                <div id="order-summary-box" style="background: #f5f5f7; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <p style="margin: 0; font-size: 0.9rem;"><strong>Riepilogo prodotti:</strong></p>
+                    <div id="summary-text" style="font-size: 0.8rem; color: #555; margin: 5px 0;"></div>
+                    <p style="margin: 5px 0 0; font-size: 1.1rem; color: #1b4332;"><strong>Totale: <span id="summary-total">€ 0.00</span></strong></p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <button type="button" class="btn-wa" onclick="processaAzioneOrdine('WhatsApp')" style="background: #25D366; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        INVIA ORDINE
+                    </button>
+                    <button type="button" class="btn-main" onclick="processaAzioneOrdine('Paypal')" style="background: #0070ba; margin: 0;">
+                        PAGA ORA
+                    </button>
+                </div>
+            </form>
+            
+            <button onclick="closeCheckout()" style="border: none; background: none; width: 100%; margin-top: 20px; color: #666; cursor: pointer; font-size: 0.9rem;">&larr; Torna al carrello</button>
+        </div>
+    </div>
+
+    <footer style="background: #1b4332; color: #fff; padding: 40px 5%; text-align: center; margin-top: 60px;">
+        <p style="font-family: 'Fraunces'; font-size: 1.5rem; margin-bottom: 10px;">Gruppo Gizzi</p>
+        <p style="font-size: 0.9rem; opacity: 0.8;">Prodotti Tipici del Cilento | Frutta e Verdura a Km 0</p>
+        <div style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">
+            &copy; 2026 Gruppo Gizzi. Tutti i diritti riservati. Spedizioni Internazionali.
+        </div>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="database.js"></script>
+    <script src="shop.js"></script>
+
+    <script>
+        // Rimuove il loader quando il negozio è pronto
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
+            }, 1000);
+        });
+
+        // Funzioni per l'apertura/chiusura modali integrate
+        function toggleCart() {
+            document.getElementById('cart-panel').classList.toggle('active');
+        }
+
+        function openCheckout() {
+            // Aggiorna il riepilogo nella modale prima di aprirla
+            const totale = calcolaTotale();
+            const items = carrello.map(c => `${c.quantita}x ${c.Nome}`).join(", ");
+            document.getElementById('summary-text').innerText = items;
+            document.getElementById('summary-total').innerText = "€ " + totale;
+            
+            document.getElementById('checkout-modal').style.display = 'flex';
+            document.getElementById('cart-panel').classList.remove('active');
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkout-modal').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
