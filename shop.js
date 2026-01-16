@@ -1,104 +1,85 @@
-let db = [], reviews = [], cart = [], curLang = 'it';
+let db = [], cart = [], lang = 'it';
 
-const texts = {
-    it: { h1: "Sapori Autentici", p: "Dal Cilento direttamente a casa tua.", cart: "Carrello", add: "Aggiungi", total: "Totale", buy: "Acquista" },
-    en: { h1: "Authentic Flavors", p: "From Cilento directly to your home.", cart: "Cart", add: "Add to Cart", total: "Total", buy: "Buy Now" },
-    de: { h1: "Echte Aromen", p: "Vom Cilento direkt zu Ihnen nach Hause.", cart: "Warenkorb", add: "In den Warenkorb", total: "Gesamt", buy: "Jetzt Kaufen" }
+const ui = {
+    it: { title: "Cilento, Pura Terra.", sub: "Consegna in 48 ore in tutta Europa.", add: "Aggiungi", pay: "Paga Ora" },
+    en: { title: "Cilento, Pure Land.", sub: "Fast delivery across Europe.", add: "Add to Cart", pay: "Pay Now" },
+    de: { title: "Cilento, Reines Land.", sub: "Schnelle Lieferung in ganz Europa.", add: "In den Warenkorb", pay: "Jetzt Zahlen" }
 };
 
 async function init() {
     db = await fetchCSV(CONFIG.links.catalogo);
-    try { reviews = await fetchCSV(CONFIG.links.recensioni); } catch(e){}
     render();
 }
 
-function changeLang(l) {
-    curLang = l;
-    document.getElementById('hero-h1').innerText = texts[l].h1;
-    document.getElementById('hero-p').innerText = texts[l].p;
+function setLang(l) {
+    lang = l;
+    document.getElementById('hero-title').innerText = ui[lang].title;
+    document.getElementById('hero-sub').innerText = ui[lang].sub;
     render();
 }
 
 function render() {
     const grid = document.getElementById('shop-grid');
     grid.innerHTML = db.map(p => {
-        const name = curLang === 'it' ? p.Nome : p[`Nome_${curLang.toUpperCase()}`] || p.Nome;
-        const desc = curLang === 'it' ? p.Descrizione : p[`Desc_${curLang.toUpperCase()}`] || p.Descrizione;
-        const prodReviews = reviews.filter(r => r.ID_Prodotto == p.ID);
-
+        const nome = lang === 'it' ? p.Nome : p[`Nome_${lang.toUpperCase()}`] || p.Nome;
         return `
             <div class="card">
-                <img src="${p.Immagine}" alt="${name}">
+                <img src="${p.Immagine}">
                 <div class="card-content">
-                    <h3>${name}</h3>
-                    <p style="font-size:0.9rem; color:#555; height:50px; overflow:hidden;">${desc}</p>
-                    <div style="font-weight:700; font-size:1.4rem; color:var(--gizzi-green); margin:15px 0;">€ ${p.Prezzo}</div>
+                    <small style="color:var(--gizzi-green); font-weight:600;">${p.Categoria}</small>
+                    <h3>${nome}</h3>
+                    <div style="font-size:1.5rem; font-weight:700; margin:15px 0;">€ ${p.Prezzo}</div>
                     <div style="display:flex; gap:10px;">
-                        <input type="number" id="q-${p.ID}" value="1" min="1" style="width:60px; border-radius:5px; border:1px solid #ddd; padding:5px;">
-                        <button class="btn-add" onclick="addToCart('${p.ID}')">${texts[curLang].add}</button>
-                    </div>
-                    <div style="margin-top:15px; font-size:0.8rem; background:#f9f9f9; padding:10px; border-radius:5px;">
-                        ${prodReviews.map(r => `<div><strong>${r.Cliente}</strong>: ${r.Commento} ${r.Risposta_Gizi ? `<br><em style="color:green">Gizzi: ${r.Risposta_Gizi}</em>` : ''}</div>`).join('')}
+                        <input type="number" id="q-${p.ID}" value="1" min="1" style="width:60px; margin:0;">
+                        <button class="btn-main" style="margin:0;" onclick="addToCart('${p.ID}')">${ui[lang].add}</button>
                     </div>
                 </div>
             </div>`;
     }).join('');
 }
 
-function toggleCart() {
-    document.getElementById('cart-panel').classList.toggle('active');
-}
-
 function addToCart(id) {
     const p = db.find(i => i.ID == id);
-    const qty = parseInt(document.getElementById(`q-${id}`).value);
-    const exists = cart.find(c => c.ID == id);
-    if(exists) exists.qty += qty;
-    else cart.push({...p, qty: qty});
-    
-    updateCartUI();
-    document.getElementById('cart-panel').classList.add('active'); // Apre SEMPRE il carrello
+    const q = parseInt(document.getElementById(`q-${id}`).value);
+    cart.push({...p, qty: q});
+    document.getElementById('cart-count').innerText = cart.length;
+    openModal();
 }
 
-function updateCartUI() {
-    const list = document.getElementById('cart-items');
-    let total = 0;
-    document.getElementById('cart-count').innerText = cart.reduce((a,b) => a + b.qty, 0);
-    
-    list.innerHTML = cart.map((c, i) => {
-        const sub = parseFloat(c.Prezzo.replace(',','.')) * c.qty;
-        total += sub;
-        return `<div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
-                    <div><strong>${c.Nome}</strong><br>${c.qty} x €${c.Prezzo}</div>
-                    <div style="text-align:right;">€${sub.toFixed(2)} <br> <button onclick="remove(${i})" style="color:red; background:none; border:none; cursor:pointer;">&times;</button></div>
-                </div>`;
-    }).join('');
-    document.getElementById('total-price').querySelector('span').innerText = `€ ${total.toFixed(2)}`;
-}
+function openModal() { document.getElementById('checkout-modal').style.display = 'flex'; }
+function closeModal() { document.getElementById('checkout-modal').style.display = 'none'; }
 
-function remove(i) { cart.splice(i,1); updateCartUI(); }
-function openCheckout() { document.getElementById('checkout-modal').style.display = 'flex'; }
-
-async function sendOrder() {
-    const n = document.getElementById('name').value;
-    const a = document.getElementById('address').value;
-    const t = document.getElementById('total-price').innerText;
-    if(!n || !a) return alert("Inserisci i dati!");
-
-    const payload = {
-        action: "newOrder",
-        customerName: n,
-        address: a,
-        phone: document.getElementById('phone').value,
+async function finalize(method) {
+    const customer = {
+        name: document.getElementById('cust-name').value,
+        email: document.getElementById('cust-email').value,
+        phone: document.getElementById('cust-phone').value,
+        address: `${document.getElementById('cust-address').value}, ${document.getElementById('cust-city').value} (${document.getElementById('cust-cap').value}), ${document.getElementById('cust-country').value}`,
         items: cart.map(c => `${c.qty}x ${c.Nome}`).join(", "),
-        total: t
+        total: cart.reduce((a,b) => a + (parseFloat(b.Prezzo.replace(',','.'))*b.qty), 0).toFixed(2)
     };
 
-    // Salvataggio nei fogli (Ordini e Clienti) tramite il tuo script_url
+    if(!customer.name || !customer.address) return alert("Inserisci i dati di spedizione!");
+
+    const orderID = "GIZZI-" + Date.now().toString().slice(-6);
+
+    // 1. REGISTRA ORDINE E CLIENTE (Google Sheets)
+    const payload = {
+        action: "newOrder",
+        orderID: orderID,
+        ...customer
+    };
+    
     fetch(CONFIG.links.script_exec, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
 
-    // WhatsApp
-    window.open(`https://wa.me/${CONFIG.contatti.wa}?text=${encodeURIComponent("Nuovo Ordine Gruppo Gizzi:\n" + payload.items + "\n" + t)}`);
+    // 2. AZIONE FINALE
+    if(method === 'WhatsApp') {
+        const msg = `*ORDINE ${orderID}*\n---\n*Cliente:* ${customer.name}\n*Indirizzo:* ${customer.address}\n*Prodotti:* ${customer.items}\n*TOTALE:* € ${customer.total}`;
+        window.open(`https://wa.me/${CONFIG.contatti.wa}?text=${encodeURIComponent(msg)}`);
+    } else {
+        // Redirect a PayPal (Semplificato)
+        window.open(`https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${CONFIG.contatti.email_admin}&item_name=Ordine_${orderID}&amount=${customer.total}&currency_code=EUR`);
+    }
 }
 
 init();
