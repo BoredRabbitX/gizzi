@@ -1,126 +1,98 @@
 let prodotti = [];
+let recensioni = [];
 let carrello = [];
-let linguaCorrente = 'it';
+let lingua = 'it';
 
 async function avviaNegozio() {
-    prodotti = await fetchCSV(CONFIG.links.catalogo);
-    if (prodotti.length > 0) {
-        mostraProdotti();
-    } else {
-        document.getElementById('shop-grid').innerHTML = "Errore: Controlla la pubblicazione del foglio Google.";
-    }
+    // Carichiamo tutto in parallelo per velocità
+    const [datiProd, datiRec] = await Promise.all([
+        fetchCSV(CONFIG.links.catalogo),
+        fetchCSV(CONFIG.links.recensioni)
+    ]);
+    
+    prodotti = datiProd;
+    recensioni = datiRec;
+    render();
 }
 
-function mostraProdotti() {
+function render() {
     const grid = document.getElementById('shop-grid');
     grid.innerHTML = prodotti.map(p => {
-        const nome = linguaCorrente === 'it' ? p.Nome : p[`Nome_${linguaCorrente.toUpperCase()}`] || p.Nome;
-        const desc = linguaCorrente === 'it' ? p.Descrizione : p[`Desc_${linguaCorrente.toUpperCase()}`] || p.Descrizione;
-        const txtAggiungi = { it: "Aggiungi", en: "Add", de: "Hinzufügen" }[linguaCorrente];
+        const nome = lingua === 'it' ? p.Nome : (p[`Nome_${lingua.toUpperCase()}`] || p.Nome);
+        const desc = lingua === 'it' ? p.Descrizione : (p[`Desc_${lingua.toUpperCase()}`] || p.Descrizione);
         
+        // Filtriamo le recensioni per questo prodotto
+        const pRec = recensioni.filter(r => r.ID_Prodotto == p.ID);
+
         return `
             <div class="card">
                 <img src="${p.Immagine}" alt="${nome}">
-                <div class="card-info">
+                <div class="card-content">
+                    <small style="color:var(--accent); font-weight:600; text-transform:uppercase;">${p.Categoria}</small>
                     <h3>${nome}</h3>
-                    <p>${desc}</p>
-                    <div class="card-price">€ ${p.Prezzo} <small>/ ${p.Unità || 'cad.'}</small></div>
-                    <div style="display:flex; gap:5px; margin-top:10px;">
-                        <input type="number" id="qty-${p.ID}" value="1" min="1" style="width:50px; padding:5px; border:1px solid #ddd;">
-                        <button class="btn-primary" onclick="aggiungi('${p.ID}')">${txtAggiungi}</button>
+                    <p class="card-desc">${desc}</p>
+                    <div style="font-size:1.4rem; font-weight:700; color:var(--gizzi-green); margin-bottom:15px;">€ ${p.Prezzo}</div>
+                    
+                    <div style="display:flex; gap:10px;">
+                        <input type="number" id="q-${p.ID}" value="1" min="1" style="width:60px; padding:8px; border:1px solid #ddd;">
+                        <button onclick="aggiungiCarrello('${p.ID}')" style="flex-grow:1; background:var(--gizzi-green); color:white; border:none; cursor:pointer; font-weight:600;">ADD TO CART</button>
+                    </div>
+
+                    <div class="reviews-area" style="margin-top:20px; border-top:1px dotted #ccc; padding-top:10px;">
+                        ${pRec.map(r => `
+                            <div class="review-item">
+                                <strong>${r.Cliente}</strong> ⭐ ${r.Voto}<br>
+                                "${r.Commento}"
+                                ${r.Risposta_Gizi ? `<div class="merchant-reply">Gruppo Gizzi: ${r.Risposta_Gizi}</div>` : ''}
+                            </div>
+                        `).join('')}
                     </div>
                 </div>
             </div>`;
     }).join('');
 }
 
-// Funzione cambio lingua (deve essere chiamata correttamente dal selettore)
-function setLang(nuovaLingua) {
-    linguaCorrente = nuovaLingua;
-    mostraProdotti();
-}
-
-function aggiungi(id) {
+function aggiungiCarrello(id) {
     const p = prodotti.find(item => item.ID == id);
-    const qtyInput = document.getElementById(`qty-${id}`);
-    const qta = parseInt(qtyInput.value);
-
-    // Controlla se il prodotto è già nel carrello
+    const qty = parseInt(document.getElementById(`q-${id}`).value);
+    
     const esistente = carrello.find(c => c.ID == id);
-    if (esistente) {
-        esistente.quantita += qta;
-    } else {
-        carrello.push({ ...p, quantita: qta });
-    }
-
-    aggiornaInterfacciaCarrello();
-    document.getElementById('cart-panel').classList.add('active');
+    if(esistente) esistente.quantita += qty;
+    else carrello.push({...p, quantita: qty});
+    
+    aggiornaCarrelloUI();
+    toggleCart(true);
 }
 
-function aggiornaInterfacciaCarrello() {
-    const lista = document.getElementById('cart-items-list');
-    document.getElementById('cart-count').innerText = carrello.reduce((a, b) => a + b.quantita, 0);
-    
+function aggiornaCarrelloUI() {
+    const list = document.getElementById('cart-items-list');
     let totale = 0;
-    lista.innerHTML = carrello.map((item, index) => {
-        const rigaPrezzo = parseFloat(item.Prezzo.replace(',', '.'));
-        const subTotale = rigaPrezzo * item.quantita;
-        totale += subTotale;
-        
+    
+    document.getElementById('cart-count').innerText = carrello.reduce((a,b) => a + b.quantita, 0);
+    
+    list.innerHTML = carrello.map((item, idx) => {
+        const sub = parseFloat(item.Prezzo.replace(',','.')) * item.quantita;
+        totale += sub;
         return `
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:5px;">
-                <div style="font-size:0.85rem;">
-                    <strong>${item.Nome}</strong><br>
-                    ${item.quantita} x €${item.Prezzo}
-                </div>
-                <div style="text-align:right;">
-                    <div style="font-weight:bold;">€${subTotale.toFixed(2)}</div>
-                    <button onclick="rimuovi(${index})" style="background:none; border:none; color:red; cursor:pointer; font-size:0.8rem;">Rimuovi</button>
-                </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                <div><strong>${item.Nome}</strong><br><small>${item.quantita} x €${item.Prezzo}</small></div>
+                <div>€${sub.toFixed(2)} <button onclick="rimuovi(${idx})" style="border:none; color:red; background:none; cursor:pointer;">&times;</button></div>
             </div>`;
     }).join('');
     
-    document.getElementById('cart-total-value').innerText = `€ ${totale.toFixed(2)}`;
+    document.getElementById('cart-total-display').querySelector('span').innerText = `€ ${totale.toFixed(2)}`;
 }
 
-function rimuovi(idx) {
-    carrello.splice(idx, 1);
-    aggiornaInterfacciaCarrello();
+function setLang(l) {
+    lingua = l;
+    render();
 }
 
-// Integrazione finale con salvataggio Ordini e Clienti
-async function processaOrdineCompleto() {
-    const nome = document.getElementById('c-name').value;
-    const email = document.getElementById('c-email').value;
-    const addr = document.getElementById('c-address').value;
-    const tel = document.getElementById('c-phone').value;
-
-    if (!nome || !email || !addr) return alert("Compila i campi obbligatori");
-
-    const totale = carrello.reduce((a, b) => a + (parseFloat(b.Prezzo.replace(',', '.')) * b.quantita), 0).toFixed(2);
-    const orderID = "GIZZI-" + Date.now().toString().slice(-6);
-
-    const dati = {
-        action: "newOrder",
-        orderID: orderID,
-        customerName: nome,
-        customerEmail: email,
-        customerPhone: tel,
-        customerAddress: addr,
-        total: totale,
-        items: carrello.map(c => `${c.quantita}x ${c.Nome}`).join(", ")
-    };
-
-    // Salva nei Fogli Google
-    fetch(CONFIG.links.script_exec, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: JSON.stringify(dati)
-    });
-
-    // Messaggio WhatsApp riepilogativo
-    const waMsg = `*NUOVO ORDINE ${orderID}*\n---\n*Cliente:* ${nome}\n*Totale:* €${totale}\n*Prodotti:* ${dati.items}`;
-    window.open(`https://wa.me/${CONFIG.contatti.wa}?text=${encodeURIComponent(waMsg)}`);
+function toggleCart(open = null) {
+    const p = document.getElementById('cart-panel');
+    if(open === true) p.classList.add('active');
+    else if(open === false) p.classList.remove('active');
+    else p.classList.toggle('active');
 }
 
 avviaNegozio();
