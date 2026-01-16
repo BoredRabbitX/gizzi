@@ -1,98 +1,107 @@
 let prodotti = [];
-let recensioni = [];
 let carrello = [];
 let lingua = 'it';
 
 async function avviaNegozio() {
-    // Carichiamo tutto in parallelo per velocità
-    const [datiProd, datiRec] = await Promise.all([
-        fetchCSV(CONFIG.links.catalogo),
-        fetchCSV(CONFIG.links.recensioni)
-    ]);
-    
-    prodotti = datiProd;
-    recensioni = datiRec;
-    render();
+    prodotti = await fetchCSV(CONFIG.links.catalogo);
+    mostraProdotti();
 }
 
-function render() {
+function mostraProdotti() {
     const grid = document.getElementById('shop-grid');
     grid.innerHTML = prodotti.map(p => {
         const nome = lingua === 'it' ? p.Nome : (p[`Nome_${lingua.toUpperCase()}`] || p.Nome);
         const desc = lingua === 'it' ? p.Descrizione : (p[`Desc_${lingua.toUpperCase()}`] || p.Descrizione);
         
-        // Filtriamo le recensioni per questo prodotto
-        const pRec = recensioni.filter(r => r.ID_Prodotto == p.ID);
-
         return `
             <div class="card">
                 <img src="${p.Immagine}" alt="${nome}">
-                <div class="card-content">
-                    <small style="color:var(--accent); font-weight:600; text-transform:uppercase;">${p.Categoria}</small>
+                <div class="card-body">
                     <h3>${nome}</h3>
-                    <p class="card-desc">${desc}</p>
-                    <div style="font-size:1.4rem; font-weight:700; color:var(--gizzi-green); margin-bottom:15px;">€ ${p.Prezzo}</div>
-                    
+                    <p style="font-size:0.85rem; color:#666; height:60px; overflow:hidden;">${desc}</p>
+                    <div style="font-size:1.3rem; font-weight:700; color:var(--gizzi-green); margin:15px 0;">€ ${p.Prezzo}</div>
                     <div style="display:flex; gap:10px;">
-                        <input type="number" id="q-${p.ID}" value="1" min="1" style="width:60px; padding:8px; border:1px solid #ddd;">
-                        <button onclick="aggiungiCarrello('${p.ID}')" style="flex-grow:1; background:var(--gizzi-green); color:white; border:none; cursor:pointer; font-weight:600;">ADD TO CART</button>
-                    </div>
-
-                    <div class="reviews-area" style="margin-top:20px; border-top:1px dotted #ccc; padding-top:10px;">
-                        ${pRec.map(r => `
-                            <div class="review-item">
-                                <strong>${r.Cliente}</strong> ⭐ ${r.Voto}<br>
-                                "${r.Commento}"
-                                ${r.Risposta_Gizi ? `<div class="merchant-reply">Gruppo Gizzi: ${r.Risposta_Gizi}</div>` : ''}
-                            </div>
-                        `).join('')}
+                        <input type="number" id="qty-${p.ID}" value="1" min="1" style="width:60px; padding:8px;">
+                        <button class="btn-buy" onclick="aggiungiCarrello('${p.ID}')">AGGIUNGI</button>
                     </div>
                 </div>
             </div>`;
     }).join('');
 }
 
+function apriCarrello() { document.getElementById('cart-panel').classList.add('active'); }
+function chiudiCarrello() { document.getElementById('cart-panel').classList.remove('active'); }
+function mostraCheckout() { document.getElementById('checkout-modal').style.display = 'flex'; }
+function chiudiCheckout() { document.getElementById('checkout-modal').style.display = 'none'; }
+
 function aggiungiCarrello(id) {
     const p = prodotti.find(item => item.ID == id);
-    const qty = parseInt(document.getElementById(`q-${id}`).value);
+    const qty = parseInt(document.getElementById(`qty-${id}`).value);
     
     const esistente = carrello.find(c => c.ID == id);
-    if(esistente) esistente.quantita += qty;
-    else carrello.push({...p, quantita: qty});
+    if(esistente) esistente.qty += qty;
+    else carrello.push({...p, qty: qty});
     
-    aggiornaCarrelloUI();
-    toggleCart(true);
+    aggiornaUI();
+    apriCarrello(); // Apre il carrello automaticamente quando aggiungi
 }
 
-function aggiornaCarrelloUI() {
-    const list = document.getElementById('cart-items-list');
+function aggiornaUI() {
+    const list = document.getElementById('cart-items');
     let totale = 0;
-    
-    document.getElementById('cart-count').innerText = carrello.reduce((a,b) => a + b.quantita, 0);
+    document.getElementById('cart-count').innerText = carrello.reduce((a,b) => a + b.qty, 0);
     
     list.innerHTML = carrello.map((item, idx) => {
-        const sub = parseFloat(item.Prezzo.replace(',','.')) * item.quantita;
+        const sub = parseFloat(item.Prezzo.replace(',','.')) * item.qty;
         totale += sub;
         return `
-            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-                <div><strong>${item.Nome}</strong><br><small>${item.quantita} x €${item.Prezzo}</small></div>
-                <div>€${sub.toFixed(2)} <button onclick="rimuovi(${idx})" style="border:none; color:red; background:none; cursor:pointer;">&times;</button></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                <div><strong>${item.Nome}</strong><br><small>${item.qty} x €${item.Prezzo}</small></div>
+                <div style="text-align:right;">
+                    <div>€${sub.toFixed(2)}</div>
+                    <button onclick="rimuovi(${idx})" style="border:none; color:red; background:none; cursor:pointer; font-size:0.8rem;">Rimuovi</button>
+                </div>
             </div>`;
     }).join('');
     
-    document.getElementById('cart-total-display').querySelector('span').innerText = `€ ${totale.toFixed(2)}`;
+    document.getElementById('cart-total').querySelector('span').innerText = `€ ${totale.toFixed(2)}`;
 }
 
-function setLang(l) {
+function rimuovi(idx) {
+    carrello.splice(idx, 1);
+    aggiornaUI();
+}
+
+function cambiaLingua(l) {
     lingua = l;
-    render();
+    mostraProdotti();
 }
 
-function toggleCart(open = null) {
-    const p = document.getElementById('cart-panel');
-    if(open === true) p.classList.add('active');
-    else if(open === false) p.classList.remove('active');
-    else p.classList.toggle('active');
+async function inviaOrdine() {
+    const nome = document.getElementById('cust-name').value;
+    const addr = document.getElementById('cust-address').value;
+    if(!nome || !addr) return alert("Inserisci nome e indirizzo!");
+
+    const totale = carrello.reduce((a,b) => a + (parseFloat(b.Prezzo.replace(',','.')) * b.qty), 0).toFixed(2);
+    const orderID = "GIZZI-" + Math.floor(Math.random() * 100000);
+
+    const payload = {
+        action: "newOrder",
+        orderID: orderID,
+        customerName: nome,
+        customerEmail: document.getElementById('cust-email').value,
+        customerPhone: document.getElementById('cust-phone').value,
+        customerAddress: addr,
+        total: totale,
+        items: carrello.map(c => `${c.qty}x ${c.Nome}`).join(", ")
+    };
+
+    // Invio al foglio Google (Ordini e Clienti)
+    fetch(CONFIG.links.script_exec, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+
+    // Messaggio WhatsApp
+    const msg = `Nuovo Ordine ${orderID}\nTotale: €${totale}\nCliente: ${nome}\nProdotti: ${payload.items}`;
+    window.open(`https://wa.me/${CONFIG.contatti.wa}?text=${encodeURIComponent(msg)}`);
 }
 
 avviaNegozio();
