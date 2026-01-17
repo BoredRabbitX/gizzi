@@ -41,6 +41,9 @@
         #cart-panel.active { right: 0; }
         
         .close-cart { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #999; }
+        .btn-clear-cart { background: none; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 5px 10px; border-radius: 5px; font-size: 0.75rem; cursor: pointer; margin-bottom: 15px; align-self: flex-start; font-weight: 600; }
+        .btn-clear-cart:hover { background: #ff4d4d; color: white; }
+
         .cart-qty-ctrl { display: flex; align-items: center; gap: 8px; background: #f0f0f0; border-radius: 5px; padding: 2px 6px; }
         .cart-qty-btn { border: none; background: none; font-weight: bold; font-size: 1rem; cursor: pointer; color: var(--gizzi-deep); }
 
@@ -100,6 +103,7 @@
 <div id="cart-panel">
     <span class="close-cart" onclick="toggleCart()">✕</span>
     <h2 id="cart-label">Il Tuo Carrello</h2>
+    <button class="btn-clear-cart" onclick="emptyCart()">🗑️ Svuota Carrello</button>
     <div id="cart-items" style="flex-grow:1; overflow-y:auto;"></div>
     <div style="border-top: 1px solid #eee; padding-top: 20px;">
         <div id="shipping-info" style="font-size: 0.8rem; color: #666; margin-bottom: 5px;">Spedizione: € 0.00</div>
@@ -135,7 +139,7 @@
     </div>
 </div>
 
-<footer><div class="container"><p>© 2026 Gruppo Gizzi.</p></div></footer>
+<footer><div class="container"><p>© 2026 Gruppo Gizzi. Cilento Authentic Experience.</p></div></footer>
 
 <script>
     const CONFIG = {
@@ -145,15 +149,13 @@
         wa: "393358060715"
     };
 
-    let products = [], cart = [], lang = 'it', carouselIndex = 0;
-    let touchStartX = 0;
+    let products = [], cart = [], lang = 'it', carouselIndex = 0, touchStartX = 0;
 
-    // SWIPE PER CHIUDERE (MOBILE)
+    // INTERAZIONI CARRELLO
     const cartPanel = document.getElementById('cart-panel');
     cartPanel.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
     cartPanel.addEventListener('touchend', e => {
-        const touchEndX = e.changedTouches[0].screenX;
-        if (touchEndX > touchStartX + 100) toggleCart(); // Se trascini a destra di 100px
+        if (e.changedTouches[0].screenX > touchStartX + 100) toggleCart();
     });
 
     function parseWeight(u) {
@@ -236,16 +238,28 @@
         const p = products.find(x => x.ID == id);
         const ex = cart.find(c => c.ID == id);
         if(ex) ex.qty++; else cart.push({...p, qty: 1});
+        saveCartUI();
+        if(!document.getElementById('cart-panel').classList.contains('active')) toggleCart();
+    }
+
+    function removeProduct(id) {
+        cart = cart.filter(c => c.ID !== id);
+        saveCartUI();
+    }
+
+    function emptyCart() {
+        if(confirm("Vuoi svuotare tutto il carrello?")) { cart = []; saveCartUI(); }
+    }
+
+    function saveCartUI() {
         localStorage.setItem('gizzi_cart', JSON.stringify(cart));
         updateCartUI();
-        if(!document.getElementById('cart-panel').classList.contains('active')) toggleCart();
     }
 
     function updateCartQty(id, delta) {
         const it = cart.find(c => c.ID == id);
         if(it) { it.qty += delta; if(it.qty <= 0) cart = cart.filter(c => c.ID !== id); }
-        localStorage.setItem('gizzi_cart', JSON.stringify(cart));
-        updateCartUI();
+        saveCartUI();
     }
 
     function updateCartUI() {
@@ -255,13 +269,14 @@
             const rP = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
             sub += parseFloat(rP); weight += (parseWeight(c.Unità) * c.qty);
             return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
-                <div style="flex:1;"><strong>${c[nK] || c.Nome}</strong><br><small>€ ${c.Prezzo}</small></div>
+                <div style="flex:1;"><strong style="font-size:0.85rem;">${c[nK] || c.Nome}</strong><br><small>€ ${c.Prezzo}</small></div>
                 <div class="cart-qty-ctrl">
                     <button class="cart-qty-btn" onclick="updateCartQty('${c.ID}', -1)">-</button>
                     <span style="font-weight:700;">${c.qty}</span>
                     <button class="cart-qty-btn" onclick="updateCartQty('${c.ID}', 1)">+</button>
                 </div>
-                <div style="min-width:60px; text-align:right; font-weight:700;">€ ${rP}</div>
+                <div style="min-width:60px; text-align:right; font-weight:700; margin: 0 10px;">€ ${rP}</div>
+                <div onclick="removeProduct('${c.ID}')" style="cursor:pointer; color:#ff4d4d; font-size:1.1rem;">🗑️</div>
             </div>`;
         }).join('');
         const country = document.getElementById('f-country').value;
@@ -281,12 +296,12 @@
     function clearAndReload() { localStorage.removeItem('gizzi_cart'); location.reload(); }
 
     async function processOrder() {
-        const fT = document.getElementById('cart-total-display').innerText.split('€')[1].trim();
-        const oID = "GZ-" + Date.now().toString().slice(-6);
         const name = document.getElementById('f-name').value;
         const email = document.getElementById('f-email').value;
         const phone = document.getElementById('f-phone').value;
         const addr = `${document.getElementById('f-street').value}, ${document.getElementById('f-city').value} (${document.getElementById('f-country').value})`;
+        const fT = document.getElementById('cart-total-display').innerText.split('€')[1].trim();
+        const oID = "GZ-" + Date.now().toString().slice(-6);
         const prodStr = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
         fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ 'entry.442927045': oID, 'entry.333212320': name, 'entry.1385104048': email, 'entry.844983788': phone, 'entry.334440207': addr, 'entry.1856379113': prodStr, 'entry.146792905': fT })});
         document.getElementById('modal').style.display = 'none';
