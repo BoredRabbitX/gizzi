@@ -33,7 +33,6 @@
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 30px; }
 
-        /* CARRELLO E OVERLAY */
         #cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2500; display: none; opacity: 0; transition: 0.3s; }
         #cart-overlay.active { display: block; opacity: 1; }
 
@@ -42,7 +41,6 @@
         
         .close-cart { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #999; }
         .btn-clear-cart { background: none; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 5px 10px; border-radius: 5px; font-size: 0.75rem; cursor: pointer; margin-bottom: 15px; align-self: flex-start; font-weight: 600; }
-        .btn-clear-cart:hover { background: #ff4d4d; color: white; }
 
         .cart-qty-ctrl { display: flex; align-items: center; gap: 8px; background: #f0f0f0; border-radius: 5px; padding: 2px 6px; }
         .cart-qty-btn { border: none; background: none; font-weight: bold; font-size: 1rem; cursor: pointer; color: var(--gizzi-deep); }
@@ -92,7 +90,7 @@
 
 <div class="container">
     <section class="carousel-section">
-        <h2 style="text-align:center; font-family:'Fraunces'; color:var(--gizzi-deep);">I Prodotti del Momento</h2>
+        <h2 id="carousel-title" style="text-align:center; font-family:'Fraunces'; color:var(--gizzi-deep);">I Prodotti del Momento</h2>
         <div class="carousel-viewport">
             <div id="carousel-track" class="carousel-track"></div>
         </div>
@@ -103,7 +101,7 @@
 <div id="cart-panel">
     <span class="close-cart" onclick="toggleCart()">✕</span>
     <h2 id="cart-label">Il Tuo Carrello</h2>
-    <button class="btn-clear-cart" onclick="emptyCart()">🗑️ Svuota Carrello</button>
+    <button id="btn-clear-txt" class="btn-clear-cart" onclick="emptyCart()">🗑️ Svuota Carrello</button>
     <div id="cart-items" style="flex-grow:1; overflow-y:auto;"></div>
     <div style="border-top: 1px solid #eee; padding-top: 20px;">
         <div id="shipping-info" style="font-size: 0.8rem; color: #666; margin-bottom: 5px;">Spedizione: € 0.00</div>
@@ -133,13 +131,13 @@
 
 <div id="thanks-popup" class="thanks-popup">
     <div style="padding:40px;">
-        <h2>Grazie!</h2>
-        <p>Ordine inviato con successo.</p>
+        <h2 id="thanks-h2-txt">Grazie!</h2>
+        <p id="thanks-p-txt">Ordine inviato con successo.</p>
         <button onclick="clearAndReload()" style="background:var(--gizzi-gold); color:white; border:none; padding:15px 40px; border-radius:50px; cursor:pointer;">OK</button>
     </div>
 </div>
 
-<footer><div class="container"><p>© 2026 Gruppo Gizzi. Cilento Authentic Experience.</p></div></footer>
+<footer><div class="container"><p>© 2026 Gruppo Gizzi.</p></div></footer>
 
 <script>
     const CONFIG = {
@@ -149,14 +147,18 @@
         wa: "393358060715"
     };
 
+    const UI = {
+        it: { h1: "L'Oro del Cilento, a casa tua.", p: "Eccellenza gastronomica.", add: "AGGIUNGI", total: "Totale", cart: "Il Tuo Carrello", proceed: "PROSEGUI", ship: "Spedizione", order: "ORDINA ORA", clear: "🗑️ Svuota Carrello", thanksH: "Grazie!", thanksP: "Ordine inviato con successo.", moments: "I Prodotti del Momento" },
+        en: { h1: "Cilento's Gold, at your doorstep.", p: "Gastronomic excellence.", add: "ADD", total: "Total", cart: "Your Cart", proceed: "CHECKOUT", ship: "Shipping", order: "ORDER NOW", clear: "🗑️ Empty Cart", thanksH: "Thank you!", thanksP: "Order sent successfully.", moments: "Products of the Moment" },
+        de: { h1: "Cilento Gold, vor Ihrer Tür.", p: "Kulinarische Exzellenz.", add: "HINZUFÜGEN", total: "Gesamt", cart: "Ihr Warenkorb", proceed: "KASSE", ship: "Versand", order: "JETZT BESTELLEN", clear: "🗑️ Warenkorb leeren", thanksH: "Danke!", thanksP: "Bestellung erfolgreich gesendet.", moments: "Produkte des Augenblicks" },
+        hu: { h1: "Cilento Aranya, az Ön otthonában.", p: "Gasztronómiai kiválóság.", add: "HOZZÁADÁS", total: "Összesen", cart: "Kosár", proceed: "KASSZA", ship: "Szállítás", order: "MEGRENDELÉS", clear: "🗑️ Kosár ürítése", thanksH: "Köszönjük!", thanksP: "Rendelését sikeresen rögzítettük.", moments: "A pillanat termékei" }
+    };
+
     let products = [], cart = [], lang = 'it', carouselIndex = 0, touchStartX = 0;
 
-    // INTERAZIONI CARRELLO
     const cartPanel = document.getElementById('cart-panel');
     cartPanel.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
-    cartPanel.addEventListener('touchend', e => {
-        if (e.changedTouches[0].screenX > touchStartX + 100) toggleCart();
-    });
+    cartPanel.addEventListener('touchend', e => { if (e.changedTouches[0].screenX > touchStartX + 100) toggleCart(); });
 
     function parseWeight(u) {
         if (!u) return 1;
@@ -168,11 +170,12 @@
     }
 
     function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+            [arr[i], arr[j]] = [arr[j], arr[i]];
         }
-        return array;
+        return arr;
     }
 
     async function load() {
@@ -191,6 +194,21 @@
         render(); startCarousel();
     }
 
+    function updateLang(val) {
+        lang = val;
+        document.getElementById('hero-h1').innerText = UI[lang].h1;
+        document.getElementById('hero-p').innerText = UI[lang].p;
+        document.getElementById('cart-label').innerText = UI[lang].cart;
+        document.getElementById('btn-clear-txt').innerText = UI[lang].clear;
+        document.getElementById('btn-cart-checkout').innerText = UI[lang].proceed;
+        document.getElementById('checkout-header').innerText = UI[lang].ship;
+        document.getElementById('btn-order-now').innerText = UI[lang].order;
+        document.getElementById('thanks-h2-txt').innerText = UI[lang].thanksH;
+        document.getElementById('thanks-p-txt').innerText = UI[lang].thanksP;
+        document.getElementById('carousel-title').innerText = UI[lang].moments;
+        render(); updateCartUI();
+    }
+
     function render() {
         const nK = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
         const cK = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
@@ -201,7 +219,7 @@
                 <div class="card-body">
                     <h3>${p[nK] || p.Nome}</h3>
                     <div class="price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
-                    <button class="btn-add" onclick="addToCart('${p.ID}')">AGGIUNGI</button>
+                    <button class="btn-add" onclick="addToCart('${p.ID}')">${UI[lang].add}</button>
                 </div>
             </div>`).join('');
         const cats = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p[cK] || p.Categoria))];
@@ -216,7 +234,7 @@
                         <div class="card-body">
                             <h3>${p[nK] || p.Nome}</h3>
                             <div class="price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
-                            <button class="btn-add" onclick="addToCart('${p.ID}')">AGGIUNGI</button>
+                            <button class="btn-add" onclick="addToCart('${p.ID}')">${UI[lang].add}</button>
                         </div>
                     </div>`).join('')}</div>
             </div>`;
@@ -242,20 +260,9 @@
         if(!document.getElementById('cart-panel').classList.contains('active')) toggleCart();
     }
 
-    function removeProduct(id) {
-        cart = cart.filter(c => c.ID !== id);
-        saveCartUI();
-    }
-
-    function emptyCart() {
-        if(confirm("Vuoi svuotare tutto il carrello?")) { cart = []; saveCartUI(); }
-    }
-
-    function saveCartUI() {
-        localStorage.setItem('gizzi_cart', JSON.stringify(cart));
-        updateCartUI();
-    }
-
+    function removeProduct(id) { cart = cart.filter(c => c.ID !== id); saveCartUI(); }
+    function emptyCart() { if(confirm(UI[lang].clear + "?")) { cart = []; saveCartUI(); } }
+    function saveCartUI() { localStorage.setItem('gizzi_cart', JSON.stringify(cart)); updateCartUI(); }
     function updateCartQty(id, delta) {
         const it = cart.find(c => c.ID == id);
         if(it) { it.qty += delta; if(it.qty <= 0) cart = cart.filter(c => c.ID !== id); }
@@ -269,7 +276,7 @@
             const rP = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
             sub += parseFloat(rP); weight += (parseWeight(c.Unità) * c.qty);
             return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
-                <div style="flex:1;"><strong style="font-size:0.85rem;">${c[nK] || c.Nome}</strong><br><small>€ ${c.Prezzo}</small></div>
+                <div style="flex:1;"><strong>${c[nK] || c.Nome}</strong><br><small>€ ${c.Prezzo}</small></div>
                 <div class="cart-qty-ctrl">
                     <button class="cart-qty-btn" onclick="updateCartQty('${c.ID}', -1)">-</button>
                     <span style="font-weight:700;">${c.qty}</span>
@@ -281,35 +288,25 @@
         }).join('');
         const country = document.getElementById('f-country').value;
         let ship = country === "Italia" ? (sub >= 120 ? 0 : Math.ceil(weight / 20) * 13) : (sub >= 300 ? 0 : 50);
-        document.getElementById('shipping-info').innerText = `Spedizione (${country}): € ${ship.toFixed(2)} (Peso: ${weight.toFixed(2)} Kg)`;
-        document.getElementById('cart-total-display').innerText = `Totale: € ${(sub + ship).toFixed(2)}`;
+        document.getElementById('shipping-info').innerText = `${UI[lang].ship} (${country}): € ${ship.toFixed(2)} (Weight: ${weight.toFixed(2)} Kg)`;
+        document.getElementById('cart-total-display').innerText = `${UI[lang].total}: € ${(sub + ship).toFixed(2)}`;
         document.getElementById('cart-count').innerText = cart.reduce((a,b) => a + b.qty, 0);
     }
 
-    function toggleCart() {
-        document.getElementById('cart-panel').classList.toggle('active');
-        document.getElementById('cart-overlay').classList.toggle('active');
-    }
-
+    function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); document.getElementById('cart-overlay').classList.toggle('active'); }
     function openCheckout() { document.getElementById('modal').style.display = 'flex'; }
     function closeCheckout() { document.getElementById('modal').style.display = 'none'; }
     function clearAndReload() { localStorage.removeItem('gizzi_cart'); location.reload(); }
 
     async function processOrder() {
-        const name = document.getElementById('f-name').value;
-        const email = document.getElementById('f-email').value;
-        const phone = document.getElementById('f-phone').value;
+        const name = document.getElementById('f-name').value, email = document.getElementById('f-email').value, phone = document.getElementById('f-phone').value;
         const addr = `${document.getElementById('f-street').value}, ${document.getElementById('f-city').value} (${document.getElementById('f-country').value})`;
-        const fT = document.getElementById('cart-total-display').innerText.split('€')[1].trim();
-        const oID = "GZ-" + Date.now().toString().slice(-6);
-        const prodStr = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
+        const fT = document.getElementById('cart-total-display').innerText.split('€')[1].trim(), oID = "GZ-" + Date.now().toString().slice(-6), prodStr = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
         fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ 'entry.442927045': oID, 'entry.333212320': name, 'entry.1385104048': email, 'entry.844983788': phone, 'entry.334440207': addr, 'entry.1856379113': prodStr, 'entry.146792905': fT })});
-        document.getElementById('modal').style.display = 'none';
-        document.getElementById('thanks-popup').style.display = 'flex';
+        document.getElementById('modal').style.display = 'none'; document.getElementById('thanks-popup').style.display = 'flex';
         const msg = `*ORDINE ${oID}*\n*CLIENTE:* ${name}\n*EMAIL:* ${email}\n*TEL:* ${phone}\n*IND:* ${addr}\n*PROD:* ${prodStr}\n*TOT:* € ${fT}`;
         window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`);
     }
-
     load();
 </script>
 </body>
