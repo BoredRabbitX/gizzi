@@ -8,7 +8,7 @@
 * { box-sizing: border-box; scroll-behavior: smooth; }
 body { font-family: 'Montserrat', sans-serif; margin: 0; background: var(--bg); color: #2d2d2d; overflow-x: hidden; }
 
-/* LAYOUT DINAMICO SPERIAMO */
+/* LAYOUT CON MARGINI (BOXED) */
 .container { 
     max-width: 1200px; 
     margin: 0 auto; 
@@ -25,68 +25,57 @@ header { position: fixed; top: 0; width: 100%; background: white; z-index: 2000;
 
 /* HERO */
 .hero {
-    height: 65vh; margin-top: 115px;
+    height: 60vh; margin-top: 115px;
     background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1240&hei=500&fit=constrain,1&fmt=webp');
     background-size: cover; background-position: center;
     display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center;
 }
-.hero h1 { font-family: 'Fraunces', serif; font-size: clamp(2.5rem, 6vw, 4rem); margin: 0; padding: 0 10px; }
 
-/* CAROUSEL - ORA FUNZIONANTE */
-.carousel-section { padding: 80px 0; background: white; }
-.carousel-viewport { 
-    position: relative; 
-    overflow: hidden; /* Taglia quello che esce */
-    width: 100%;
-}
+/* CAROUSEL - FIX FINALE */
+.carousel-section { padding: 60px 0; background: white; }
+.carousel-wrapper { position: relative; width: 100%; overflow: hidden; }
 .carousel-track { 
     display: flex; 
-    gap: 30px; 
-    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
+    gap: 20px; 
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); 
     width: max-content;
 }
 .carousel-item { 
-    width: 320px; /* Larghezza fissa card */
+    width: 280px; 
     flex-shrink: 0; 
     background: #fdfaf5; 
-    border-radius: 15px; 
+    border-radius: 12px; 
     padding: 20px; 
     border: 1px solid #eee; 
     text-align: center;
 }
-.carousel-item img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; }
+.carousel-item img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; }
 
 .carousel-btn { 
     position: absolute; top: 50%; transform: translateY(-50%); 
     background: var(--gizzi-deep); color: white; border: none; 
-    width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 10;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; 
 }
-.carousel-btn.left { left: 10px; }
-.carousel-btn.right { right: 10px; }
+.carousel-btn.left { left: 0; }
+.carousel-btn.right { right: 0; }
 
-/* NEGOZIO */
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; margin-top: 40px; }
-.card { background: white; border-radius: 15px; overflow: hidden; border: 1px solid #eee; transition: 0.3s; }
-.card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-.card img { width: 100%; height: 250px; object-fit: cover; }
-.card-body { padding: 25px; text-align: center; }
+/* GRIGLIA NEGOZIO */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; margin-top: 30px; }
+.card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #eee; transition: 0.3s; }
+.card img { width: 100%; height: 220px; object-fit: cover; }
+.card-body { padding: 20px; text-align: center; }
 
-/* FOOTER VERDE PROFESSIONALE */
+/* FOOTER VERDE GIZZI */
 footer { 
     background: var(--gizzi-deep); 
     color: white; 
-    padding: 80px 0; 
+    padding: 60px 0; 
     text-align: center; 
     border-top: 5px solid var(--gizzi-gold);
 }
-.footer-logo { font-family: 'Fraunces', serif; font-size: 2.5rem; color: var(--gizzi-gold); margin-bottom: 20px; }
+.footer-logo { font-family: 'Fraunces', serif; font-size: 2rem; color: var(--gizzi-gold); margin-bottom: 10px; }
 
-/* MODALI E CARRELLO */
-#cart-panel { position: fixed; right: -100%; top: 0; width: 400px; max-width: 100%; height: 100vh; background: white; z-index: 3000; transition: 0.5s; padding: 40px; display: flex; flex-direction: column; border-left: 1px solid #eee; }
+/* POPUP E CARRELLO */
+#cart-panel { position: fixed; right: -100%; top: 0; width: 400px; max-width: 100%; height: 100vh; background: white; z-index: 3000; transition: 0.5s; padding: 30px; display: flex; flex-direction: column; box-shadow: -5px 0 20px rgba(0,0,0,0.1); }
 #cart-panel.active { right: 0; }
-.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 4000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-.modal-content { background: white; padding: 40px; border-radius: 20px; width: 90%; max-width: 500px; }
-
-/* POPUP RINGRAZIAMENTO */
 .thanks-popup { display: none; position: fixed; inset: 0; background: var(--gizzi-deep); z-index: 5000; align-items: center; justify-content: center; color: white; text-align: center; }
