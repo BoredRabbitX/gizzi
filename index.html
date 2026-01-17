@@ -5,22 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gruppo Gizzi | Cilento Authentic Experience</title>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root { --gizzi-deep: #1b4332; --gizzi-gold: #b08d57; --bg: #fdfaf5; --white: #ffffff; }
+        * { box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: 'Montserrat', sans-serif; margin: 0; background: var(--bg); color: #2d2d2d; overflow-x: hidden; }
+
+        /* LAYOUT BOXED */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* HEADER & MENU */
+        header { position: fixed; top: 0; width: 100%; background: white; z-index: 2000; border-bottom: 1px solid #eee; }
+        .nav-top { height: 70px; display: flex; align-items: center; justify-content: space-between; }
+        .logo { font-family: 'Fraunces', serif; font-size: 1.6rem; color: var(--gizzi-deep); text-decoration: none; font-weight: 700; }
+        .category-menu { display: flex; justify-content: center; gap: 15px; padding: 12px 0; background: white; border-top: 1px solid #f0f0f0; overflow-x: auto; white-space: nowrap; }
+        .category-menu a { text-decoration: none; color: #666; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 5px 12px; transition: 0.3s; }
+        .category-menu a:hover { color: var(--gizzi-gold); }
+
+        /* HERO */
+        .hero {
+            height: 60vh; margin-top: 115px;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1240&hei=500&fit=constrain,1&fmt=webp');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center;
+        }
+
+        /* CAROUSEL */
+        .carousel-section { padding: 60px 0; background: white; }
+        .carousel-viewport { position: relative; overflow: hidden; width: 100%; margin-top: 30px; }
+        .carousel-track { display: flex; gap: 25px; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); width: max-content; padding: 10px 0; }
+        .carousel-item { width: 300px; flex-shrink: 0; background: var(--bg); border-radius: 15px; padding: 20px; border: 1px solid #eee; text-align: center; }
+        .carousel-item img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; }
+        .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: var(--gizzi-deep); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.2rem; }
+        .btn-left { left: 5px; } .btn-right { right: 5px; }
+
+        /* GRIGLIA NEGOZIO */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 35px; margin-top: 40px; }
+        .card { background: white; border-radius: 15px; overflow: hidden; border: 1px solid #eee; transition: 0.3s; display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 250px; object-fit: cover; }
+        .card-body { padding: 25px; text-align: center; flex-grow: 1; }
+        .card-body h3 { font-family: 'Fraunces'; font-size: 1.2rem; color: var(--gizzi-deep); margin: 0 0 10px; }
+        .price { color: var(--gizzi-gold); font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
+
+        /* BOTTONI */
+        .btn-add { background: var(--gizzi-deep); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; transition: 0.3s; }
+        .btn-add:hover { background: var(--gizzi-gold); }
+
+        /* FOOTER VERDE */
+        footer { background: var(--gizzi-deep); color: white; padding: 70px 0; text-align: center; border-top: 5px solid var(--gizzi-gold); margin-top: 80px; }
+        .footer-logo { font-family: 'Fraunces'; font-size: 2.2rem; color: var(--gizzi-gold); margin-bottom: 15px; }
+
+        /* CARRELLO LATERALE */
+        #cart-panel { position: fixed; right: -450px; top: 0; width: 400px; max-width: 100%; height: 100vh; background: white; z-index: 3000; transition: 0.5s; padding: 40px; display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
+        #cart-panel.active { right: 0; }
+
+        /* POPUP RINGRAZIAMENTO */
+        .thanks-popup { display: none; position: fixed; inset: 0; background: var(--gizzi-deep); z-index: 5000; align-items: center; justify-content: center; color: white; text-align: center; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 4000; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 40px; border-radius: 20px; width: 90%; max-width: 500px; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ddd; }
+    </style>
 </head>
 <body>
 
 <header>
     <div class="container nav-top">
         <a href="#" class="logo">GRUPPO GIZZI</a>
-        <div class="nav-controls">
-            <select id="lang-sel" onchange="updateLang(this.value)">
+        <div style="display:flex; gap:20px; align-items:center;">
+            <select id="lang-sel" onchange="updateLang(this.value)" style="border:none; background:none; font-weight:700; cursor:pointer; font-size:1rem;">
                 <option value="it">🇮🇹 IT</option>
                 <option value="en">🇬🇧 EN</option>
                 <option value="de">🇩🇪 DE</option>
             </select>
-            <div class="cart-icon" onclick="toggleCart()">🛒 <span id="cart-count">0</span></div>
+            <div onclick="toggleCart()" style="cursor:pointer; font-size:1.6rem; position:relative;">
+                🛒 <span id="cart-count" style="position:absolute; top:-10px; right:-10px; background:var(--gizzi-gold); color:white; border-radius:50%; padding:2px 7px; font-size:0.7rem;">0</span>
+            </div>
         </div>
     </div>
+    <div id="anchor-menu" class="category-menu"></div>
 </header>
 
 <section class="hero">
@@ -30,44 +92,193 @@
     </div>
 </section>
 
-<main class="container">
+<div class="container">
     <section class="carousel-section">
-        <h2 id="carousel-title" style="text-align:center; font-family:'Fraunces'; color:var(--gizzi-deep);">I Prodotti del Momento</h2>
+        <h2 id="carousel-title" style="text-align:center; font-family:'Fraunces'; color:var(--gizzi-deep); font-size:2rem;">I Prodotti del Momento</h2>
         <div class="carousel-viewport">
-            <button class="carousel-nav prev" onclick="moveCarousel(-1)">❮</button>
-            <div class="carousel-container">
-                <div id="carousel-track" class="carousel-track"></div>
-            </div>
-            <button class="carousel-nav next" onclick="moveCarousel(1)">❯</button>
+            <button class="carousel-btn btn-left" onclick="moveCarousel(-1)">❮</button>
+            <div id="carousel-track" class="carousel-track"></div>
+            <button class="carousel-btn btn-right" onclick="moveCarousel(1)">❯</button>
         </div>
     </section>
-    <div id="negozio"></div>
-</main>
 
-<footer class="footer">
+    <div id="negozio"></div>
+</div>
+
+<div id="thanks-popup" class="thanks-popup">
+    <div style="padding:40px;">
+        <h2 id="thanks-h2" style="font-family:'Fraunces'; font-size:3rem; color:var(--gizzi-gold);">Grazie!</h2>
+        <p id="thanks-p" style="font-size:1.2rem;">Il tuo ordine è stato ricevuto con successo.</p>
+        <button onclick="location.reload()" style="background:var(--gizzi-gold); color:white; border:none; padding:18px 50px; border-radius:50px; cursor:pointer; font-weight:700; margin-top:30px;">CHIUDI</button>
+    </div>
+</div>
+
+<div id="cart-panel">
+    <h2 id="cart-label" style="font-family:'Fraunces';">Il Tuo Carrello</h2>
+    <div id="cart-items" style="flex-grow:1; overflow-y:auto; margin-top:20px;"></div>
+    <div style="border-top: 1px solid #eee; padding-top: 25px;">
+        <h3 id="cart-total-display">Totale: € 0.00</h3>
+        <button class="btn-add" style="background:var(--gizzi-gold); padding:18px; border-radius:50px;" onclick="openCheckout()">PROSEGUI</button>
+    </div>
+</div>
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <h2 id="checkout-header" style="font-family:'Fraunces'; margin-bottom:20px;">Spedizione</h2>
+        <input type="text" id="f-name" placeholder="Nome e Cognome *">
+        <input type="email" id="f-email" placeholder="Email *">
+        <input type="tel" id="f-phone" placeholder="Cellulare *">
+        <input type="text" id="f-street" placeholder="Indirizzo (Via, CAP, Città) *">
+        <button class="btn-add" style="background:#25D366; margin-top:10px; font-size:1.1rem;" onclick="processOrder()">ORDINA ORA</button>
+        <button onclick="closeCheckout()" style="background:none; border:none; width:100%; margin-top:15px; color:#999; cursor:pointer;">Annulla</button>
+    </div>
+</div>
+
+<footer>
     <div class="container">
         <div class="footer-logo">GRUPPO GIZZI</div>
-        <p id="footer-copy">© 2026 Gruppo Gizzi. Cilento Authentic Experience.</p>
+        <p id="footer-text">© 2026 Gruppo Gizzi. Cilento Authentic Experience.</p>
     </div>
 </footer>
 
-<div id="cart-panel" class="cart-panel">
-    <h2 id="cart-label">Carrello</h2>
-    <div id="cart-items"></div>
-    <div class="cart-footer">
-        <h3 id="cart-total">Totale: € 0.00</h3>
-        <button class="btn-primary" onclick="openCheckout()">PROSEGUI</button>
-    </div>
-</div>
+<script>
+    const CONFIG = {
+        catalog: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIumwZulbMAuesmG69DB8Y1bx2Y-NQXfyG7_m1-rdpZ-SoOxM0JyZtnj0_eV_K4t4drULTwV44nE5Y/pub?gid=0&single=true&output=csv",
+        formURL: "https://docs.google.com/forms/d/e/1FAIpQLSend7KPNCjTNP1d-B3zd-wvhZAVXLS3P7341yN88fm3d7D4Jw/formResponse",
+        emailWebApp: "https://script.google.com/macros/s/AKfycbwv1iqWofz-uaNpOlOD-D6qhPx-heZ8IAp6ZdJ1FdbK7BU8xLmGu9sN3wqnDkQaXbkp/exec",
+        wa: "393358060715"
+    };
 
-<div id="thanks-popup" class="thanks-overlay">
-    <div class="thanks-box">
-        <h2 id="thanks-h">Grazie!</h2>
-        <p id="thanks-p">Ordine ricevuto correttamente.</p>
-        <button onclick="location.reload()" style="background:var(--gizzi-gold); color:white; border:none; padding:10px 30px; border-radius:50px; cursor:pointer; margin-top:20px;">CHIUDI</button>
-    </div>
-</div>
+    const UI = {
+        it: { h1: "L'Oro del Cilento, a casa tua.", p: "Eccellenza gastronomica dal cuore del Parco Nazionale.", add: "Aggiungi", total: "Totale", carousel: "I Prodotti del Momento", ship: "Spedizione", thanksH: "Grazie!", thanksP: "Ordine ricevuto correttamente." },
+        en: { h1: "Cilento's Gold, at your doorstep.", p: "Gastronomic excellence from the heart of the National Park.", add: "Add", total: "Total", carousel: "Featured Products", ship: "Shipping", thanksH: "Thank you!", thanksP: "Order received successfully." },
+        de: { h1: "Cilento Gold, vor Ihrer Tür.", p: "Kulinarische Exzellenz aus dem Herzen des Nationalparks.", add: "Hinzufügen", total: "Gesamt", carousel: "Unsere Highlights", ship: "Versand", thanksH: "Vielen Dank!", thanksP: "Bestellung erfolgreich erhalten." }
+    };
 
-<script src="script.js"></script>
+    let products = [], cart = [], lang = 'it', carouselIndex = 0;
+
+    async function load() {
+        const res = await fetch(CONFIG.catalog);
+        const text = await res.text();
+        const rows = text.split('\n').filter(r => r.trim() !== "");
+        const headers = rows[0].split(',').map(h => h.trim());
+        products = rows.slice(1).map(row => {
+            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            let o = {};
+            headers.forEach((h, i) => o[h] = cols[i]?.replace(/"/g, '').trim());
+            return o;
+        });
+        render();
+        startAutoPlay();
+    }
+
+    function updateLang(val) {
+        lang = val;
+        document.getElementById('hero-h1').innerText = UI[lang].h1;
+        document.getElementById('hero-p').innerText = UI[lang].p;
+        document.getElementById('carousel-title').innerText = UI[lang].carousel;
+        document.getElementById('checkout-header').innerText = UI[lang].ship;
+        render();
+    }
+
+    function render() {
+        const track = document.getElementById('carousel-track');
+        const negozio = document.getElementById('negozio');
+        const menu = document.getElementById('anchor-menu');
+        const catKey = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
+        const nameKey = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
+
+        // CAROUSEL
+        const featured = products.filter(p => p.Disponibile === 'SI' && p.Evidenza === 'SI');
+        track.innerHTML = featured.map(p => `
+            <div class="carousel-item">
+                <img src="${p.Immagine}">
+                <h4>${p[nameKey] || p.Nome}</h4>
+                <div class="price">€ ${p.Prezzo}</div>
+                <button class="btn-add" onclick="add('${p.ID}')">${UI[lang].add}</button>
+            </div>`).join('');
+
+        // SHOP & MENU
+        const categories = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p[catKey] || p.Categoria))];
+        menu.innerHTML = categories.map(cat => `<a href="#cat-${cat.replace(/\s+/g, '')}">${cat}</a>`).join('');
+        
+        negozio.innerHTML = categories.map(cat => {
+            const catProds = products.filter(p => p.Disponibile === 'SI' && (p[catKey] === cat || p.Categoria === cat));
+            return `<div id="cat-${cat.replace(/\s+/g, '')}" style="padding-top:140px; margin-top:-80px;">
+                <h2 style="font-family:'Fraunces'; color:var(--gizzi-deep); font-size:2rem; margin-bottom:30px; border-bottom:3px solid var(--gizzi-gold); display:inline-block;">${cat}</h2>
+                <div class="grid">${catProds.map(p => `
+                    <div class="card">
+                        <img src="${p.Immagine}">
+                        <div class="card-body">
+                            <h3>${p[nameKey] || p.Nome}</h3>
+                            <div class="price">€ ${p.Prezzo}</div>
+                            <button class="btn-add" onclick="add('${p.ID}')">${UI[lang].add}</button>
+                        </div>
+                    </div>`).join('')}</div>
+            </div>`;
+        }).join('');
+    }
+
+    function moveCarousel(dir) {
+        const track = document.getElementById('carousel-track');
+        const items = document.querySelectorAll('.carousel-item');
+        const cardWidth = 325; // item + gap
+        const visible = Math.floor(document.querySelector('.container').offsetWidth / cardWidth);
+        const max = items.length - (visible || 1);
+        carouselIndex = Math.max(0, Math.min(carouselIndex + dir, max));
+        track.style.transform = `translateX(-${carouselIndex * cardWidth}px)`;
+    }
+
+    function startAutoPlay() { setInterval(() => moveCarousel(1), 6000); }
+
+    function add(id) {
+        const p = products.find(x => x.ID == id);
+        const ex = cart.find(c => c.ID == id);
+        if(ex) ex.qty++; else cart.push({...p, qty: 1});
+        updateCartUI();
+        document.getElementById('cart-panel').classList.add('active');
+    }
+
+    function updateCartUI() {
+        let tot = 0;
+        document.getElementById('cart-count').innerText = cart.reduce((a,b) => a + b.qty, 0);
+        document.getElementById('cart-items').innerHTML = cart.map((c, i) => {
+            const sub = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
+            tot += parseFloat(sub);
+            return `<div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #f0f0f0; padding-bottom:10px;">
+                <div><strong>${c.Nome}</strong><br>${c.qty}x €${c.Prezzo}</div>
+                <div>€ ${sub} <span onclick="cart.splice(${i},1); updateCartUI();" style="color:red; cursor:pointer; font-weight:bold; margin-left:10px;">✕</span></div>
+            </div>`;
+        }).join('');
+        document.getElementById('cart-total-display').innerText = `${UI[lang].total}: € ${tot.toFixed(2)}`;
+    }
+
+    function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); }
+    function openCheckout() { document.getElementById('modal').style.display = 'flex'; }
+    function closeCheckout() { document.getElementById('modal').style.display = 'none'; }
+
+    async function processOrder() {
+        const name = document.getElementById('f-name').value;
+        const phone = document.getElementById('f-phone').value;
+        const total = document.getElementById('cart-total-display').innerText;
+        const orderID = "GZ-" + Date.now().toString().slice(-6);
+        const items = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
+        if(!name || !phone) return alert("Inserisci i dati obbligatori!");
+
+        const f = new URLSearchParams();
+        f.append('entry.442927045', orderID); f.append('entry.333212320', name);
+        f.append('entry.844983788', phone); f.append('entry.1856379113', items);
+        f.append('entry.146792905', total);
+        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: f });
+
+        fetch(CONFIG.emailWebApp, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({id: orderID, cliente: name, prodotti: items, totale: total}) });
+
+        document.getElementById('modal').style.display = 'none';
+        document.getElementById('thanks-popup').style.display = 'flex';
+        setTimeout(() => window.open(`https://wa.me/${CONFIG.wa}?text=Ordine ${orderID} - ${total}`), 2000);
+    }
+
+    load();
+</script>
 </body>
 </html>
