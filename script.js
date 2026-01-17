@@ -37,7 +37,7 @@ function render() {
     const nameKey = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
     const catKey = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
 
-    // CAROUSEL DATA
+    // CAROUSEL DATA TEST
     const featured = products.filter(p => p.Evidenza === 'SI');
     document.getElementById('carousel-track').innerHTML = featured.map(p => `
         <div class="carousel-item">
