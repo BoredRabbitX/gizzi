@@ -41,7 +41,7 @@ function render() {
     // Altro render del negozio qui...
 }
 
-// LOGICA CAROUSEL AUTO-PLAY E MOVIMENTO
+// LOGICA CAROUSEL AUTO-PLAY E MOVIMENTO FORSE FUNZIONA
 function moveCarousel(direction) {
     const track = document.getElementById('carousel-track');
     const items = document.querySelectorAll('.carousel-item');
