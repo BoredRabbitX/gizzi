@@ -18,12 +18,9 @@
                 <option value="en">🇬🇧 EN</option>
                 <option value="de">🇩🇪 DE</option>
             </select>
-            <div class="cart-icon" onclick="toggleCart()">
-                🛒 <span id="cart-count">0</span>
-            </div>
+            <div class="cart-icon" onclick="toggleCart()">🛒 <span id="cart-count">0</span></div>
         </div>
     </div>
-    <div id="anchor-menu" class="category-menu"></div>
 </header>
 
 <section class="hero">
@@ -35,17 +32,15 @@
 
 <main class="container">
     <section class="carousel-section">
-        <h2 id="carousel-title">I Prodotti del Momento</h2>
+        <h2 id="carousel-title" style="text-align:center; font-family:'Fraunces'; color:var(--gizzi-deep);">I Prodotti del Momento</h2>
         <div class="carousel-viewport">
             <button class="carousel-nav prev" onclick="moveCarousel(-1)">❮</button>
             <div class="carousel-container">
-                <div id="carousel-track" class="carousel-track">
-                    </div>
+                <div id="carousel-track" class="carousel-track"></div>
             </div>
             <button class="carousel-nav next" onclick="moveCarousel(1)">❯</button>
         </div>
     </section>
-
     <div id="negozio"></div>
 </main>
 
@@ -65,23 +60,11 @@
     </div>
 </div>
 
-<div id="modal-checkout" class="modal">
-    <div class="modal-content">
-        <h2 id="ship-label">Spedizione</h2>
-        <input type="text" id="f-name" placeholder="Nome *">
-        <input type="email" id="f-email" placeholder="Email *">
-        <input type="tel" id="f-phone" placeholder="Telefono *">
-        <input type="text" id="f-street" placeholder="Indirizzo *">
-        <button class="btn-success" onclick="processOrder()">ORDINA ORA</button>
-        <button class="btn-link" onclick="closeCheckout()">Annulla</button>
-    </div>
-</div>
-
 <div id="thanks-popup" class="thanks-overlay">
     <div class="thanks-box">
         <h2 id="thanks-h">Grazie!</h2>
-        <p id="thanks-p">Ordine ricevuto.</p>
-        <button onclick="location.reload()">CHIUDI</button>
+        <p id="thanks-p">Ordine ricevuto correttamente.</p>
+        <button onclick="location.reload()" style="background:var(--gizzi-gold); color:white; border:none; padding:10px 30px; border-radius:50px; cursor:pointer; margin-top:20px;">CHIUDI</button>
     </div>
 </div>
 
