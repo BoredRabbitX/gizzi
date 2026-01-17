@@ -28,6 +28,21 @@
         .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(2rem, 6vw, 4rem); margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
         .hero p { font-size: 1.2rem; max-width: 800px; margin-top: 15px; font-weight: 400; text-shadow: 1px 1px 5px rgba(0,0,0,0.5); }
 
+        /* --- STILE CAROUSEL --- */
+        .carousel-section { padding: 60px 0; background: var(--white); overflow: hidden; }
+        .carousel-header { text-align: center; font-family: 'Fraunces'; color: var(--gizzi-deep); margin-bottom: 30px; font-size: 2rem; }
+        .carousel-container { position: relative; max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+        .carousel-track-container { overflow: hidden; }
+        .carousel-track { display: flex; transition: transform 0.5s ease-in-out; gap: 20px; }
+        .carousel-item { min-width: calc(33.333% - 14px); background: #fdfaf5; border-radius: 12px; border: 1px solid #eee; padding: 15px; text-align: center; }
+        @media (max-width: 768px) { .carousel-item { min-width: calc(100%); } }
+        .carousel-item img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+        .carousel-item h4 { font-family: 'Fraunces'; margin: 10px 0; color: var(--gizzi-deep); }
+        .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: var(--gizzi-deep); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; font-weight: bold; }
+        .carousel-btn.left { left: 0; }
+        .carousel-btn.right { right: 0; }
+        /* ---------------------- */
+
         .container { max-width: 1300px; margin: 0 auto; padding: 0 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; margin-bottom: 60px; }
         .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #f2f2f2; }
@@ -71,6 +86,17 @@
     <p id="hero-p">L'essenza del Mediterraneo: prodotti autentici del Parco Nazionale, spediti con amore in tutta Europa.</p>
 </section>
 
+<section class="carousel-section">
+    <h2 id="carousel-title" class="carousel-header">I Prodotti del Momento</h2>
+    <div class="carousel-container">
+        <button class="carousel-btn left" onclick="moveCarousel(-1)">&#10094;</button>
+        <div class="carousel-track-container">
+            <div id="carousel-track" class="carousel-track">
+                </div>
+        </div>
+        <button class="carousel-btn right" onclick="moveCarousel(1)">&#10095;</button>
+    </div>
+</section>
 <div id="negozio"></div>
 
 <div id="cart-panel">
@@ -116,12 +142,13 @@
     };
 
     const UI_STRINGS = {
-        it: { h1: "Cilento, Pura Terra.", p: "L'essenza del Mediterraneo: prodotti autentici del Parco Nazionale, spediti con amore in tutta Europa.", cart: "Carrello", checkout: "PROSEGUI", total: "Totale", add: "Aggiungi", ship: "Spedizione", order: "ORDINA VIA WHATSAPP" },
-        en: { h1: "Cilento, Pure Land.", p: "The essence of the Mediterranean: authentic products from the National Park, shipped with love across Europe.", cart: "Cart", checkout: "CHECKOUT", total: "Total", add: "Add", ship: "Shipping", order: "ORDER VIA WHATSAPP" },
-        de: { h1: "Cilento, Reines Land.", p: "Die Essenz des Mittelmeers: authentische Produkte aus dem Nationalpark, mit Liebe europaweit versandt.", cart: "Warenkorb", checkout: "KASSE", total: "Gesamt", add: "Hinzufügen", ship: "Versand", order: "PER WHATSAPP BESTELLEN" }
+        it: { h1: "Cilento, Pura Terra.", p: "L'essenza del Mediterraneo: prodotti autentici del Parco Nazionale, spediti con amore in tutta Europa.", cart: "Carrello", checkout: "PROSEGUI", total: "Totale", add: "Aggiungi", ship: "Spedizione", order: "ORDINA VIA WHATSAPP", carousel: "I Prodotti del Momento" },
+        en: { h1: "Cilento, Pure Land.", p: "The essence of the Mediterranean: authentic products from the National Park, shipped with love across Europe.", cart: "Cart", checkout: "CHECKOUT", total: "Total", add: "Add", ship: "Shipping", order: "ORDER VIA WHATSAPP", carousel: "Featured Products" },
+        de: { h1: "Cilento, Reines Land.", p: "Die Essenz des Mittelmeers: authentische Produkte aus dem Nationalpark, mit Liebe europaweit versandt.", cart: "Warenkorb", checkout: "KASSE", total: "Gesamt", add: "Hinzufügen", ship: "Versand", order: "PER WHATSAPP BESTELLEN", carousel: "Aktuelle Highlights" }
     };
 
     let products = [], cart = [], lang = 'it';
+    let carouselIndex = 0;
 
     async function load() {
         const res = await fetch(CONFIG.catalog);
@@ -145,17 +172,34 @@
         document.getElementById('btn-checkout-text').innerText = UI_STRINGS[lang].checkout;
         document.getElementById('checkout-header').innerText = UI_STRINGS[lang].ship;
         document.getElementById('btn-confirm-text').innerText = UI_STRINGS[lang].order;
+        document.getElementById('carousel-title').innerText = UI_STRINGS[lang].carousel;
         render();
     }
 
     function render() {
         const container = document.getElementById('negozio');
         const menu = document.getElementById('anchor-menu');
+        const track = document.getElementById('carousel-track');
+        
         const catKey = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
         const categories = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p[catKey] || p.Categoria))];
         
         menu.innerHTML = categories.map(cat => `<a href="#cat-${cat.replace(/\s+/g, '')}">${cat}</a>`).join('');
 
+        // --- RENDER CAROUSEL (Primi 6 prodotti disponibili) ---
+        const featured = products.filter(p => p.Disponibile === 'SI').slice(0, 6);
+        track.innerHTML = featured.map(p => {
+            const name = lang === 'it' ? p.Nome : (p[`Nome_${lang.toUpperCase()}`] || p.Nome);
+            return `
+            <div class="carousel-item">
+                <img src="${p.Immagine}">
+                <h4>${name}</h4>
+                <div style="color:var(--gizzi-gold); font-weight:bold;">€ ${p.Prezzo}</div>
+                <button onclick="add('${p.ID}')" style="background:var(--gizzi-deep); color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; margin-top:10px; font-size:0.8rem;">${UI_STRINGS[lang].add}</button>
+            </div>`;
+        }).join('');
+
+        // --- RENDER NEGOZIO COMPLETO ---
         container.innerHTML = categories.map(cat => {
             const catProds = products.filter(p => p.Disponibile === 'SI' && (p[catKey] === cat || p.Categoria === cat));
             return `
@@ -177,6 +221,20 @@
                 </div></div>
             </div>`;
         }).join('');
+    }
+
+    function moveCarousel(direction) {
+        const track = document.getElementById('carousel-track');
+        const items = document.querySelectorAll('.carousel-item');
+        const visibleItems = window.innerWidth > 768 ? 3 : 1;
+        const maxIndex = items.length - visibleItems;
+        
+        carouselIndex += direction;
+        if (carouselIndex < 0) carouselIndex = 0;
+        if (carouselIndex > maxIndex) carouselIndex = maxIndex;
+        
+        const amount = items[0].offsetWidth + 20;
+        track.style.transform = `translateX(-${carouselIndex * amount}px)`;
     }
 
     function add(id) {
@@ -207,56 +265,43 @@
     function openCheckout() { document.getElementById('modal').style.display = 'flex'; }
     function closeCheckout() { document.getElementById('modal').style.display = 'none'; }
 
-   async function processOrder() {
-    // 1. Recupero i dati inseriti nel checkout
-    const name = document.getElementById('f-name').value;
-    const email = document.getElementById('f-email').value;
-    const phone = document.getElementById('f-phone').value;
-    const street = document.getElementById('f-street').value;
-    const city = document.getElementById('f-city').value;
-    const cap = document.getElementById('f-cap').value;
-    const country = document.getElementById('f-country').value;
-    const totalText = document.getElementById('cart-total-display').innerText;
+    async function processOrder() {
+        const name = document.getElementById('f-name').value;
+        const email = document.getElementById('f-email').value;
+        const phone = document.getElementById('f-phone').value;
+        const street = document.getElementById('f-street').value;
+        const city = document.getElementById('f-city').value;
+        const cap = document.getElementById('f-cap').value;
+        const country = document.getElementById('f-country').value;
+        const totalText = document.getElementById('cart-total-display').innerText;
 
-    if(!name || !street || !city || !phone) return alert("Per favore, compila i campi obbligatori.");
+        if(!name || !street || !city || !phone) return alert("Per favore, compila i campi obbligatori.");
 
-    // Costruisco l'indirizzo unico e l'ID ordine
-    const fullAddress = `${street}, ${cap} ${city}, ${country}`;
-    const orderID = "GZ-" + Date.now().toString().slice(-6);
-    const orderItems = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
+        const fullAddress = `${street}, ${cap} ${city}, ${country}`;
+        const orderID = "GZ-" + Date.now().toString().slice(-6);
+        const orderItems = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
 
-    // 2. CONFIGURAZIONE GOOGLE FORM (Invisibile)
-    // Ho estratto questi ID dal tuo HTML:
-    const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSend7KPNCjTNP1d-B3zd-wvhZAVXLS3P7341yN88fm3d7D4Jw/formResponse";
-    
-    const body = new URLSearchParams();
-    body.append('entry.442927045', orderID);      // ID_Ordine
-    body.append('entry.333212320', name);         // Cliente
-    body.append('entry.1385104048', email);       // Email
-    body.append('entry.844983788', phone);        // Telefono
-    body.append('entry.334440207', fullAddress);  // Indirizzo
-    body.append('entry.1856379113', orderItems);  // Prodotti
-    body.append('entry.146792905', totalText);    // Totale
+        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSend7KPNCjTNP1d-B3zd-wvhZAVXLS3P7341yN88fm3d7D4Jw/formResponse";
+        
+        const body = new URLSearchParams();
+        body.append('entry.442927045', orderID);
+        body.append('entry.333212320', name);
+        body.append('entry.1385104048', email);
+        body.append('entry.844983788', phone);
+        body.append('entry.334440207', fullAddress);
+        body.append('entry.1856379113', orderItems);
+        body.append('entry.146792905', totalText);
 
-    // INVIO DATI AL FOGLIO (via Google Form)
-    fetch(formURL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: body
-    });
+        fetch(formURL, { method: 'POST', mode: 'no-cors', body: body });
 
-    // 3. MESSAGGIO WHATSAPP (Sempre attivo)
-    let itemDetails = cart.map(c => `- ${c.qty}x ${c.Nome}: €${(parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2)}`).join("\n");
-    const msg = `*NUOVO ORDINE ${orderID}*\n\n*CLIENTE:* ${name}\n*TEL:* ${phone}\n*INDIRIZZO:* ${fullAddress}\n\n*DETTAGLIO:*\n${itemDetails}\n\n*${totalText}*`;
-    
-    window.open(`https://wa.me/393358060715?text=${encodeURIComponent(msg)}`);
+        let itemDetails = cart.map(c => `- ${c.qty}x ${c.Nome}: €${(parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2)}`).join("\n");
+        const msg = `*NUOVO ORDINE ${orderID}*\n\n*CLIENTE:* ${name}\n*TEL:* ${phone}\n*INDIRIZZO:* ${fullAddress}\n\n*DETTAGLIO:*\n${itemDetails}\n\n*${totalText}*`;
+        
+        window.open(`https://wa.me/393358060715?text=${encodeURIComponent(msg)}`);
 
-    // Reset finale
-    cart = []; 
-    updateUI(); 
-    closeCheckout(); 
-    toggleCart();
-}
+        cart = []; updateUI(); closeCheckout(); toggleCart();
+    }
+
     load();
 </script>
 </body>
