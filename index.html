@@ -27,6 +27,7 @@
         .carousel-track { display: flex; gap: 20px; transition: transform 0.6s ease-in-out; width: max-content; padding: 10px 0; }
         
         .card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #eee; transition: 0.3s; text-align: center; width: 280px; flex-shrink: 0; display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         .card img { width: 100%; height: 200px; object-fit: cover; }
         .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .card-body h3 { font-family: 'Fraunces'; font-size: 1.1rem; margin: 0 0 10px; min-height: 2.8em; display: flex; align-items: center; justify-content: center; line-height: 1.2; }
@@ -87,7 +88,6 @@
             <div id="carousel-track" class="carousel-track"></div>
         </div>
     </section>
-    
     <div id="negozio"></div>
 </div>
 
@@ -151,18 +151,12 @@
 
     let products = [], cart = [], lang = 'it', carouselIndex = 0;
 
-    // FIX CONVERSIONE PESO: Estrae il numero e gestisce g/kg correttamente
     function parseWeight(unitStr) {
         if (!unitStr) return 1;
-        // Prende il numero (anche decimale con punto o virgola)
         let match = unitStr.match(/(\d+[\.,]?\d*)/);
         if (!match) return 1;
         let val = parseFloat(match[0].replace(',', '.'));
-        
-        // Se l'unità contiene 'g' (grammi) e NON 'kg', divide per 1000
-        if (unitStr.toLowerCase().includes('g') && !unitStr.toLowerCase().includes('kg')) {
-            val = val / 1000;
-        }
+        if (unitStr.toLowerCase().includes('g') && !unitStr.toLowerCase().includes('kg')) val = val / 1000;
         return val;
     }
 
@@ -196,7 +190,6 @@
     function render() {
         const nK = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
         const cK = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
-        
         const feat = products.filter(p => p.Disponibile === 'SI' && p.Evidenza === 'SI');
         document.getElementById('carousel-track').innerHTML = feat.map(p => `
             <div class="card">
@@ -207,7 +200,6 @@
                     <button class="btn-add" onclick="addToCart('${p.ID}')">${UI[lang].add}</button>
                 </div>
             </div>`).join('');
-
         const cats = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p[cK] || p.Categoria))];
         document.getElementById('anchor-menu').innerHTML = cats.map(c => `<a href="#cat-${c.replace(/\s+/g, '')}">${c}</a>`).join('');
         document.getElementById('negozio').innerHTML = cats.map(c => {
@@ -245,15 +237,8 @@
         document.getElementById('cart-panel').classList.add('active');
     }
 
-    function removeProduct(id) {
-        cart = cart.filter(c => c.ID !== id);
-        saveCart(); updateCartUI();
-    }
-
-    function emptyCart() {
-        if(confirm("Svuotare tutto il carrello?")) { cart = []; saveCart(); updateCartUI(); }
-    }
-
+    function removeProduct(id) { cart = cart.filter(c => c.ID !== id); saveCart(); updateCartUI(); }
+    function emptyCart() { if(confirm("Svuotare tutto il carrello?")) { cart = []; saveCart(); updateCartUI(); } }
     function updateCartQty(id, delta) {
         const it = cart.find(c => c.ID == id);
         if(it) { it.qty += delta; if(it.qty <= 0) removeProduct(id); }
@@ -264,7 +249,7 @@
 
     function updateCartUI() {
         const nK = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
-        let sub = 0; let totalWeight = 0;
+        let sub = 0, totalWeight = 0;
         document.getElementById('cart-items').innerHTML = cart.map(c => {
             const rP = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
             sub += parseFloat(rP);
@@ -280,16 +265,10 @@
                 <div onclick="removeProduct('${c.ID}')" style="cursor:pointer; color:#ff4d4d; font-size:1.1rem;">🗑️</div>
             </div>`;
         }).join('');
-        
         const country = document.getElementById('f-country').value;
         let ship = 0;
-        if (country === "Italia") {
-            if (sub >= 120) ship = 0;
-            else ship = Math.ceil(totalWeight / 20) * 13;
-        } else {
-            ship = sub >= 300 ? 0 : 50;
-        }
-        
+        if (country === "Italia") ship = sub >= 120 ? 0 : Math.ceil(totalWeight / 20) * 13;
+        else ship = sub >= 300 ? 0 : 50;
         const tot = sub + ship;
         document.getElementById('shipping-info').innerText = `Spedizione (${country}): € ${ship.toFixed(2)} (Peso stimato: ${totalWeight.toFixed(2)} Kg)`;
         document.getElementById('cart-total-display').innerText = `${UI[lang].total}: € ${tot.toFixed(2)}`;
@@ -302,20 +281,34 @@
     function clearAndReload() { localStorage.removeItem('gizzi_cart'); location.reload(); }
 
     async function processOrder() {
+        const name = document.getElementById('f-name').value;
+        const email = document.getElementById('f-email').value;
+        const phone = document.getElementById('f-phone').value;
+        const country = document.getElementById('f-country').value;
+        const addr = `${document.getElementById('f-street').value}, ${document.getElementById('f-city').value} (${country})`;
         const fT = document.getElementById('cart-total-display').innerText.split('€')[1].trim();
         const oID = "GZ-" + Date.now().toString().slice(-6);
         const oIt = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
-        const addr = `${document.getElementById('f-street').value}, ${document.getElementById('f-city').value} (${document.getElementById('f-country').value})`;
 
-        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({
-            'entry.442927045': oID, 'entry.333212320': document.getElementById('f-name').value,
-            'entry.844983788': document.getElementById('f-phone').value, 'entry.334440207': addr,
-            'entry.1856379113': oIt, 'entry.146792905': fT
-        })});
+        // INVIO AL FORM
+        const params = new URLSearchParams();
+        params.append('entry.442927045', oID);
+        params.append('entry.333212320', name);
+        params.append('entry.1385104048', email); // EMAIL FISSA QUI
+        params.append('entry.844983788', phone);
+        params.append('entry.334440207', addr);
+        params.append('entry.1856379113', oIt);
+        params.append('entry.146792905', fT);
+
+        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: params });
+        fetch(CONFIG.emailWebApp, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({id: oID, cliente: name, email: email, prodotti: oIt, totale: fT, indirizzo: addr}) });
 
         document.getElementById('modal').style.display = 'none';
         document.getElementById('thanks-popup').style.display = 'flex';
-        window.open(`https://wa.me/${CONFIG.wa}?text=Ordine ${oID} - Totale € ${fT}`);
+        
+        // MESSAGGIO WHATSAPP COMPLETO
+        const msg = `*NUOVO ORDINE ${oID}*\n\n*CLIENTE:* ${name}\n*EMAIL:* ${email}\n*TEL:* ${phone}\n*INDIRIZZO:* ${addr}\n\n*PRODOTTI:* \n${cart.map(c => "- " + c.qty + "x " + c.Nome).join("\n")}\n\n*TOTALE:* € ${fT}`;
+        window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`);
     }
 
     load();
