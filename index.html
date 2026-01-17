@@ -37,12 +37,12 @@
     <section class="carousel-section">
         <h2 id="carousel-title">I Prodotti del Momento</h2>
         <div class="carousel-viewport">
-            <button class="carousel-nav prev" id="prevBtn">❮</button>
+            <button class="carousel-nav prev" onclick="moveCarousel(-1)">❮</button>
             <div class="carousel-container">
                 <div id="carousel-track" class="carousel-track">
                     </div>
             </div>
-            <button class="carousel-nav next" id="nextBtn">❯</button>
+            <button class="carousel-nav next" onclick="moveCarousel(1)">❯</button>
         </div>
     </section>
 
@@ -86,7 +86,5 @@
 </div>
 
 <script src="script.js"></script>
-<script src="carousel.js"></script>
-
-</body>  
+</body>
 </html>
