@@ -42,7 +42,7 @@
         .card-body h3 { font-family: 'Fraunces'; font-size: 1.2rem; color: var(--gizzi-deep); margin: 0 0 10px; }
         .price { color: var(--gizzi-gold); font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
 
-        /* SELETTORE QUANTITÀ - FIX ALLINEAMENTO */
+        /* SELETTORE QUANTITÀ - BLOCCO UNICO */
         .qty-selector { display: flex; align-items: center; justify-content: center; margin-bottom: 15px; gap: 0; }
         .qty-btn { 
             background: var(--gizzi-deep); color: white; border: none; 
@@ -87,6 +87,7 @@
                 <option value="it">🇮🇹 IT</option>
                 <option value="en">🇬🇧 EN</option>
                 <option value="de">🇩🇪 DE</option>
+                <option value="hu">🇭🇺 HU</option>
             </select>
             <div onclick="toggleCart()" style="cursor:pointer; font-size:1.6rem; position:relative;">
                 🛒 <span id="cart-count" style="position:absolute; top:-10px; right:-10px; background:var(--gizzi-gold); color:white; border-radius:50%; padding:2px 7px; font-size:0.7rem;">0</span>
@@ -117,15 +118,15 @@
 
 <div id="thanks-popup" class="thanks-popup">
     <div style="padding:40px;">
-        <h2 id="thanks-h2" style="font-family:'Fraunces'; font-size:3rem; color:var(--gizzi-gold);">Grazie!</h2>
-        <p id="thanks-p" style="font-size:1.2rem;">Il tuo ordine è stato ricevuto con successo.</p>
+        <h2 id="thanks-h2">Grazie!</h2>
+        <p id="thanks-p">Ordine ricevuto correttamente.</p>
         <button id="thanks-btn" onclick="location.reload()" style="background:var(--gizzi-gold); color:white; border:none; padding:18px 50px; border-radius:50px; cursor:pointer; font-weight:700; margin-top:30px;">CHIUDI</button>
     </div>
 </div>
 
 <div id="cart-panel">
     <span class="close-cart" onclick="toggleCart()">✕</span>
-    <h2 id="cart-label" style="font-family:'Fraunces';">Il Tuo Carrello</h2>
+    <h2 id="cart-label">Il Tuo Carrello</h2>
     <div id="cart-items" style="flex-grow:1; overflow-y:auto; margin-top:20px;"></div>
     <div style="border-top: 1px solid #eee; padding-top: 25px;">
         <h3 id="cart-total-display">Totale: € 0.00</h3>
@@ -135,7 +136,7 @@
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <h2 id="checkout-header" style="font-family:'Fraunces'; margin-bottom:20px;">Spedizione</h2>
+        <h2 id="checkout-header">Spedizione</h2>
         <form id="order-form" onsubmit="event.preventDefault(); processOrder();">
             <input type="text" id="f-name" placeholder="Nome e Cognome *" required>
             <input type="email" id="f-email" placeholder="Email *" required>
@@ -148,8 +149,8 @@
             <select id="f-country" required>
                 <option value="Italia">Italia</option>
                 <option value="Germania">Germania</option>
+                <option value="Ungheria">Ungheria</option>
                 <option value="Regno Unito">Regno Unito</option>
-                <option value="Francia">Francia</option>
             </select>
             <button type="submit" id="btn-order-now" class="btn-add" style="background:#25D366; margin-top:10px; font-size:1.1rem;">ORDINA ORA</button>
             <button type="button" id="btn-cancel" onclick="closeCheckout()" style="background:none; border:none; width:100%; margin-top:15px; color:#999; cursor:pointer;">Annulla</button>
@@ -175,7 +176,8 @@
     const UI = {
         it: { h1: "L'Oro del Cilento, a casa tua.", p: "Eccellenza gastronomica dal cuore del Parco Nazionale.", add: "Aggiungi", total: "Totale", carousel: "I Prodotti del Momento", ship: "Spedizione", thanksH: "Grazie!", thanksP: "Ordine ricevuto correttamente.", cartTitle: "Il Tuo Carrello", proceed: "PROSEGUI", order: "ORDINA ORA", cancel: "Annulla", close: "CHIUDI" },
         en: { h1: "Cilento's Gold, at your doorstep.", p: "Gastronomic excellence from the heart of the National Park.", add: "Add", total: "Total", carousel: "Featured Products", ship: "Shipping", thanksH: "Thank you!", thanksP: "Order received successfully.", cartTitle: "Your Cart", proceed: "CHECKOUT", order: "ORDER NOW", cancel: "Cancel", close: "CLOSE" },
-        de: { h1: "Cilento Gold, vor Ihrer Tür.", p: "Kulinarische Exzellenz aus dem Herzen des Nationalparks.", add: "Hinzufügen", total: "Gesamt", carousel: "Unsere Highlights", ship: "Versand", thanksH: "Vielen Dank!", thanksP: "Bestellung erfolgreich erhalten.", cartTitle: "Ihr Warenkorb", proceed: "KASSE", order: "JETZT BESTELLEN", cancel: "Abbrechen", close: "SCHLIESSEN" }
+        de: { h1: "Cilento Gold, vor Ihrer Tür.", p: "Kulinarische Exzellenz aus dem Herzen des Nationalparks.", add: "Hinzufügen", total: "Gesamt", carousel: "Unsere Highlights", ship: "Versand", thanksH: "Vielen Dank!", thanksP: "Bestellung erfolgreich erhalten.", cartTitle: "Ihr Warenkorb", proceed: "KASSE", order: "JETZT BESTELLEN", cancel: "Abbrechen", close: "SCHLIESSEN" },
+        hu: { h1: "Cilento Aranya, az Ön otthonában.", p: "Gasztronómiai kiválóság a Nemzeti Park szívéből.", add: "Hozzáadás", total: "Összesen", carousel: "Kiemelt Termékeink", ship: "Szállítás", thanksH: "Köszönjük!", thanksP: "Rendelését sikeresen rögzítettük.", cartTitle: "Kosár", proceed: "KASSZA", order: "MEGRENDELÉS", cancel: "Mégse", close: "BEZÁRÁS" }
     };
 
     let products = [], cart = [], lang = 'it', carouselIndex = 0, currentTotalNum = 0;
@@ -212,15 +214,15 @@
         updateCartUI();
     }
 
-    // FUNZIONE UNIVERSALE PER I TASTI QUANTITÀ
-    function changeQtyUI(id, delta) {
+    // Funzione globale corretta per i tasti quantità
+    window.changeQtyUI = function(id, delta) {
         const input = document.getElementById('qty-' + id);
         if (input) {
             let val = parseInt(input.value) + delta;
             if (val < 1) val = 1;
             input.value = val;
         }
-    }
+    };
 
     function render() {
         const track = document.getElementById('carousel-track');
@@ -230,18 +232,7 @@
         const nameKey = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
 
         const featured = products.filter(p => p.Disponibile === 'SI' && p.Evidenza === 'SI');
-        track.innerHTML = featured.map(p => `
-            <div class="carousel-item">
-                <img src="${p.Immagine}">
-                <h4>${p[nameKey] || p.Nome}</h4>
-                <div class="price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
-                <div class="qty-selector">
-                    <button class="qty-btn minus" onclick="changeQtyUI('${p.ID}', -1)">-</button>
-                    <input type="number" id="qty-${p.ID}" class="qty-input" value="1" readonly>
-                    <button class="qty-btn plus" onclick="changeQtyUI('${p.ID}', 1)">+</button>
-                </div>
-                <button class="btn-add" onclick="add('${p.ID}')">${UI[lang].add}</button>
-            </div>`).join('');
+        track.innerHTML = featured.map(p => createCard(p, nameKey)).join('');
 
         const categories = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p[catKey] || p.Categoria))];
         menu.innerHTML = categories.map(cat => `<a href="#cat-${cat.replace(/\s+/g, '')}">${cat}</a>`).join('');
@@ -250,75 +241,72 @@
             const catProds = products.filter(p => p.Disponibile === 'SI' && (p[catKey] === cat || p.Categoria === cat));
             return `<div id="cat-${cat.replace(/\s+/g, '')}" style="padding-top:140px; margin-top:-80px;">
                 <h2 style="font-family:'Fraunces'; color:var(--gizzi-deep); font-size:2rem; margin-bottom:30px; border-bottom:3px solid var(--gizzi-gold); display:inline-block;">${cat}</h2>
-                <div class="grid">${catProds.map(p => `
-                    <div class="card">
-                        <img src="${p.Immagine}">
-                        <div class="card-body">
-                            <h3>${p[nameKey] || p.Nome}</h3>
-                            <div class="price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
-                            <div class="qty-selector">
-                                <button class="qty-btn minus" onclick="changeQtyUI('${p.ID}', -1)">-</button>
-                                <input type="number" id="qty-${p.ID}" class="qty-input" value="1" readonly>
-                                <button class="qty-btn plus" onclick="changeQtyUI('${p.ID}', 1)">+</button>
-                            </div>
-                            <button class="btn-add" onclick="add('${p.ID}')">${UI[lang].add}</button>
-                        </div>
-                    </div>`).join('')}</div>
+                <div class="grid">${catProds.map(p => createCard(p, nameKey)).join('')}</div>
             </div>`;
         }).join('');
     }
 
+    // Funzione per creare la card uniforme ovunque
+    function createCard(p, nameKey) {
+        return `
+            <div class="carousel-item card">
+                <img src="${p.Immagine}">
+                <div class="card-body">
+                    <h3>${p[nameKey] || p.Nome}</h3>
+                    <div class="price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
+                    <div class="qty-selector">
+                        <button class="qty-btn minus" onclick="changeQtyUI('${p.ID}', -1)">-</button>
+                        <input type="number" id="qty-${p.ID}" class="qty-input" value="1" readonly>
+                        <button class="qty-btn plus" onclick="changeQtyUI('${p.ID}', 1)">+</button>
+                    </div>
+                    <button class="btn-add" onclick="add('${p.ID}')">${UI[lang].add}</button>
+                </div>
+            </div>`;
+    }
+
     function moveCarousel(dir) {
         const track = document.getElementById('carousel-track');
-        const items = document.querySelectorAll('.carousel-item');
+        const items = document.querySelectorAll('.carousel-track .carousel-item');
         if(items.length === 0) return;
         const cardWidth = 325; 
-        const visible = Math.floor(document.querySelector('.container').offsetWidth / cardWidth);
-        const maxScroll = items.length - (visible || 1);
+        const containerWidth = document.querySelector('.carousel-viewport').offsetWidth;
+        const visible = Math.floor(containerWidth / cardWidth) || 1;
+        const maxScroll = items.length - visible;
         carouselIndex += dir;
         if (carouselIndex > maxScroll) carouselIndex = 0;
         else if (carouselIndex < 0) carouselIndex = maxScroll;
         track.style.transform = `translateX(-${carouselIndex * cardWidth}px)`;
     }
 
-    function add(id) {
+    window.add = function(id) {
         const p = products.find(x => x.ID == id);
         const input = document.getElementById('qty-' + id);
-        const qtyToAdd = parseInt(input.value);
-        
+        const qtyToAdd = input ? parseInt(input.value) : 1;
         const ex = cart.find(c => c.ID == id);
-        if(ex) {
-            ex.qty += qtyToAdd;
-        } else {
-            cart.push({...p, qty: qtyToAdd});
-        }
-        
-        input.value = 1; 
+        if(ex) ex.qty += qtyToAdd; else cart.push({...p, qty: qtyToAdd});
+        if(input) input.value = 1;
         updateCartUI();
         document.getElementById('cart-panel').classList.add('active');
-    }
+    };
 
-    function changeCartQty(index, delta) {
+    window.changeCartQty = function(index, delta) {
         cart[index].qty += delta;
-        if (cart[index].qty < 1) {
-            cart.splice(index, 1);
-        }
+        if (cart[index].qty < 1) cart.splice(index, 1);
         updateCartUI();
-    }
+    };
 
     function updateCartUI() {
         let tot = 0;
         document.getElementById('cart-count').innerText = cart.reduce((a,b) => a + b.qty, 0);
         document.getElementById('cart-items').innerHTML = cart.map((c, i) => {
             const nameKey = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
-            const displayName = c[nameKey] || c.Nome;
             const sub = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
             tot += parseFloat(sub);
             return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #f0f0f0; padding-bottom:10px;">
-                <div style="flex:1;"><strong>${displayName}</strong><br><small>€${c.Prezzo} / ${c.Unità}</small></div>
+                <div style="flex:1;"><strong>${c[nameKey] || c.Nome}</strong><br><small>€${c.Prezzo} / ${c.Unità}</small></div>
                 <div style="display:flex; align-items:center; gap:8px;">
                     <button class="qty-btn" style="width:24px; height:24px; border-radius:4px;" onclick="changeCartQty(${i}, -1)">-</button>
-                    <span style="font-weight:bold; min-width:20px; text-align:center;">${c.qty}</span>
+                    <span style="font-weight:bold;">${c.qty}</span>
                     <button class="qty-btn" style="width:24px; height:24px; border-radius:4px;" onclick="changeCartQty(${i}, 1)">+</button>
                 </div>
                 <div style="min-width:70px; text-align:right; font-weight:bold;">€ ${sub}</div>
@@ -328,9 +316,9 @@
         document.getElementById('cart-total-display').innerText = `${UI[lang].total}: € ${currentTotalNum}`;
     }
 
-    function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); }
-    function openCheckout() { document.getElementById('modal').style.display = 'flex'; }
-    function closeCheckout() { document.getElementById('modal').style.display = 'none'; }
+    window.toggleCart = () => document.getElementById('cart-panel').classList.toggle('active');
+    window.openCheckout = () => document.getElementById('modal').style.display = 'flex';
+    window.closeCheckout = () => document.getElementById('modal').style.display = 'none';
 
     async function processOrder() {
         const name = document.getElementById('f-name').value;
@@ -340,13 +328,10 @@
         const cap = document.getElementById('f-cap').value;
         const city = document.getElementById('f-city').value;
         const country = document.getElementById('f-country').value;
-
         if(!name || !email || !phone || !street || !city) return alert("Compila i campi obbligatori.");
-
         const fullAddress = `${street}, ${cap} ${city}, ${country}`;
         const orderID = "GZ-" + Date.now().toString().slice(-6);
         const orderItems = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
-        
         const f = new URLSearchParams();
         f.append('entry.442927045', orderID); 
         f.append('entry.333212320', name);
@@ -355,17 +340,13 @@
         f.append('entry.334440207', fullAddress); 
         f.append('entry.1856379113', orderItems);
         f.append('entry.146792905', currentTotalNum);
-
         fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: f });
         fetch(CONFIG.emailWebApp, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({id: orderID, cliente: name, email: email, prodotti: orderItems, totale: currentTotalNum, indirizzo: fullAddress}) });
-
         document.getElementById('modal').style.display = 'none';
         document.getElementById('thanks-popup').style.display = 'flex';
-        
         const msg = `*NUOVO ORDINE ${orderID}*\n\n*CLIENTE:* ${name}\n*TEL:* ${phone}\n*INDIRIZZO:* ${fullAddress}\n\n*DETTAGLIO:* ${orderItems}\n\n*TOTALE:* € ${currentTotalNum}`;
         window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`);
     }
-
     load();
 </script>
 </body>
