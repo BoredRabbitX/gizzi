@@ -94,7 +94,7 @@ function openCheckout() { document.getElementById('modal-checkout').style.displa
 function closeCheckout() { document.getElementById('modal-checkout').style.display = 'none'; }
 
 async function processOrder() {
-    // Logica invio identica a prima...
+    // Logica invio identica a prima....
     document.getElementById('thanks-popup').style.display = 'flex';
 }
 
