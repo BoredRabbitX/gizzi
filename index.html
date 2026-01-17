@@ -173,6 +173,7 @@
             return o;
         });
         render();
+        // Avvio auto-play
         setInterval(() => moveCarousel(1), 8000);
     }
 
@@ -229,14 +230,27 @@
         }).join('');
     }
 
+    // LOGICA CAROUSEL CON LOOP INFINITO
     function moveCarousel(dir) {
         const track = document.getElementById('carousel-track');
         const items = document.querySelectorAll('.carousel-item');
         if(items.length === 0) return;
+        
         const cardWidth = 325; 
         const visible = Math.floor(document.querySelector('.container').offsetWidth / cardWidth);
-        const max = items.length - (visible || 1);
-        carouselIndex = Math.max(0, Math.min(carouselIndex + dir, max));
+        const maxScroll = items.length - (visible || 1);
+
+        carouselIndex += dir;
+
+        // Se va oltre l'ultimo elemento, torna al primo
+        if (carouselIndex > maxScroll) {
+            carouselIndex = 0;
+        } 
+        // Se va prima del primo elemento (cliccando indietro), va all'ultimo
+        else if (carouselIndex < 0) {
+            carouselIndex = maxScroll;
+        }
+
         track.style.transform = `translateX(-${carouselIndex * cardWidth}px)`;
     }
 
@@ -261,7 +275,7 @@
                 <div>€ ${sub} <span onclick="cart.splice(${i},1); updateCartUI();" style="color:red; cursor:pointer; font-weight:bold; margin-left:10px;">✕</span></div>
             </div>`;
         }).join('');
-        currentTotalNum = tot.toFixed(2); // Memorizziamo solo il numero
+        currentTotalNum = tot.toFixed(2);
         document.getElementById('cart-total-display').innerText = `${UI[lang].total}: € ${currentTotalNum}`;
     }
 
@@ -284,7 +298,6 @@
         const orderID = "GZ-" + Date.now().toString().slice(-6);
         const orderItems = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
         
-        // Prepariamo i dati per il Form
         const f = new URLSearchParams();
         f.append('entry.442927045', orderID); 
         f.append('entry.333212320', name);
@@ -292,7 +305,7 @@
         f.append('entry.844983788', phone);
         f.append('entry.334440207', fullAddress); 
         f.append('entry.1856379113', orderItems);
-        f.append('entry.146792905', currentTotalNum); // INVIAMO SOLO IL NUMERO (es. 45.50)
+        f.append('entry.146792905', currentTotalNum);
 
         fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: f });
         fetch(CONFIG.emailWebApp, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({id: orderID, cliente: name, email: email, prodotti: orderItems, totale: currentTotalNum, indirizzo: fullAddress}) });
