@@ -110,6 +110,12 @@ header {
     background: var(--white); 
     overflow: hidden; 
 }
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Fondamentale per il movimento */
+    gap: 20px;
+    width: max-content;
+}
 
 .carousel-header { 
     text-align: center; 
