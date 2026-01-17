@@ -109,7 +109,7 @@
     <div style="padding:40px;">
         <h2 id="thanks-h2" style="font-family:'Fraunces'; font-size:3rem; color:var(--gizzi-gold);">Grazie!</h2>
         <p id="thanks-p" style="font-size:1.2rem;">Il tuo ordine è stato ricevuto con successo.</p>
-        <button onclick="location.reload()" style="background:var(--gizzi-gold); color:white; border:none; padding:18px 50px; border-radius:50px; cursor:pointer; font-weight:700; margin-top:30px;">CHIUDI</button>
+        <button id="thanks-btn" onclick="location.reload()" style="background:var(--gizzi-gold); color:white; border:none; padding:18px 50px; border-radius:50px; cursor:pointer; font-weight:700; margin-top:30px;">CHIUDI</button>
     </div>
 </div>
 
@@ -118,7 +118,7 @@
     <div id="cart-items" style="flex-grow:1; overflow-y:auto; margin-top:20px;"></div>
     <div style="border-top: 1px solid #eee; padding-top: 25px;">
         <h3 id="cart-total-display">Totale: € 0.00</h3>
-        <button class="btn-add" style="background:var(--gizzi-gold); padding:18px; border-radius:50px;" onclick="openCheckout()">PROSEGUI</button>
+        <button id="btn-cart-checkout" class="btn-add" style="background:var(--gizzi-gold); padding:18px; border-radius:50px;" onclick="openCheckout()">PROSEGUI</button>
     </div>
 </div>
 
@@ -129,8 +129,8 @@
         <input type="email" id="f-email" placeholder="Email *">
         <input type="tel" id="f-phone" placeholder="Cellulare *">
         <input type="text" id="f-street" placeholder="Indirizzo (Via, CAP, Città) *">
-        <button class="btn-add" style="background:#25D366; margin-top:10px; font-size:1.1rem;" onclick="processOrder()">ORDINA ORA</button>
-        <button onclick="closeCheckout()" style="background:none; border:none; width:100%; margin-top:15px; color:#999; cursor:pointer;">Annulla</button>
+        <button id="btn-order-now" class="btn-add" style="background:#25D366; margin-top:10px; font-size:1.1rem;" onclick="processOrder()">ORDINA ORA</button>
+        <button id="btn-cancel" onclick="closeCheckout()" style="background:none; border:none; width:100%; margin-top:15px; color:#999; cursor:pointer;">Annulla</button>
     </div>
 </div>
 
@@ -150,9 +150,9 @@
     };
 
     const UI = {
-        it: { h1: "L'Oro del Cilento, a casa tua.", p: "Eccellenza gastronomica dal cuore del Parco Nazionale.", add: "Aggiungi", total: "Totale", carousel: "I Prodotti del Momento", ship: "Spedizione", thanksH: "Grazie!", thanksP: "Ordine ricevuto correttamente." },
-        en: { h1: "Cilento's Gold, at your doorstep.", p: "Gastronomic excellence from the heart of the National Park.", add: "Add", total: "Total", carousel: "Featured Products", ship: "Shipping", thanksH: "Thank you!", thanksP: "Order received successfully." },
-        de: { h1: "Cilento Gold, vor Ihrer Tür.", p: "Kulinarische Exzellenz aus dem Herzen des Nationalparks.", add: "Hinzufügen", total: "Gesamt", carousel: "Unsere Highlights", ship: "Versand", thanksH: "Vielen Dank!", thanksP: "Bestellung erfolgreich erhalten." }
+        it: { h1: "L'Oro del Cilento, a casa tua.", p: "Eccellenza gastronomica dal cuore del Parco Nazionale.", add: "Aggiungi", total: "Totale", carousel: "I Prodotti del Momento", ship: "Spedizione", thanksH: "Grazie!", thanksP: "Ordine ricevuto correttamente.", cartTitle: "Il Tuo Carrello", proceed: "PROSEGUI", order: "ORDINA ORA", cancel: "Annulla", close: "CHIUDI" },
+        en: { h1: "Cilento's Gold, at your doorstep.", p: "Gastronomic excellence from the heart of the National Park.", add: "Add", total: "Total", carousel: "Featured Products", ship: "Shipping", thanksH: "Thank you!", thanksP: "Order received successfully.", cartTitle: "Your Cart", proceed: "CHECKOUT", order: "ORDER NOW", cancel: "Cancel", close: "CLOSE" },
+        de: { h1: "Cilento Gold, vor Ihrer Tür.", p: "Kulinarische Exzellenz aus dem Herzen des Nationalparks.", add: "Hinzufügen", total: "Gesamt", carousel: "Unsere Highlights", ship: "Versand", thanksH: "Vielen Dank!", thanksP: "Bestellung erfolgreich erhalten.", cartTitle: "Ihr Warenkorb", proceed: "KASSE", order: "JETZT BESTELLEN", cancel: "Abbrechen", close: "SCHLIESSEN" }
     };
 
     let products = [], cart = [], lang = 'it', carouselIndex = 0;
@@ -178,7 +178,15 @@
         document.getElementById('hero-p').innerText = UI[lang].p;
         document.getElementById('carousel-title').innerText = UI[lang].carousel;
         document.getElementById('checkout-header').innerText = UI[lang].ship;
+        document.getElementById('cart-label').innerText = UI[lang].cartTitle;
+        document.getElementById('btn-cart-checkout').innerText = UI[lang].proceed;
+        document.getElementById('btn-order-now').innerText = UI[lang].order;
+        document.getElementById('btn-cancel').innerText = UI[lang].cancel;
+        document.getElementById('thanks-h2').innerText = UI[lang].thanksH;
+        document.getElementById('thanks-p').innerText = UI[lang].thanksP;
+        document.getElementById('thanks-btn').innerText = UI[lang].close;
         render();
+        updateCartUI();
     }
 
     function render() {
@@ -222,14 +230,15 @@
     function moveCarousel(dir) {
         const track = document.getElementById('carousel-track');
         const items = document.querySelectorAll('.carousel-item');
-        const cardWidth = 325; // item + gap
+        if(items.length === 0) return;
+        const cardWidth = 325; 
         const visible = Math.floor(document.querySelector('.container').offsetWidth / cardWidth);
         const max = items.length - (visible || 1);
         carouselIndex = Math.max(0, Math.min(carouselIndex + dir, max));
         track.style.transform = `translateX(-${carouselIndex * cardWidth}px)`;
     }
 
-    function startAutoPlay() { setInterval(() => moveCarousel(1), 6000); }
+    function startAutoPlay() { setInterval(() => moveCarousel(1), 8000); }
 
     function add(id) {
         const p = products.find(x => x.ID == id);
@@ -243,10 +252,12 @@
         let tot = 0;
         document.getElementById('cart-count').innerText = cart.reduce((a,b) => a + b.qty, 0);
         document.getElementById('cart-items').innerHTML = cart.map((c, i) => {
+            const nameKey = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
+            const displayName = c[nameKey] || c.Nome;
             const sub = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
             tot += parseFloat(sub);
             return `<div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #f0f0f0; padding-bottom:10px;">
-                <div><strong>${c.Nome}</strong><br>${c.qty}x €${c.Prezzo}</div>
+                <div><strong>${displayName}</strong><br>${c.qty}x €${c.Prezzo}</div>
                 <div>€ ${sub} <span onclick="cart.splice(${i},1); updateCartUI();" style="color:red; cursor:pointer; font-weight:bold; margin-left:10px;">✕</span></div>
             </div>`;
         }).join('');
