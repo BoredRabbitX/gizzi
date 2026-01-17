@@ -10,10 +10,8 @@
         * { box-sizing: border-box; scroll-behavior: smooth; }
         body { font-family: 'Montserrat', sans-serif; margin: 0; background: var(--bg); color: #2d2d2d; overflow-x: hidden; }
 
-        /* LAYOUT BOXED */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
-        /* HEADER & MENU */
         header { position: fixed; top: 0; width: 100%; background: white; z-index: 2000; border-bottom: 1px solid #eee; }
         .nav-top { height: 70px; display: flex; align-items: center; justify-content: space-between; }
         .logo { font-family: 'Fraunces', serif; font-size: 1.6rem; color: var(--gizzi-deep); text-decoration: none; font-weight: 700; }
@@ -21,7 +19,6 @@
         .category-menu a { text-decoration: none; color: #666; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 5px 12px; transition: 0.3s; }
         .category-menu a:hover { color: var(--gizzi-gold); }
 
-        /* HERO */
         .hero {
             height: 60vh; margin-top: 115px;
             background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1240&hei=500&fit=constrain,1&fmt=webp');
@@ -29,7 +26,6 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center;
         }
 
-        /* CAROUSEL */
         .carousel-section { padding: 60px 0; background: white; }
         .carousel-viewport { position: relative; overflow: hidden; width: 100%; margin-top: 30px; }
         .carousel-track { display: flex; gap: 25px; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); width: max-content; padding: 10px 0; }
@@ -38,7 +34,6 @@
         .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: var(--gizzi-deep); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.2rem; }
         .btn-left { left: 5px; } .btn-right { right: 5px; }
 
-        /* GRIGLIA NEGOZIO */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 35px; margin-top: 40px; }
         .card { background: white; border-radius: 15px; overflow: hidden; border: 1px solid #eee; transition: 0.3s; display: flex; flex-direction: column; }
         .card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
@@ -47,23 +42,21 @@
         .card-body h3 { font-family: 'Fraunces'; font-size: 1.2rem; color: var(--gizzi-deep); margin: 0 0 10px; }
         .price { color: var(--gizzi-gold); font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
 
-        /* BOTTONI */
         .btn-add { background: var(--gizzi-deep); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; transition: 0.3s; }
         .btn-add:hover { background: var(--gizzi-gold); }
 
-        /* FOOTER VERDE */
         footer { background: var(--gizzi-deep); color: white; padding: 70px 0; text-align: center; border-top: 5px solid var(--gizzi-gold); margin-top: 80px; }
         .footer-logo { font-family: 'Fraunces'; font-size: 2.2rem; color: var(--gizzi-gold); margin-bottom: 15px; }
 
-        /* CARRELLO LATERALE */
         #cart-panel { position: fixed; right: -450px; top: 0; width: 400px; max-width: 100%; height: 100vh; background: white; z-index: 3000; transition: 0.5s; padding: 40px; display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
         #cart-panel.active { right: 0; }
+        .close-cart { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #999; }
 
-        /* POPUP RINGRAZIAMENTO */
         .thanks-popup { display: none; position: fixed; inset: 0; background: var(--gizzi-deep); z-index: 5000; align-items: center; justify-content: center; color: white; text-align: center; }
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 4000; align-items: center; justify-content: center; }
         .modal-content { background: white; padding: 40px; border-radius: 20px; width: 90%; max-width: 500px; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ddd; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ddd; }
+        input:invalid { border-color: #ff4d4d; }
     </style>
 </head>
 <body>
@@ -101,7 +94,6 @@
             <button class="carousel-btn btn-right" onclick="moveCarousel(1)">❯</button>
         </div>
     </section>
-
     <div id="negozio"></div>
 </div>
 
@@ -114,6 +106,7 @@
 </div>
 
 <div id="cart-panel">
+    <span class="close-cart" onclick="toggleCart()">✕</span>
     <h2 id="cart-label" style="font-family:'Fraunces';">Il Tuo Carrello</h2>
     <div id="cart-items" style="flex-grow:1; overflow-y:auto; margin-top:20px;"></div>
     <div style="border-top: 1px solid #eee; padding-top: 25px;">
@@ -125,12 +118,24 @@
 <div id="modal" class="modal">
     <div class="modal-content">
         <h2 id="checkout-header" style="font-family:'Fraunces'; margin-bottom:20px;">Spedizione</h2>
-        <input type="text" id="f-name" placeholder="Nome e Cognome *">
-        <input type="email" id="f-email" placeholder="Email *">
-        <input type="tel" id="f-phone" placeholder="Cellulare *">
-        <input type="text" id="f-street" placeholder="Indirizzo (Via, CAP, Città) *">
-        <button id="btn-order-now" class="btn-add" style="background:#25D366; margin-top:10px; font-size:1.1rem;" onclick="processOrder()">ORDINA ORA</button>
-        <button id="btn-cancel" onclick="closeCheckout()" style="background:none; border:none; width:100%; margin-top:15px; color:#999; cursor:pointer;">Annulla</button>
+        <form id="order-form" onsubmit="event.preventDefault(); processOrder();">
+            <input type="text" id="f-name" placeholder="Nome e Cognome *" required>
+            <input type="email" id="f-email" placeholder="Email *" required>
+            <input type="tel" id="f-phone" placeholder="Cellulare *" required>
+            <input type="text" id="f-street" placeholder="Indirizzo (Via e Civico) *" required>
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="f-cap" placeholder="CAP *" required style="flex:1;">
+                <input type="text" id="f-city" placeholder="Città *" required style="flex:2;">
+            </div>
+            <select id="f-country" required>
+                <option value="Italia">Italia</option>
+                <option value="Germania">Germania</option>
+                <option value="Regno Unito">Regno Unito</option>
+                <option value="Francia">Francia</option>
+            </select>
+            <button type="submit" id="btn-order-now" class="btn-add" style="background:#25D366; margin-top:10px; font-size:1.1rem;">ORDINA ORA</button>
+            <button type="button" id="btn-cancel" onclick="closeCheckout()" style="background:none; border:none; width:100%; margin-top:15px; color:#999; cursor:pointer;">Annulla</button>
+        </form>
     </div>
 </div>
 
@@ -169,7 +174,7 @@
             return o;
         });
         render();
-        startAutoPlay();
+        setInterval(() => moveCarousel(1), 8000);
     }
 
     function updateLang(val) {
@@ -196,7 +201,6 @@
         const catKey = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
         const nameKey = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
 
-        // CAROUSEL
         const featured = products.filter(p => p.Disponibile === 'SI' && p.Evidenza === 'SI');
         track.innerHTML = featured.map(p => `
             <div class="carousel-item">
@@ -206,7 +210,6 @@
                 <button class="btn-add" onclick="add('${p.ID}')">${UI[lang].add}</button>
             </div>`).join('');
 
-        // SHOP & MENU
         const categories = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p[catKey] || p.Categoria))];
         menu.innerHTML = categories.map(cat => `<a href="#cat-${cat.replace(/\s+/g, '')}">${cat}</a>`).join('');
         
@@ -238,8 +241,6 @@
         track.style.transform = `translateX(-${carouselIndex * cardWidth}px)`;
     }
 
-    function startAutoPlay() { setInterval(() => moveCarousel(1), 8000); }
-
     function add(id) {
         const p = products.find(x => x.ID == id);
         const ex = cart.find(c => c.ID == id);
@@ -270,23 +271,37 @@
 
     async function processOrder() {
         const name = document.getElementById('f-name').value;
+        const email = document.getElementById('f-email').value;
         const phone = document.getElementById('f-phone').value;
+        const street = document.getElementById('f-street').value;
+        const cap = document.getElementById('f-cap').value;
+        const city = document.getElementById('f-city').value;
+        const country = document.getElementById('f-country').value;
         const total = document.getElementById('cart-total-display').innerText;
+
+        if(!name || !email || !phone || !street || !city) return alert("Per favore, compila tutti i campi obbligatori.");
+
+        const fullAddress = `${street}, ${cap} ${city}, ${country}`;
         const orderID = "GZ-" + Date.now().toString().slice(-6);
-        const items = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
-        if(!name || !phone) return alert("Inserisci i dati obbligatori!");
+        const orderItems = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
 
         const f = new URLSearchParams();
-        f.append('entry.442927045', orderID); f.append('entry.333212320', name);
-        f.append('entry.844983788', phone); f.append('entry.1856379113', items);
+        f.append('entry.442927045', orderID); 
+        f.append('entry.333212320', name);
+        f.append('entry.1385104048', email);
+        f.append('entry.844983788', phone);
+        f.append('entry.334440207', fullAddress); 
+        f.append('entry.1856379113', orderItems);
         f.append('entry.146792905', total);
-        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: f });
 
-        fetch(CONFIG.emailWebApp, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({id: orderID, cliente: name, prodotti: items, totale: total}) });
+        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: f });
+        fetch(CONFIG.emailWebApp, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({id: orderID, cliente: name, email: email, prodotti: orderItems, totale: total, indirizzo: fullAddress}) });
 
         document.getElementById('modal').style.display = 'none';
         document.getElementById('thanks-popup').style.display = 'flex';
-        setTimeout(() => window.open(`https://wa.me/${CONFIG.wa}?text=Ordine ${orderID} - ${total}`), 2000);
+        
+        const msg = `*NUOVO ORDINE ${orderID}*\n\n*CLIENTE:* ${name}\n*TEL:* ${phone}\n*INDIRIZZO:* ${fullAddress}\n\n*DETTAGLIO:* ${orderItems}\n\n*${total}*`;
+        window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`);
     }
 
     load();
