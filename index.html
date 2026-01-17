@@ -207,41 +207,56 @@
     function openCheckout() { document.getElementById('modal').style.display = 'flex'; }
     function closeCheckout() { document.getElementById('modal').style.display = 'none'; }
 
-    async function processOrder() {
-        const name = document.getElementById('f-name').value;
-        const street = document.getElementById('f-street').value;
-        const city = document.getElementById('f-city').value;
-        const cap = document.getElementById('f-cap').value;
-        const country = document.getElementById('f-country').value;
-        const totalText = document.getElementById('cart-total-display').innerText;
+   async function processOrder() {
+    // 1. Recupero i dati inseriti nel checkout
+    const name = document.getElementById('f-name').value;
+    const email = document.getElementById('f-email').value;
+    const phone = document.getElementById('f-phone').value;
+    const street = document.getElementById('f-street').value;
+    const city = document.getElementById('f-city').value;
+    const cap = document.getElementById('f-cap').value;
+    const country = document.getElementById('f-country').value;
+    const totalText = document.getElementById('cart-total-display').innerText;
 
-        if(!name || !street || !city) return alert("Per favore, compila i campi obbligatori.");
+    if(!name || !street || !city || !phone) return alert("Per favore, compila i campi obbligatori.");
 
-        const orderData = {
-            orderID: "GZ-" + Date.now().toString().slice(-6),
-            customerName: name,
-            customerEmail: document.getElementById('f-email').value,
-            customerPhone: document.getElementById('f-phone').value,
-            customerAddress: `${street}, ${cap} ${city}, ${country}`,
-            items: cart.map(c => `${c.qty}x ${c.Nome}`).join(", "),
-            total: totalText
-        };
+    // Costruisco l'indirizzo unico e l'ID ordine
+    const fullAddress = `${street}, ${cap} ${city}, ${country}`;
+    const orderID = "GZ-" + Date.now().toString().slice(-6);
+    const orderItems = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
 
-        // Registrazione su Google Sheets
-        fetch(CONFIG.webapp, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(orderData)
-        });
+    // 2. CONFIGURAZIONE GOOGLE FORM (Invisibile)
+    // Ho estratto questi ID dal tuo HTML:
+    const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSend7KPNCjTNP1d-B3zd-wvhZAVXLS3P7341yN88fm3d7D4Jw/formResponse";
+    
+    const body = new URLSearchParams();
+    body.append('entry.442927045', orderID);      // ID_Ordine
+    body.append('entry.333212320', name);         // Cliente
+    body.append('entry.1385104048', email);       // Email
+    body.append('entry.844983788', phone);        // Telefono
+    body.append('entry.334440207', fullAddress);  // Indirizzo
+    body.append('entry.1856379113', orderItems);  // Prodotti
+    body.append('entry.146792905', totalText);    // Totale
 
-        // Invio WhatsApp
-        const msg = `*ORDINE GRUPPO GIZZI*\nCliente: ${name}\n\n*PRODOTTI:*\n${cart.map(c => `- ${c.qty}x ${c.Nome}`).join("\n")}\n\n*${totalText}*`;
-        window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`);
-        
-        cart = []; updateUI(); closeCheckout(); toggleCart();
-    }
+    // INVIO DATI AL FOGLIO (via Google Form)
+    fetch(formURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: body
+    });
 
+    // 3. MESSAGGIO WHATSAPP (Sempre attivo)
+    let itemDetails = cart.map(c => `- ${c.qty}x ${c.Nome}: €${(parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2)}`).join("\n");
+    const msg = `*NUOVO ORDINE ${orderID}*\n\n*CLIENTE:* ${name}\n*TEL:* ${phone}\n*INDIRIZZO:* ${fullAddress}\n\n*DETTAGLIO:*\n${itemDetails}\n\n*${totalText}*`;
+    
+    window.open(`https://wa.me/393358060715?text=${encodeURIComponent(msg)}`);
+
+    // Reset finale
+    cart = []; 
+    updateUI(); 
+    closeCheckout(); 
+    toggleCart();
+}
     load();
 </script>
 </body>
