@@ -5,61 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gruppo Gizzi | Cilento Authentic Experience</title>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
-        :root { --gizzi-deep: #1b4332; --gizzi-gold: #b08d57; --bg: #fdfaf5; --white: #ffffff; }
-        * { box-sizing: border-box; scroll-behavior: smooth; }
-        body { font-family: 'Montserrat', sans-serif; margin: 0; background: var(--bg); color: #2d2d2d; line-height: 1.6; }
-
-        header { position: fixed; top: 0; width: 100%; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); z-index: 2000; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .nav-top { height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; }
-        .logo { font-family: 'Fraunces', serif; font-size: 1.6rem; color: var(--gizzi-deep); text-decoration: none; font-weight: 700; }
-        
-        .category-menu { display: flex; justify-content: center; gap: 20px; padding: 10px 0; background: var(--white); border-top: 1px solid #f0f0f0; overflow-x: auto; white-space: nowrap; }
-        .category-menu a { text-decoration: none; color: #666; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 5px 10px; transition: 0.3s; }
-        .category-menu a:hover { color: var(--gizzi-gold); }
-
-        .hero {
-            height: 75vh; margin-top: 115px;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-                        url('https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1240&hei=500&fit=constrain,1&fmt=webp');
-            background-size: cover; background-position: center;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 0 20px;
+        /* Stili aggiuntivi per il Popup di ringraziamento (non presenti nel CSS base) */
+        .thanks-popup {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            z-index: 9999; align-items: center; justify-content: center; text-align: center; color: white;
         }
-        .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(2rem, 6vw, 4rem); margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
-        .hero p { font-size: 1.2rem; max-width: 800px; margin-top: 15px; font-weight: 400; text-shadow: 1px 1px 5px rgba(0,0,0,0.5); }
-
-        /* --- STILE CAROUSEL --- */
-        .carousel-section { padding: 60px 0; background: var(--white); overflow: hidden; }
-        .carousel-header { text-align: center; font-family: 'Fraunces'; color: var(--gizzi-deep); margin-bottom: 30px; font-size: 2rem; }
-        .carousel-container { position: relative; max-width: 1200px; margin: 0 auto; padding: 0 40px; }
-        .carousel-track-container { overflow: hidden; }
-        .carousel-track { display: flex; transition: transform 0.5s ease-in-out; gap: 20px; }
-        .carousel-item { min-width: calc(33.333% - 14px); background: #fdfaf5; border-radius: 12px; border: 1px solid #eee; padding: 15px; text-align: center; }
-        @media (max-width: 768px) { .carousel-item { min-width: calc(100%); } }
-        .carousel-item img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
-        .carousel-item h4 { font-family: 'Fraunces'; margin: 10px 0; color: var(--gizzi-deep); }
-        .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: var(--gizzi-deep); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; font-weight: bold; }
-        .carousel-btn.left { left: 0; }
-        .carousel-btn.right { right: 0; }
-        /* ---------------------- */
-
-        .container { max-width: 1300px; margin: 0 auto; padding: 0 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; margin-bottom: 60px; }
-        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #f2f2f2; }
-        .card:hover { transform: translateY(-5px); }
-        .card img { width: 100%; height: 200px; object-fit: cover; }
-        .card-body { padding: 15px; text-align: center; }
-        .card-body h3 { font-family: 'Fraunces', serif; font-size: 1.1rem; margin: 10px 0; color: var(--gizzi-deep); height: 2.4em; overflow: hidden; }
-        .price-tag { font-size: 1.3rem; font-weight: 700; color: var(--gizzi-gold); margin: 5px 0; }
-
-        #cart-panel { position: fixed; right: -100%; top: 0; width: 400px; max-width: 100%; height: 100vh; background: white; z-index: 3000; transition: 0.5s; box-shadow: -15px 0 50px rgba(0,0,0,0.1); padding: 30px; display: flex; flex-direction: column; }
-        #cart-panel.active { right: 0; }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 4000; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 35px; border-radius: 20px; width: 95%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
-        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ddd; font-family: inherit; }
-
-        footer { background: var(--gizzi-deep); color: white; padding: 60px 5%; text-align: center; margin-top: 80px; border-top: 4px solid var(--gizzi-gold); }
-        .footer-logo { font-family: 'Fraunces', serif; font-size: 1.8rem; margin-bottom: 15px; color: var(--gizzi-gold); }
+        .thanks-content { background: var(--gizzi-deep); padding: 50px; border-radius: 20px; border: 2px solid var(--gizzi-gold); max-width: 450px; width: 90%; }
+        .thanks-content h2 { font-family: 'Fraunces'; font-size: 2rem; margin-bottom: 15px; }
+        .btn-close-thanks { background: var(--gizzi-gold); color: white; border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: 700; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -97,7 +52,17 @@
         <button class="carousel-btn right" onclick="moveCarousel(1)">&#10095;</button>
     </div>
 </section>
+
 <div id="negozio"></div>
+
+<div id="thanks-popup" class="thanks-popup">
+    <div class="thanks-content">
+        <div style="font-size: 4rem; color: var(--gizzi-gold); margin-bottom: 10px;">✓</div>
+        <h2 id="thanks-title">Grazie per il tuo ordine!</h2>
+        <p id="thanks-p">Abbiamo inviato un riepilogo alla tua email. Ti contatteremo a breve su WhatsApp per coordinare la spedizione.</p>
+        <button class="btn-close-thanks" onclick="closeThanks()">CHIUDI</button>
+    </div>
+</div>
 
 <div id="cart-panel">
     <h2 id="cart-title-text" style="font-family:'Fraunces'">Carrello</h2>
@@ -124,7 +89,7 @@
             <option value="Germania">Germania</option>
             <option value="UK">Regno Unito</option>
         </select>
-        <button id="btn-confirm-text" onclick="processOrder()" style="background:#25D366; color:white; width:100%; padding:15px; border:none; border-radius:10px; cursor:pointer; font-weight:700;">ORDINA</button>
+        <button id="btn-confirm-text" onclick="processOrder()" style="background:#25D366; color:white; width:100%; padding:15px; border:none; border-radius:10px; cursor:pointer; font-weight:700;">ORDINA ORA</button>
         <button onclick="closeCheckout()" style="background:none; border:none; width:100%; margin-top:10px; color:#999; cursor:pointer;">Annulla</button>
     </div>
 </div>
@@ -136,32 +101,34 @@
 
 <script>
     const CONFIG = {
-        webapp: "https://script.google.com/macros/s/AKfycbz7FDFHSZ0Njd_cHhq7EPZHwOpw6hz4yHCZ5joVkneedzWb-zKgCTerTg965zljq9nY/exec",
         catalog: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIumwZulbMAuesmG69DB8Y1bx2Y-NQXfyG7_m1-rdpZ-SoOxM0JyZtnj0_eV_K4t4drULTwV44nE5Y/pub?gid=0&single=true&output=csv",
+        formURL: "https://docs.google.com/forms/d/e/1FAIpQLSend7KPNCjTNP1d-B3zd-wvhZAVXLS3P7341yN88fm3d7D4Jw/formResponse",
+        emailWebApp: "https://script.google.com/macros/s/AKfycbwv1iqWofz-uaNpOlOD-D6qhPx-heZ8IAp6ZdJ1FdbK7BU8xLmGu9sN3wqnDkQaXbkp/exec",
         wa: "393358060715"
     };
 
     const UI_STRINGS = {
-        it: { h1: "Cilento, Pura Terra.", p: "L'essenza del Mediterraneo: prodotti autentici del Parco Nazionale, spediti con amore in tutta Europa.", cart: "Carrello", checkout: "PROSEGUI", total: "Totale", add: "Aggiungi", ship: "Spedizione", order: "ORDINA VIA WHATSAPP", carousel: "I Prodotti del Momento" },
-        en: { h1: "Cilento, Pure Land.", p: "The essence of the Mediterranean: authentic products from the National Park, shipped with love across Europe.", cart: "Cart", checkout: "CHECKOUT", total: "Total", add: "Add", ship: "Shipping", order: "ORDER VIA WHATSAPP", carousel: "Featured Products" },
-        de: { h1: "Cilento, Reines Land.", p: "Die Essenz des Mittelmeers: authentische Produkte aus dem Nationalpark, mit Liebe europaweit versandt.", cart: "Warenkorb", checkout: "KASSE", total: "Gesamt", add: "Hinzufügen", ship: "Versand", order: "PER WHATSAPP BESTELLEN", carousel: "Aktuelle Highlights" }
+        it: { h1: "Cilento, Pura Terra.", p: "L'essenza del Mediterraneo: prodotti autentici del Parco Nazionale, spediti con amore in tutta Europa.", cart: "Carrello", checkout: "PROSEGUI", total: "Totale", add: "Aggiungi", ship: "Spedizione", order: "ORDINA ORA", carousel: "I Prodotti del Momento" },
+        en: { h1: "Cilento, Pure Land.", p: "The essence of the Mediterranean: authentic products from the National Park, shipped with love across Europe.", cart: "Cart", checkout: "CHECKOUT", total: "Total", add: "Add", ship: "Shipping", order: "ORDER NOW", carousel: "Featured Products" },
+        de: { h1: "Cilento, Reines Land.", p: "Die Essenz des Mittelmeers: authentische Produkte aus dem Nationalpark, mit Liebe europaweit versandt.", cart: "Warenkorb", checkout: "KASSE", total: "Gesamt", add: "Hinzufügen", ship: "Versand", order: "JETZT BESTELLEN", carousel: "Aktuelle Highlights" }
     };
 
-    let products = [], cart = [], lang = 'it';
-    let carouselIndex = 0;
+    let products = [], cart = [], lang = 'it', carouselIndex = 0;
 
     async function load() {
-        const res = await fetch(CONFIG.catalog);
-        const text = await res.text();
-        const rows = text.split('\n').filter(r => r.trim() !== "");
-        const headers = rows[0].split(',').map(h => h.trim());
-        products = rows.slice(1).map(row => {
-            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            let o = {};
-            headers.forEach((h, i) => o[h] = cols[i]?.replace(/"/g, '').trim());
-            return o;
-        });
-        render();
+        try {
+            const res = await fetch(CONFIG.catalog);
+            const text = await res.text();
+            const rows = text.split('\n').filter(r => r.trim() !== "");
+            const headers = rows[0].split(',').map(h => h.trim());
+            products = rows.slice(1).map(row => {
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                let o = {};
+                headers.forEach((h, i) => o[h] = cols[i]?.replace(/"/g, '').trim());
+                return o;
+            });
+            render();
+        } catch(e) { console.error("Errore caricamento catalogo"); }
     }
 
     function updateLang(val) {
@@ -180,14 +147,13 @@
         const container = document.getElementById('negozio');
         const menu = document.getElementById('anchor-menu');
         const track = document.getElementById('carousel-track');
-        
         const catKey = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
-        const categories = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p[catKey] || p.Categoria))];
         
+        const categories = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p[catKey] || p.Categoria))];
         menu.innerHTML = categories.map(cat => `<a href="#cat-${cat.replace(/\s+/g, '')}">${cat}</a>`).join('');
 
-        // --- RENDER CAROUSEL (Primi 6 prodotti disponibili) ---
-        const featured = products.filter(p => p.Disponibile === 'SI').slice(0, 6);
+        // CAROUSEL LOGIC: Filtra prodotti con colonna Evidenza = SI
+        const featured = products.filter(p => p.Disponibile === 'SI' && p.Evidenza === 'SI');
         track.innerHTML = featured.map(p => {
             const name = lang === 'it' ? p.Nome : (p[`Nome_${lang.toUpperCase()}`] || p.Nome);
             return `
@@ -199,7 +165,10 @@
             </div>`;
         }).join('');
 
-        // --- RENDER NEGOZIO COMPLETO ---
+        carouselIndex = 0;
+        track.style.transform = `translateX(0)`;
+
+        // NEGOZIO COMPLETO
         container.innerHTML = categories.map(cat => {
             const catProds = products.filter(p => p.Disponibile === 'SI' && (p[catKey] === cat || p.Categoria === cat));
             return `
@@ -208,8 +177,7 @@
                 <div class="container"><div class="grid">
                     ${catProds.map(p => {
                         const name = lang === 'it' ? p.Nome : (p[`Nome_${lang.toUpperCase()}`] || p.Nome);
-                        return `
-                        <div class="card">
+                        return `<div class="card">
                             <img src="${p.Immagine}">
                             <div class="card-body">
                                 <h3>${name}</h3>
@@ -226,15 +194,19 @@
     function moveCarousel(direction) {
         const track = document.getElementById('carousel-track');
         const items = document.querySelectorAll('.carousel-item');
+        if (items.length === 0) return;
+
+        const gap = 20;
+        const itemWidth = items[0].offsetWidth;
         const visibleItems = window.innerWidth > 768 ? 3 : 1;
         const maxIndex = items.length - visibleItems;
-        
+
         carouselIndex += direction;
         if (carouselIndex < 0) carouselIndex = 0;
         if (carouselIndex > maxIndex) carouselIndex = maxIndex;
-        
-        const amount = items[0].offsetWidth + 20;
-        track.style.transform = `translateX(-${carouselIndex * amount}px)`;
+
+        const moveAmount = (itemWidth + gap) * carouselIndex;
+        track.style.transform = `translateX(-${moveAmount}px)`;
     }
 
     function add(id) {
@@ -264,6 +236,7 @@
     function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); }
     function openCheckout() { document.getElementById('modal').style.display = 'flex'; }
     function closeCheckout() { document.getElementById('modal').style.display = 'none'; }
+    function closeThanks() { document.getElementById('thanks-popup').style.display = 'none'; location.reload(); }
 
     async function processOrder() {
         const name = document.getElementById('f-name').value;
@@ -271,35 +244,48 @@
         const phone = document.getElementById('f-phone').value;
         const street = document.getElementById('f-street').value;
         const city = document.getElementById('f-city').value;
-        const cap = document.getElementById('f-cap').value;
-        const country = document.getElementById('f-country').value;
         const totalText = document.getElementById('cart-total-display').innerText;
 
         if(!name || !street || !city || !phone) return alert("Per favore, compila i campi obbligatori.");
 
-        const fullAddress = `${street}, ${cap} ${city}, ${country}`;
+        const fullAddress = `${street}, ${document.getElementById('f-cap').value} ${city}, Italia`;
         const orderID = "GZ-" + Date.now().toString().slice(-6);
         const orderItems = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
 
-        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSend7KPNCjTNP1d-B3zd-wvhZAVXLS3P7341yN88fm3d7D4Jw/formResponse";
-        
-        const body = new URLSearchParams();
-        body.append('entry.442927045', orderID);
-        body.append('entry.333212320', name);
-        body.append('entry.1385104048', email);
-        body.append('entry.844983788', phone);
-        body.append('entry.334440207', fullAddress);
-        body.append('entry.1856379113', orderItems);
-        body.append('entry.146792905', totalText);
+        // 1. Invio a Google Form (Database)
+        const formData = new URLSearchParams();
+        formData.append('entry.442927045', orderID);
+        formData.append('entry.333212320', name);
+        formData.append('entry.1385104048', email);
+        formData.append('entry.844983788', phone);
+        formData.append('entry.334440207', fullAddress);
+        formData.append('entry.1856379113', orderItems);
+        formData.append('entry.146792905', totalText);
+        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: formData });
 
-        fetch(formURL, { method: 'POST', mode: 'no-cors', body: body });
+        // 2. Invio Email (Web App)
+        fetch(CONFIG.emailWebApp, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: new URLSearchParams({
+                'id': orderID,
+                'cliente': name,
+                'email': email,
+                'prodotti': orderItems,
+                'totale': totalText,
+                'indirizzo': fullAddress
+            })
+        });
 
-        let itemDetails = cart.map(c => `- ${c.qty}x ${c.Nome}: €${(parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2)}`).join("\n");
-        const msg = `*NUOVO ORDINE ${orderID}*\n\n*CLIENTE:* ${name}\n*TEL:* ${phone}\n*INDIRIZZO:* ${fullAddress}\n\n*DETTAGLIO:*\n${itemDetails}\n\n*${totalText}*`;
-        
-        window.open(`https://wa.me/393358060715?text=${encodeURIComponent(msg)}`);
+        // 3. Popup di successo
+        document.getElementById('modal').style.display = 'none';
+        document.getElementById('thanks-popup').style.display = 'flex';
 
-        cart = []; updateUI(); closeCheckout(); toggleCart();
+        // 4. Apertura WhatsApp
+        const msg = `*NUOVO ORDINE ${orderID}*\n\n*CLIENTE:* ${name}\n*TEL:* ${phone}\n*INDIRIZZO:* ${fullAddress}\n\n*DETTAGLIO:* ${orderItems}\n\n*${totalText}*`;
+        setTimeout(() => window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`), 1500);
+
+        cart = []; updateUI();
     }
 
     load();
