@@ -353,4 +353,20 @@
         f.append('entry.1385104048', email);
         f.append('entry.844983788', phone);
         f.append('entry.334440207', fullAddress); 
-        f.append('entry.185
+        f.append('entry.1856379113', orderItems);
+        f.append('entry.146792905', currentTotalNum);
+
+        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: f });
+        fetch(CONFIG.emailWebApp, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({id: orderID, cliente: name, email: email, prodotti: orderItems, totale: currentTotalNum, indirizzo: fullAddress}) });
+
+        document.getElementById('modal').style.display = 'none';
+        document.getElementById('thanks-popup').style.display = 'flex';
+        
+        const msg = `*NUOVO ORDINE ${orderID}*\n\n*CLIENTE:* ${name}\n*TEL:* ${phone}\n*INDIRIZZO:* ${fullAddress}\n\n*DETTAGLIO:* ${orderItems}\n\n*TOTALE:* € ${currentTotalNum}`;
+        window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`);
+    }
+
+    load();
+</script>
+</body>
+</html>
