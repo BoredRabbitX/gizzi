@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gruppo Gizzi | Cilento Authentic Experience</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,14 +12,14 @@
 <header>
     <div class="nav-top">
         <a href="#" class="logo">GRUPPO GIZZI</a>
-        <div style="display:flex; gap:20px; align-items:center;">
-            <select id="lang-sel" onchange="updateLang(this.value)" style="border:none; font-weight:700; cursor:pointer; background:none; font-size:0.9rem;">
+        <div style="display:flex; gap:15px; align-items:center;">
+            <select id="lang-sel" onchange="updateLang(this.value)">
                 <option value="it">🇮🇹 IT</option>
                 <option value="en">🇬🇧 EN</option>
                 <option value="de">🇩🇪 DE</option>
             </select>
             <div onclick="toggleCart()" style="cursor:pointer; font-size:1.4rem; position:relative;">
-                🛒 <span id="cart-count" style="position:absolute; top:-10px; right:-10px; background:var(--gizzi-gold); color:white; border-radius:50%; padding:2px 6px; font-size:0.65rem;">0</span>
+                🛒 <span id="cart-count" style="position:absolute; top:-10px; right:-10px; background:var(--gizzi-gold); color:white; border-radius:50%; padding:2px 6px; font-size:0.7rem;">0</span>
             </div>
         </div>
     </div>
@@ -28,27 +28,25 @@
 
 <section class="hero">
     <h1 id="hero-h1">L'Oro del Cilento, a casa tua.</h1>
-    <p id="hero-p">Dalle terre incontaminate del Parco Nazionale, selezioniamo l'eccellenza gastronomica per portarla sulla tua tavola.</p>
+    <p id="hero-p">Eccellenza gastronomica dal cuore del Parco Nazionale.</p>
 </section>
 
 <section class="carousel-section">
-    <h2 id="carousel-title" class="carousel-header">I Prodotti del Momento</h2>
+    <h2 id="carousel-title" style="text-align:center; font-family:'Fraunces'; color:var(--gizzi-deep);">I Prodotti del Momento</h2>
     <div class="carousel-container">
-        <button class="carousel-btn left" onclick="moveCarousel(-1)">&#10094;</button>
-        <div class="carousel-track-container">
-            <div id="carousel-track" class="carousel-track"></div>
-        </div>
-        <button class="carousel-btn right" onclick="moveCarousel(1)">&#10095;</button>
+        <button class="carousel-btn left" onclick="moveCarousel(-1)">❮</button>
+        <div id="carousel-track" class="carousel-track"></div>
+        <button class="carousel-btn right" onclick="moveCarousel(1)">❯</button>
     </div>
 </section>
 
-<div id="negozio"></div>
+<div id="negozio" class="container"></div>
 
 <div id="thanks-popup" class="thanks-popup">
-    <div class="thanks-content">
+    <div style="padding:40px;">
         <h2 id="thanks-h2" style="font-family:'Fraunces'; font-size:2.5rem;">Grazie!</h2>
-        <p id="thanks-p">Ordine ricevuto. Controlla la tua email.</p>
-        <button onclick="location.reload()" style="background:var(--gizzi-gold); color:white; border:none; padding:15px 40px; border-radius:50px; cursor:pointer; margin-top:20px; font-weight:700;">OK</button>
+        <p id="thanks-p">Ordine inviato con successo.</p>
+        <button onclick="location.reload()" style="background:var(--gizzi-gold); color:white; border:none; padding:15px 40px; border-radius:50px; cursor:pointer; font-weight:700; margin-top:20px;">OK</button>
     </div>
 </div>
 
@@ -63,19 +61,21 @@
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <h2 id="checkout-header" style="font-family:'Fraunces'; margin:0 0 20px 0;">Spedizione</h2>
-        <input type="text" id="f-name" placeholder="Nome e Cognome *">
+        <h2 id="checkout-header" style="font-family:'Fraunces'; margin-top:0;">Spedizione</h2>
+        <input type="text" id="f-name" placeholder="Nome *">
         <input type="email" id="f-email" placeholder="Email *">
-        <input type="tel" id="f-phone" placeholder="Cellulare *">
+        <input type="tel" id="f-phone" placeholder="Telefono *">
         <input type="text" id="f-street" placeholder="Indirizzo *">
-        <div style="display:flex; gap:10px;">
-            <input type="text" id="f-cap" placeholder="CAP *" style="flex:1;">
-            <input type="text" id="f-city" placeholder="Città *" style="flex:2;">
-        </div>
-        <button id="btn-confirm-text" onclick="processOrder()" style="background:#25D366; color:white; width:100%; padding:15px; border:none; border-radius:10px; cursor:pointer; font-weight:700; margin-top:10px;">ORDINA ORA</button>
+        <input type="text" id="f-city" placeholder="Città *">
+        <button id="btn-confirm-text" onclick="processOrder()" style="background:#25D366; color:white; width:100%; padding:15px; border:none; border-radius:10px; cursor:pointer; font-weight:700; margin-top:10px;">CONFERMA</button>
         <button onclick="closeCheckout()" style="background:none; border:none; width:100%; margin-top:10px; color:#999; cursor:pointer;">Annulla</button>
     </div>
 </div>
+
+<footer>
+    <div style="font-family:'Fraunces'; font-size:1.5rem; color:var(--gizzi-gold);">GRUPPO GIZZI</div>
+    <p>© 2026 Gruppo Gizzi. Cilento Authentic Experience.</p>
+</footer>
 
 <script>
     const CONFIG = {
@@ -85,10 +85,10 @@
         wa: "393358060715"
     };
 
-    const UI_STRINGS = {
-        it: { h1: "L'Oro del Cilento, a casa tua.", p: "Dalle terre incontaminate del Parco Nazionale, selezioniamo l'eccellenza gastronomica. Spedizioni in tutta Europa.", cart: "Carrello", checkout: "PROSEGUI", total: "Totale", add: "Aggiungi", ship: "Spedizione", order: "ORDINA ORA", carousel: "I Prodotti del Momento", thanksH: "Grazie per il tuo ordine!", thanksP: "Ti abbiamo inviato un riepilogo via email. Ti contatteremo su WhatsApp." },
-        en: { h1: "Cilento's Gold, at your doorstep.", p: "From the pristine lands of the National Park, we select gastronomic excellence. Shipping across Europe.", cart: "Cart", checkout: "CHECKOUT", total: "Total", add: "Add", ship: "Shipping", order: "ORDER NOW", carousel: "Featured Products", thanksH: "Thank you for your order!", thanksP: "We sent you a summary via email. We will contact you on WhatsApp." },
-        de: { h1: "Cilento's Gold, vor Ihrer Haustür.", p: "Aus den unberührten Ländern des Nationalparks wählen wir gastronomische Exzellenz aus. Versand europaweit.", cart: "Warenkorb", checkout: "KASSE", total: "Gesamt", add: "Hinzufügen", ship: "Versand", order: "JETZT BESTELLEN", carousel: "Aktuelle Highlights", thanksH: "Vielen Dank!", thanksP: "Wir haben Ihnen eine Zusammenfassung per E-Mail inviato. Wir melden uns per WhatsApp." }
+    const UI = {
+        it: { h1: "L'Oro del Cilento, a casa tua.", p: "Dalle terre incontaminate del Parco Nazionale, selezioniamo l'eccellenza gastronomica.", cart: "Carrello", checkout: "PROSEGUI", total: "Totale", add: "Aggiungi", ship: "Spedizione", order: "ORDINA ORA", carousel: "I Prodotti del Momento", thanksH: "Grazie!", thanksP: "Ti abbiamo inviato un'email. Ti contatteremo su WhatsApp." },
+        en: { h1: "Cilento's Gold, at your doorstep.", p: "From the pristine lands of the National Park, we select gastronomic excellence.", cart: "Cart", checkout: "CHECKOUT", total: "Total", add: "Add", ship: "Shipping", order: "ORDER NOW", carousel: "Featured Products", thanksH: "Thank you!", thanksP: "We sent you an email. We will contact you on WhatsApp." },
+        de: { h1: "Cilento Gold, vor Ihrer Tür.", p: "Aus den unberührten Ländern des Nationalparks wählen wir kulinarische Exzellenz.", cart: "Warenkorb", checkout: "KASSE", total: "Gesamt", add: "Hinzufügen", ship: "Versand", order: "JETZT BESTELLEN", carousel: "Unsere Highlights", thanksH: "Vielen Dank!", thanksP: "Wir haben Ihnen eine E-Mail gesendet. Wir melden uns per WhatsApp." }
     };
 
     let products = [], cart = [], lang = 'it', carouselIndex = 0;
@@ -109,39 +109,50 @@
 
     function updateLang(val) {
         lang = val;
-        document.getElementById('hero-h1').innerText = UI_STRINGS[lang].h1;
-        document.getElementById('hero-p').innerText = UI_STRINGS[lang].p;
-        document.getElementById('cart-title-text').innerText = UI_STRINGS[lang].cart;
-        document.getElementById('btn-checkout-text').innerText = UI_STRINGS[lang].checkout;
-        document.getElementById('checkout-header').innerText = UI_STRINGS[lang].ship;
-        document.getElementById('btn-confirm-text').innerText = UI_STRINGS[lang].order;
-        document.getElementById('carousel-title').innerText = UI_STRINGS[lang].carousel;
-        document.getElementById('thanks-h2').innerText = UI_STRINGS[lang].thanksH;
-        document.getElementById('thanks-p').innerText = UI_STRINGS[lang].thanksP;
+        document.getElementById('hero-h1').innerText = UI[lang].h1;
+        document.getElementById('hero-p').innerText = UI[lang].p;
+        document.getElementById('cart-title-text').innerText = UI[lang].cart;
+        document.getElementById('btn-checkout-text').innerText = UI[lang].checkout;
+        document.getElementById('checkout-header').innerText = UI[lang].ship;
+        document.getElementById('btn-confirm-text').innerText = UI[lang].order;
+        document.getElementById('carousel-title').innerText = UI[lang].carousel;
+        document.getElementById('thanks-h2').innerText = UI[lang].thanksH;
+        document.getElementById('thanks-p').innerText = UI[lang].thanksP;
         render();
     }
 
     function render() {
-        const container = document.getElementById('negozio');
-        const menu = document.getElementById('anchor-menu');
-        const track = document.getElementById('carousel-track');
         const catKey = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
+        const nameKey = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
         
-        const categories = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p[catKey] || p.Categoria))];
-        menu.innerHTML = categories.map(cat => `<a href="#cat-${cat.replace(/\s+/g, '')}">${cat}</a>`).join('');
-
+        // Carousel
         const featured = products.filter(p => p.Disponibile === 'SI' && p.Evidenza === 'SI');
-        track.innerHTML = featured.map(p => {
-            const name = lang === 'it' ? p.Nome : (p[`Nome_${lang.toUpperCase()}`] || p.Nome);
-            return `<div class="carousel-item"><img src="${p.Immagine}"><h4>${name}</h4><div style="color:var(--gizzi-gold); font-weight:bold;">€ ${p.Prezzo}</div><button onclick="add('${p.ID}')" style="background:var(--gizzi-deep); color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; margin-top:10px;">${UI_STRINGS[lang].add}</button></div>`;
-        }).join('');
+        document.getElementById('carousel-track').innerHTML = featured.map(p => `
+            <div class="carousel-item">
+                <img src="${p.Immagine}">
+                <h4>${p[nameKey] || p.Nome}</h4>
+                <div style="color:var(--gizzi-gold); font-weight:bold;">€ ${p.Prezzo}</div>
+                <button onclick="add('${p.ID}')" style="background:var(--gizzi-deep); color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; margin-top:10px;">${UI[lang].add}</button>
+            </div>`).join('');
 
-        container.innerHTML = categories.map(cat => {
+        // Shop
+        const categories = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p[catKey] || p.Categoria))];
+        document.getElementById('anchor-menu').innerHTML = categories.map(cat => `<a href="#cat-${cat.replace(/\s+/g, '')}">${cat}</a>`).join('');
+        
+        document.getElementById('negozio').innerHTML = categories.map(cat => {
             const catProds = products.filter(p => p.Disponibile === 'SI' && (p[catKey] === cat || p.Categoria === cat));
-            return `<div id="cat-${cat.replace(/\s+/g, '')}" style="padding-top:130px; margin-top:-130px;"><h2 style="text-align:center; font-family:'Fraunces'; color:var(--gizzi-deep); margin-bottom:30px;">${cat}</h2><div class="container"><div class="grid">${catProds.map(p => {
-                const name = lang === 'it' ? p.Nome : (p[`Nome_${lang.toUpperCase()}`] || p.Nome);
-                return `<div class="card"><img src="${p.Immagine}"><div class="card-body"><h3>${name}</h3><div class="price-tag">€ ${p.Prezzo}</div><button onclick="add('${p.ID}')" style="background:var(--gizzi-deep); color:white; width:100%; border:none; padding:10px; border-radius:6px; cursor:pointer; font-weight:600; margin-top:10px;">${UI_STRINGS[lang].add}</button></div></div>`;
-            }).join('')}</div></div></div>`;
+            return `<div id="cat-${cat.replace(/\s+/g, '')}" style="padding-top:130px; margin-top:-130px;">
+                <h2 style="text-align:center; font-family:'Fraunces'; color:var(--gizzi-deep); margin-bottom:20px;">${cat}</h2>
+                <div class="grid">${catProds.map(p => `
+                    <div class="card">
+                        <img src="${p.Immagine}">
+                        <div class="card-body">
+                            <h3>${p[nameKey] || p.Nome}</h3>
+                            <div class="price-tag">€ ${p.Prezzo}</div>
+                            <button onclick="add('${p.ID}')" style="background:var(--gizzi-deep); color:white; width:100%; border:none; padding:10px; border-radius:6px; cursor:pointer; font-weight:600; margin-top:10px;">${UI[lang].add}</button>
+                        </div>
+                    </div>`).join('')}</div>
+            </div>`;
         }).join('');
     }
 
@@ -149,29 +160,32 @@
         const track = document.getElementById('carousel-track');
         const items = document.querySelectorAll('.carousel-item');
         if (items.length === 0) return;
-        const itemWidth = 300 + 25; // larghezza + gap
-        const visible = window.innerWidth > 768 ? 3 : 1;
-        carouselIndex = Math.max(0, Math.min(carouselIndex + direction, items.length - visible));
-        track.style.transform = `translateX(-${carouselIndex * itemWidth}px)`;
+        const step = 300; // larghezza + gap circa
+        const max = items.length - (window.innerWidth > 768 ? 3 : 1);
+        carouselIndex = Math.max(0, Math.min(carouselIndex + direction, max));
+        track.style.transform = `translateX(-${carouselIndex * step}px)`;
     }
 
     function add(id) {
         const p = products.find(x => x.ID == id);
         const ex = cart.find(c => c.ID == id);
         if(ex) ex.qty++; else cart.push({...p, qty: 1});
-        updateUI();
+        updateCartUI();
         document.getElementById('cart-panel').classList.add('active');
     }
 
-    function updateUI() {
+    function updateCartUI() {
         let tot = 0;
         document.getElementById('cart-count').innerText = cart.reduce((a,b) => a + b.qty, 0);
         document.getElementById('cart-items').innerHTML = cart.map((c, i) => {
             const sub = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
             tot += parseFloat(sub);
-            return `<div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:0.85rem;"><div><strong>${c.Nome}</strong><br><small>${c.qty}x €${c.Prezzo}</small></div><div>€ ${sub} <span onclick="cart.splice(${i},1); updateUI();" style="color:red; cursor:pointer;">&times;</span></div></div>`;
+            return `<div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:0.85rem;">
+                <div><strong>${c.Nome}</strong><br>${c.qty}x €${c.Prezzo}</div>
+                <div>€ ${sub} <span onclick="cart.splice(${i},1); updateCartUI();" style="color:red; cursor:pointer;">&times;</span></div>
+            </div>`;
         }).join('');
-        document.getElementById('cart-total-display').innerText = `${UI_STRINGS[lang].total}: € ${tot.toFixed(2)}`;
+        document.getElementById('cart-total-display').innerText = `Total: € ${tot.toFixed(2)}`;
     }
 
     function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); }
@@ -179,36 +193,31 @@
     function closeCheckout() { document.getElementById('modal').style.display = 'none'; }
 
     async function processOrder() {
-        const d = {
-            name: document.getElementById('f-name').value,
-            email: document.getElementById('f-email').value,
-            phone: document.getElementById('f-phone').value,
-            addr: `${document.getElementById('f-street').value}, ${document.getElementById('f-cap').value} ${document.getElementById('f-city').value}`,
-            total: document.getElementById('cart-total-display').innerText,
-            id: "GZ-" + Date.now().toString().slice(-6),
-            items: cart.map(c => `${c.qty}x ${c.Nome}`).join(", ")
-        };
+        const name = document.getElementById('f-name').value;
+        const email = document.getElementById('f-email').value;
+        const phone = document.getElementById('f-phone').value;
+        const addr = document.getElementById('f-street').value + ", " + document.getElementById('f-city').value;
+        const total = document.getElementById('cart-total-display').innerText;
+        const orderID = "GZ-" + Date.now().toString().slice(-6);
+        const items = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
 
-        if(!d.name || !d.phone) return alert("Dati mancanti!");
+        if(!name || !phone) return alert("Inserisci i dati!");
 
-        // 1. Google Form
-        const body = new URLSearchParams();
-        body.append('entry.442927045', d.id); body.append('entry.333212320', d.name);
-        body.append('entry.1385104048', d.email); body.append('entry.844983788', d.phone);
-        body.append('entry.334440207', d.addr); body.append('entry.1856379113', d.items);
-        body.append('entry.146792905', d.total);
-        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: body });
+        // Google Form
+        const f = new URLSearchParams();
+        f.append('entry.442927045', orderID); f.append('entry.333212320', name);
+        f.append('entry.1385104048', email); f.append('entry.844983788', phone);
+        f.append('entry.334440207', addr); f.append('entry.1856379113', items);
+        f.append('entry.146792905', total);
+        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: f });
 
-        // 2. Email WebApp
-        fetch(CONFIG.emailWebApp, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(d) });
+        // Email WebApp
+        fetch(CONFIG.emailWebApp, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({id: orderID, cliente: name, email: email, prodotti: items, totale: total, indirizzo: addr}) });
 
-        // 3. UI
         document.getElementById('modal').style.display = 'none';
         document.getElementById('thanks-popup').style.display = 'flex';
         
-        // WhatsApp
-        const msg = `*NUOVO ORDINE ${d.id}*\nCliente: ${d.name}\n${d.total}`;
-        setTimeout(() => window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`), 1500);
+        setTimeout(() => window.open(`https://wa.me/${CONFIG.wa}?text=Ordine ${orderID} - ${total}`), 1500);
     }
 
     load();
