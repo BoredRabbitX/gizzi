@@ -42,7 +42,6 @@
         .card-body h3 { font-family: 'Fraunces'; font-size: 1.2rem; color: var(--gizzi-deep); margin: 0 0 10px; }
         .price { color: var(--gizzi-gold); font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
 
-        /* SELETTORE QUANTITÀ - BLOCCO UNICO */
         .qty-selector { display: flex; align-items: center; justify-content: center; margin-bottom: 15px; gap: 0; }
         .qty-btn { 
             background: var(--gizzi-deep); color: white; border: none; 
@@ -59,7 +58,6 @@
             color: var(--gizzi-deep); outline: none; margin: 0; padding: 0;
             background: white; -moz-appearance: textfield;
         }
-        .qty-input::-webkit-outer-spin-button, .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
         .btn-add { background: var(--gizzi-deep); color: white; border: none; padding: 15px 25px; border-radius: 10px; cursor: pointer; font-weight: 600; width: 100%; transition: 0.3s; font-size: 1rem; }
         .btn-add:hover { background: var(--gizzi-gold); }
@@ -118,9 +116,9 @@
 
 <div id="thanks-popup" class="thanks-popup">
     <div style="padding:40px;">
-        <h2 id="thanks-h2">Grazie!</h2>
-        <p id="thanks-p">Ordine ricevuto correttamente.</p>
-        <button id="thanks-btn" onclick="location.reload()" style="background:var(--gizzi-gold); color:white; border:none; padding:18px 50px; border-radius:50px; cursor:pointer; font-weight:700; margin-top:30px;">CHIUDI</button>
+        <h2 id="thanks-h2">Köszönjük!</h2>
+        <p id="thanks-p">A rendelést sikeresen fogadtuk.</p>
+        <button onclick="location.reload()" style="background:var(--gizzi-gold); color:white; border:none; padding:18px 50px; border-radius:50px; cursor:pointer; font-weight:700; margin-top:30px;">BEZÁRÁS</button>
     </div>
 </div>
 
@@ -138,10 +136,10 @@
     <div class="modal-content">
         <h2 id="checkout-header">Spedizione</h2>
         <form id="order-form" onsubmit="event.preventDefault(); processOrder();">
-            <input type="text" id="f-name" placeholder="Nome e Cognome *" required>
+            <input type="text" id="f-name" placeholder="Nome *" required>
             <input type="email" id="f-email" placeholder="Email *" required>
             <input type="tel" id="f-phone" placeholder="Cellulare *" required>
-            <input type="text" id="f-street" placeholder="Indirizzo (Via e Civico) *" required>
+            <input type="text" id="f-street" placeholder="Indirizzo *" required>
             <div style="display:flex; gap:10px;">
                 <input type="text" id="f-cap" placeholder="CAP *" required style="flex:1;">
                 <input type="text" id="f-city" placeholder="Città *" required style="flex:2;">
@@ -152,8 +150,8 @@
                 <option value="Ungheria">Ungheria</option>
                 <option value="Regno Unito">Regno Unito</option>
             </select>
-            <button type="submit" id="btn-order-now" class="btn-add" style="background:#25D366; margin-top:10px; font-size:1.1rem;">ORDINA ORA</button>
-            <button type="button" id="btn-cancel" onclick="closeCheckout()" style="background:none; border:none; width:100%; margin-top:15px; color:#999; cursor:pointer;">Annulla</button>
+            <button type="submit" id="btn-order-now" class="btn-add" style="background:#25D366; margin-top:10px;">ORDINA ORA</button>
+            <button type="button" onclick="closeCheckout()" style="background:none; border:none; width:100%; margin-top:15px; color:#999; cursor:pointer;">Annulla</button>
         </form>
     </div>
 </div>
@@ -161,7 +159,7 @@
 <footer>
     <div class="container">
         <div class="footer-logo">GRUPPO GIZZI</div>
-        <p id="footer-text">© 2026 Gruppo Gizzi. Cilento Authentic Experience.</p>
+        <p>© 2026 Gruppo Gizzi. Cilento Authentic Experience.</p>
     </div>
 </footer>
 
@@ -174,10 +172,10 @@
     };
 
     const UI = {
-        it: { h1: "L'Oro del Cilento, a casa tua.", p: "Eccellenza gastronomica dal cuore del Parco Nazionale.", add: "Aggiungi", total: "Totale", carousel: "I Prodotti del Momento", ship: "Spedizione", thanksH: "Grazie!", thanksP: "Ordine ricevuto correttamente.", cartTitle: "Il Tuo Carrello", proceed: "PROSEGUI", order: "ORDINA ORA", cancel: "Annulla", close: "CHIUDI" },
-        en: { h1: "Cilento's Gold, at your doorstep.", p: "Gastronomic excellence from the heart of the National Park.", add: "Add", total: "Total", carousel: "Featured Products", ship: "Shipping", thanksH: "Thank you!", thanksP: "Order received successfully.", cartTitle: "Your Cart", proceed: "CHECKOUT", order: "ORDER NOW", cancel: "Cancel", close: "CLOSE" },
-        de: { h1: "Cilento Gold, vor Ihrer Tür.", p: "Kulinarische Exzellenz aus dem Herzen des Nationalparks.", add: "Hinzufügen", total: "Gesamt", carousel: "Unsere Highlights", ship: "Versand", thanksH: "Vielen Dank!", thanksP: "Bestellung erfolgreich erhalten.", cartTitle: "Ihr Warenkorb", proceed: "KASSE", order: "JETZT BESTELLEN", cancel: "Abbrechen", close: "SCHLIESSEN" },
-        hu: { h1: "Cilento Aranya, az Ön otthonában.", p: "Gasztronómiai kiválóság a Nemzeti Park szívéből.", add: "Hozzáadás", total: "Összesen", carousel: "Kiemelt Termékeink", ship: "Szállítás", thanksH: "Köszönjük!", thanksP: "Rendelését sikeresen rögzítettük.", cartTitle: "Kosár", proceed: "KASSZA", order: "MEGRENDELÉS", cancel: "Mégse", close: "BEZÁRÁS" }
+        it: { h1: "L'Oro del Cilento, a casa tua.", p: "Eccellenza gastronomica dal cuore del Parco Nazionale.", add: "Aggiungi", total: "Totale", carousel: "I Prodotti del Momento", ship: "Spedizione", thanksH: "Grazie!", thanksP: "Ordine ricevuto correttamente.", cartTitle: "Il Tuo Carrello", proceed: "PROSEGUI", order: "ORDINA ORA" },
+        en: { h1: "Cilento's Gold, at your doorstep.", p: "Gastronomic excellence from the heart of the National Park.", add: "Add", total: "Total", carousel: "Featured Products", ship: "Shipping", thanksH: "Thank you!", thanksP: "Order received successfully.", cartTitle: "Your Cart", proceed: "CHECKOUT", order: "ORDER NOW" },
+        de: { h1: "Cilento Gold, vor Ihrer Tür.", p: "Kulinarische Exzellenz aus dem Herzen des Nationalparks.", add: "Hinzufügen", total: "Gesamt", carousel: "Unsere Highlights", ship: "Versand", thanksH: "Vielen Dank!", thanksP: "Bestellung erfolgreich erhalten.", cartTitle: "Ihr Warenkorb", proceed: "KASSE", order: "JETZT BESTELLEN" },
+        hu: { h1: "Cilento Aranya, az Ön otthonában.", p: "Gasztronómiai kiválóság a Nemzeti Park szívéből.", add: "Hozzáadás", total: "Összesen", carousel: "Kiemelt Termékek", ship: "Szállítás", thanksH: "Köszönjük!", thanksP: "Rendelését sikeresen rögzítettük.", cartTitle: "Kosár", proceed: "KASSZA", order: "MEGRENDELÉS" }
     };
 
     let products = [], cart = [], lang = 'it', carouselIndex = 0, currentTotalNum = 0;
@@ -205,22 +203,16 @@
         document.getElementById('checkout-header').innerText = UI[lang].ship;
         document.getElementById('cart-label').innerText = UI[lang].cartTitle;
         document.getElementById('btn-cart-checkout').innerText = UI[lang].proceed;
-        document.getElementById('btn-order-now').innerText = UI[lang].order;
-        document.getElementById('btn-cancel').innerText = UI[lang].cancel;
-        document.getElementById('thanks-h2').innerText = UI[lang].thanksH;
-        document.getElementById('thanks-p').innerText = UI[lang].thanksP;
-        document.getElementById('thanks-btn').innerText = UI[lang].close;
         render();
         updateCartUI();
     }
 
-    // Funzione globale corretta per i tasti quantità
-    window.changeQtyUI = function(id, delta) {
-        const input = document.getElementById('qty-' + id);
-        if (input) {
-            let val = parseInt(input.value) + delta;
-            if (val < 1) val = 1;
-            input.value = val;
+    // Funzione globale che deve stare fuori dal render
+    window.changeQty = function(id, delta) {
+        const el = document.getElementById(`qty-${id}`);
+        if(el) {
+            let val = parseInt(el.value) + delta;
+            el.value = val < 1 ? 1 : val;
         }
     };
 
@@ -228,12 +220,15 @@
         const track = document.getElementById('carousel-track');
         const negozio = document.getElementById('negozio');
         const menu = document.getElementById('anchor-menu');
+        
         const catKey = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
         const nameKey = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
 
+        // Carousel
         const featured = products.filter(p => p.Disponibile === 'SI' && p.Evidenza === 'SI');
-        track.innerHTML = featured.map(p => createCard(p, nameKey)).join('');
+        track.innerHTML = featured.map(p => createCardHTML(p, nameKey)).join('');
 
+        // Shop Categories
         const categories = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p[catKey] || p.Categoria))];
         menu.innerHTML = categories.map(cat => `<a href="#cat-${cat.replace(/\s+/g, '')}">${cat}</a>`).join('');
         
@@ -241,79 +236,62 @@
             const catProds = products.filter(p => p.Disponibile === 'SI' && (p[catKey] === cat || p.Categoria === cat));
             return `<div id="cat-${cat.replace(/\s+/g, '')}" style="padding-top:140px; margin-top:-80px;">
                 <h2 style="font-family:'Fraunces'; color:var(--gizzi-deep); font-size:2rem; margin-bottom:30px; border-bottom:3px solid var(--gizzi-gold); display:inline-block;">${cat}</h2>
-                <div class="grid">${catProds.map(p => createCard(p, nameKey)).join('')}</div>
+                <div class="grid">${catProds.map(p => createCardHTML(p, nameKey)).join('')}</div>
             </div>`;
         }).join('');
     }
 
-    // Funzione per creare la card uniforme ovunque
-    function createCard(p, nameKey) {
+    function createCardHTML(p, nameKey) {
         return `
-            <div class="carousel-item card">
-                <img src="${p.Immagine}">
-                <div class="card-body">
-                    <h3>${p[nameKey] || p.Nome}</h3>
-                    <div class="price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
+            <div class="card" style="width:300px; flex-shrink:0; text-align:center;">
+                <img src="${p.Immagine}" style="width:100%; height:220px; object-fit:cover; border-radius:15px 15px 0 0;">
+                <div style="padding:20px;">
+                    <h3 style="font-family:'Fraunces'; font-size:1.1rem; margin:0 0 10px;">${p[nameKey] || p.Nome}</h3>
+                    <div style="color:var(--gizzi-gold); font-weight:700; margin-bottom:15px;">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
                     <div class="qty-selector">
-                        <button class="qty-btn minus" onclick="changeQtyUI('${p.ID}', -1)">-</button>
+                        <button class="qty-btn minus" onclick="changeQty('${p.ID}', -1)">-</button>
                         <input type="number" id="qty-${p.ID}" class="qty-input" value="1" readonly>
-                        <button class="qty-btn plus" onclick="changeQtyUI('${p.ID}', 1)">+</button>
+                        <button class="qty-btn plus" onclick="changeQty('${p.ID}', 1)">+</button>
                     </div>
-                    <button class="btn-add" onclick="add('${p.ID}')">${UI[lang].add}</button>
+                    <button class="btn-add" onclick="addToCart('${p.ID}')">${UI[lang].add}</button>
                 </div>
             </div>`;
     }
 
-    function moveCarousel(dir) {
-        const track = document.getElementById('carousel-track');
-        const items = document.querySelectorAll('.carousel-track .carousel-item');
-        if(items.length === 0) return;
-        const cardWidth = 325; 
-        const containerWidth = document.querySelector('.carousel-viewport').offsetWidth;
-        const visible = Math.floor(containerWidth / cardWidth) || 1;
-        const maxScroll = items.length - visible;
-        carouselIndex += dir;
-        if (carouselIndex > maxScroll) carouselIndex = 0;
-        else if (carouselIndex < 0) carouselIndex = maxScroll;
-        track.style.transform = `translateX(-${carouselIndex * cardWidth}px)`;
-    }
-
-    window.add = function(id) {
+    window.addToCart = function(id) {
         const p = products.find(x => x.ID == id);
-        const input = document.getElementById('qty-' + id);
-        const qtyToAdd = input ? parseInt(input.value) : 1;
-        const ex = cart.find(c => c.ID == id);
-        if(ex) ex.qty += qtyToAdd; else cart.push({...p, qty: qtyToAdd});
-        if(input) input.value = 1;
+        const qty = parseInt(document.getElementById(`qty-${id}`).value);
+        const existing = cart.find(c => c.ID == id);
+        if(existing) existing.qty += qty; else cart.push({...p, qty: qty});
+        document.getElementById(`qty-${id}`).value = 1;
         updateCartUI();
         document.getElementById('cart-panel').classList.add('active');
-    };
-
-    window.changeCartQty = function(index, delta) {
-        cart[index].qty += delta;
-        if (cart[index].qty < 1) cart.splice(index, 1);
-        updateCartUI();
     };
 
     function updateCartUI() {
         let tot = 0;
         document.getElementById('cart-count').innerText = cart.reduce((a,b) => a + b.qty, 0);
         document.getElementById('cart-items').innerHTML = cart.map((c, i) => {
-            const nameKey = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
             const sub = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
             tot += parseFloat(sub);
-            return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #f0f0f0; padding-bottom:10px;">
-                <div style="flex:1;"><strong>${c[nameKey] || c.Nome}</strong><br><small>€${c.Prezzo} / ${c.Unità}</small></div>
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <button class="qty-btn" style="width:24px; height:24px; border-radius:4px;" onclick="changeCartQty(${i}, -1)">-</button>
-                    <span style="font-weight:bold;">${c.qty}</span>
-                    <button class="qty-btn" style="width:24px; height:24px; border-radius:4px;" onclick="changeCartQty(${i}, 1)">+</button>
-                </div>
-                <div style="min-width:70px; text-align:right; font-weight:bold;">€ ${sub}</div>
+            return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                <div style="flex:1;"><strong>${c.Nome}</strong><br><small>€${c.Prezzo} x ${c.qty}</small></div>
+                <div style="font-weight:700;">€ ${sub}</div>
+                <div onclick="cart.splice(${i},1); updateCartUI();" style="color:red; cursor:pointer; margin-left:15px;">✕</div>
             </div>`;
         }).join('');
         currentTotalNum = tot.toFixed(2);
         document.getElementById('cart-total-display').innerText = `${UI[lang].total}: € ${currentTotalNum}`;
+    }
+
+    function moveCarousel(dir) {
+        const track = document.getElementById('carousel-track');
+        const items = track.children.length;
+        if(items === 0) return;
+        const width = 325;
+        const visible = Math.floor(document.querySelector('.container').offsetWidth / width);
+        carouselIndex = (carouselIndex + dir + items) % (items - visible + 1);
+        track.style.transform = `translateX(-${carouselIndex * width}px)`;
     }
 
     window.toggleCart = () => document.getElementById('cart-panel').classList.toggle('active');
@@ -322,31 +300,27 @@
 
     async function processOrder() {
         const name = document.getElementById('f-name').value;
-        const email = document.getElementById('f-email').value;
         const phone = document.getElementById('f-phone').value;
-        const street = document.getElementById('f-street').value;
-        const cap = document.getElementById('f-cap').value;
-        const city = document.getElementById('f-city').value;
-        const country = document.getElementById('f-country').value;
-        if(!name || !email || !phone || !street || !city) return alert("Compila i campi obbligatori.");
-        const fullAddress = `${street}, ${cap} ${city}, ${country}`;
+        const addr = `${document.getElementById('f-street').value}, ${document.getElementById('f-cap').value} ${document.getElementById('f-city').value} (${document.getElementById('f-country').value})`;
         const orderID = "GZ-" + Date.now().toString().slice(-6);
         const orderItems = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
+        
         const f = new URLSearchParams();
         f.append('entry.442927045', orderID); 
         f.append('entry.333212320', name);
-        f.append('entry.1385104048', email);
         f.append('entry.844983788', phone);
-        f.append('entry.334440207', fullAddress); 
+        f.append('entry.334440207', addr); 
         f.append('entry.1856379113', orderItems);
         f.append('entry.146792905', currentTotalNum);
+
         fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: f });
-        fetch(CONFIG.emailWebApp, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({id: orderID, cliente: name, email: email, prodotti: orderItems, totale: currentTotalNum, indirizzo: fullAddress}) });
+        fetch(CONFIG.emailWebApp, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({id: orderID, cliente: name, prodotti: orderItems, totale: currentTotalNum, indirizzo: addr}) });
+
         document.getElementById('modal').style.display = 'none';
         document.getElementById('thanks-popup').style.display = 'flex';
-        const msg = `*NUOVO ORDINE ${orderID}*\n\n*CLIENTE:* ${name}\n*TEL:* ${phone}\n*INDIRIZZO:* ${fullAddress}\n\n*DETTAGLIO:* ${orderItems}\n\n*TOTALE:* € ${currentTotalNum}`;
-        window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`);
+        setTimeout(() => window.open(`https://wa.me/${CONFIG.wa}?text=Ordine ${orderID} - €${currentTotalNum}`), 2000);
     }
+
     load();
 </script>
 </body>
