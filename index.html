@@ -196,6 +196,7 @@
 
     function updateLang(val) {
         lang = val;
+        // Aggiorna testi UI
         document.getElementById('hero-h1').innerText = UI[lang].h1;
         document.getElementById('hero-p').innerText = UI[lang].p;
         document.getElementById('cart-label').innerText = UI[lang].cart;
@@ -206,7 +207,19 @@
         document.getElementById('thanks-h2-txt').innerText = UI[lang].thanksH;
         document.getElementById('thanks-p-txt').innerText = UI[lang].thanksP;
         document.getElementById('carousel-title').innerText = UI[lang].moments;
-        render(); updateCartUI();
+
+        // AUTO-SET NAZIONE E SPEDIZIONE
+        const countrySel = document.getElementById('f-country');
+        if (lang === 'it') {
+            countrySel.value = "Italia";
+        } else if (lang === 'hu') {
+            countrySel.value = "Ungheria";
+        } else {
+            countrySel.value = "Europa";
+        }
+
+        render(); 
+        updateCartUI();
     }
 
     function render() {
