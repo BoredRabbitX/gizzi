@@ -42,10 +42,23 @@
         .card-body h3 { font-family: 'Fraunces'; font-size: 1.2rem; color: var(--gizzi-deep); margin: 0 0 10px; }
         .price { color: var(--gizzi-gold); font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
 
-        /* CONTROLLO QUANTITÀ NELLE SCHEDE */
-        .qty-selector { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px; }
-        .qty-btn { background: #eee; border: none; width: 30px; height: 30px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .qty-input { width: 40px; text-align: center; border: 1px solid #ddd; border-radius: 5px; font-weight: 600; padding: 2px; }
+        /* SELETTORE QUANTITÀ UNIFORMATO */
+        .qty-selector { display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
+        .qty-btn { 
+            background: var(--gizzi-deep); color: white; border: none; 
+            width: 40px; height: 40px; cursor: pointer; font-weight: bold; font-size: 1.2rem;
+            transition: 0.2s;
+        }
+        .qty-btn:first-child { border-radius: 8px 0 0 8px; }
+        .qty-btn:last-child { border-radius: 0 8px 8px 0; }
+        .qty-btn:hover { background: var(--gizzi-gold); }
+        
+        .qty-input { 
+            width: 50px; height: 40px; text-align: center; border: 1px solid #ddd; 
+            border-left: none; border-right: none; font-weight: 700; font-size: 1rem;
+            color: var(--gizzi-deep); outline: none; -moz-appearance: textfield;
+        }
+        .qty-input::-webkit-outer-spin-button, .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
         .btn-add { background: var(--gizzi-deep); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; transition: 0.3s; }
         .btn-add:hover { background: var(--gizzi-gold); }
@@ -212,6 +225,7 @@
         const catKey = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
         const nameKey = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
 
+        // CAROUSEL
         const featured = products.filter(p => p.Disponibile === 'SI' && p.Evidenza === 'SI');
         track.innerHTML = featured.map(p => `
             <div class="carousel-item">
@@ -226,6 +240,7 @@
                 <button class="btn-add" onclick="add('${p.ID}')">${UI[lang].add}</button>
             </div>`).join('');
 
+        // SHOP & MENU
         const categories = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p[catKey] || p.Categoria))];
         menu.innerHTML = categories.map(cat => `<a href="#cat-${cat.replace(/\s+/g, '')}">${cat}</a>`).join('');
         
@@ -276,7 +291,7 @@
             cart.push({...p, qty: qtyToAdd});
         }
         
-        input.value = 1; // Resetta a 1 dopo l'aggiunta
+        input.value = 1;
         updateCartUI();
         document.getElementById('cart-panel').classList.add('active');
     }
@@ -300,9 +315,9 @@
             return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #f0f0f0; padding-bottom:10px;">
                 <div style="flex:1;"><strong>${displayName}</strong><br><small>€${c.Prezzo} / ${c.Unità}</small></div>
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <button class="qty-btn" style="width:24px; height:24px;" onclick="changeCartQty(${i}, -1)">-</button>
+                    <button class="qty-btn" style="width:24px; height:24px; border-radius:4px;" onclick="changeCartQty(${i}, -1)">-</button>
                     <span style="font-weight:bold; min-width:20px; text-align:center;">${c.qty}</span>
-                    <button class="qty-btn" style="width:24px; height:24px;" onclick="changeCartQty(${i}, 1)">+</button>
+                    <button class="qty-btn" style="width:24px; height:24px; border-radius:4px;" onclick="changeCartQty(${i}, 1)">+</button>
                 </div>
                 <div style="min-width:70px; text-align:right; font-weight:bold;">€ ${sub}</div>
             </div>`;
@@ -323,10 +338,13 @@
         const cap = document.getElementById('f-cap').value;
         const city = document.getElementById('f-city').value;
         const country = document.getElementById('f-country').value;
+
         if(!name || !email || !phone || !street || !city) return alert("Compila i campi obbligatori.");
+
         const fullAddress = `${street}, ${cap} ${city}, ${country}`;
         const orderID = "GZ-" + Date.now().toString().slice(-6);
         const orderItems = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
+        
         const f = new URLSearchParams();
         f.append('entry.442927045', orderID); 
         f.append('entry.333212320', name);
@@ -335,13 +353,17 @@
         f.append('entry.334440207', fullAddress); 
         f.append('entry.1856379113', orderItems);
         f.append('entry.146792905', currentTotalNum);
+
         fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: f });
         fetch(CONFIG.emailWebApp, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({id: orderID, cliente: name, email: email, prodotti: orderItems, totale: currentTotalNum, indirizzo: fullAddress}) });
+
         document.getElementById('modal').style.display = 'none';
         document.getElementById('thanks-popup').style.display = 'flex';
+        
         const msg = `*NUOVO ORDINE ${orderID}*\n\n*CLIENTE:* ${name}\n*TEL:* ${phone}\n*INDIRIZZO:* ${fullAddress}\n\n*DETTAGLIO:* ${orderItems}\n\n*TOTALE:* € ${currentTotalNum}`;
         window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`);
     }
+
     load();
 </script>
 </body>
