@@ -7,55 +7,63 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --gizzi-deep: #1b4332; --gizzi-gold: #b08d57; --bg: #fdfaf5; --white: #ffffff; --text: #2d2d2d; }
-        * { box-sizing: border-box; scroll-behavior: smooth; }
         
-        body { font-family: 'Montserrat', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.5; -webkit-tap-highlight-color: transparent; }
+        /* FIX DECENTRALE: Impedisce lo scroll orizzontale su tutto il corpo */
+        * { box-sizing: border-box; scroll-behavior: smooth; }
+        html, body { overflow-x: hidden; width: 100%; position: relative; margin: 0; padding: 0; }
+        
+        body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; -webkit-tap-highlight-color: transparent; }
         h1, h2, h3, .logo { font-family: 'Fraunces', serif; font-weight: 700; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 15px; width: 100%; }
         header { position: fixed; top: 0; width: 100%; background: white; z-index: 2000; border-bottom: 1px solid #eee; }
         .nav-top { height: 70px; display: flex; align-items: center; justify-content: space-between; }
-        .logo { font-size: 1.5rem; color: var(--gizzi-deep); text-decoration: none; }
+        .logo { font-size: 1.4rem; color: var(--gizzi-deep); text-decoration: none; }
         
-        /* MENU CATEGORIE CENTRATO */
         .category-menu { display: flex; justify-content: center; gap: 10px; padding: 12px; background: white; border-top: 1px solid #f0f0f0; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
         .category-menu::-webkit-scrollbar { display: none; }
         .category-menu a { text-decoration: none; color: #666; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 8px 15px; border: 1px solid #eee; border-radius: 50px; cursor: pointer; }
 
-        .hero { height: 40vh; margin-top: 115px; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1240&hei=500&fit=constrain,1&fmt=webp'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 0 20px; }
+        .hero { height: 40vh; margin-top: 115px; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1240&hei=500&fit=constrain,1&fmt=webp'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 0 20px; width: 100%; }
 
         .view-controls { text-align: center; margin: 30px 0; display: flex; justify-content: center; gap: 10px; }
-        .btn-toggle-view { background: white; border: 2px solid var(--gizzi-deep); color: var(--gizzi-deep); padding: 12px 20px; border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 0.85rem; transition: 0.3s; }
+        .btn-toggle-view { background: white; border: 2px solid var(--gizzi-deep); color: var(--gizzi-deep); padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 0.85rem; transition: 0.3s; }
         .btn-toggle-view.active { background: var(--gizzi-deep); color: white; }
 
-        /* CAROUSEL INFINITO RESPONSIVE */
+        /* CAROUSEL FIX */
         .carousel-viewport { position: relative; overflow: hidden; width: 100%; margin: 20px 0; }
-        .carousel-track { display: flex; gap: 20px; width: max-content; }
+        .carousel-track { display: flex; gap: 15px; width: max-content; }
         .carousel-track.animate { transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
         
-        .card { background: white; border-radius: 16px; overflow: hidden; border: 1px solid #eee; text-align: center; width: 300px; flex-shrink: 0; display: flex; flex-direction: column; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .card img { width: 100%; height: 220px; object-fit: cover; }
-        .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .card-body h3 { font-size: 1.2rem; margin: 0 0 10px; min-height: 2.8em; color: var(--gizzi-deep); line-height: 1.2; }
-        .price { color: var(--gizzi-gold); font-weight: 700; font-size: 1.4rem; margin-bottom: 15px; }
+        .card { background: white; border-radius: 16px; overflow: hidden; border: 1px solid #eee; text-align: center; width: 280px; flex-shrink: 0; display: flex; flex-direction: column; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-body h3 { font-size: 1.1rem; margin: 0 0 10px; min-height: 2.8em; color: var(--gizzi-deep); line-height: 1.2; }
+        .price { color: var(--gizzi-gold); font-weight: 700; font-size: 1.3rem; margin-bottom: 12px; }
 
-        .btn-add { background: var(--gizzi-deep); color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 700; width: 100%; text-transform: uppercase; font-size: 0.9rem; min-height: 48px; }
+        .btn-add { background: var(--gizzi-deep); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 700; width: 100%; text-transform: uppercase; font-size: 0.85rem; min-height: 48px; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-top: 25px; width: 100%; }
 
         /* CARRELLO */
         #cart-panel { position: fixed; right: -100%; top: 0; width: 100%; max-width: 400px; height: 100%; background: white; z-index: 3000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; }
         #cart-panel.active { right: 0; }
         .cart-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
         .cart-footer { padding: 25px; border-top: 2px solid #eee; background: white; }
-        #cart-items { flex: 1; overflow-y: auto; padding: 20px; }
+        #cart-items { flex: 1; overflow-y: auto; padding: 15px; }
 
         @media (max-width: 768px) {
-            .category-menu { justify-content: flex-start; } /* Su mobile scorre da sinistra */
-            .card { width: 85vw; }
-            .grid { grid-template-columns: 1fr; }
+            .category-menu { justify-content: flex-start; }
+            .card { width: 80vw; } /* Evita che la scheda sia troppo larga */
+            .grid { grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 5px; }
+            .grid .card { width: 100%; }
+            .grid .card-body h3 { font-size: 0.9rem; }
         }
         
+        @media (max-width: 480px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
         footer { background: var(--gizzi-deep); color: white; padding: 40px 0; text-align: center; margin-top: 50px; width: 100%; }
     </style>
 </head>
@@ -67,7 +75,7 @@
     <div class="container nav-top">
         <a href="#" class="logo">GRUPPO GIZZI</a>
         <div style="display:flex; gap:12px; align-items:center;">
-            <select id="lang-sel" onchange="updateLang(this.value)" style="border:none; font-weight:700; font-family:'Montserrat'; background:transparent; cursor:pointer;">
+            <select id="lang-sel" onchange="updateLang(this.value)" style="border:none; font-weight:700; background:transparent; cursor:pointer;">
                 <option value="it">🇮🇹 IT</option>
                 <option value="en">🇬🇧 EN</option>
                 <option value="de">🇩🇪 DE</option>
@@ -112,7 +120,7 @@
     <div class="cart-footer">
         <div id="shipping-info" style="font-size: 0.9rem; color: #666; margin-bottom: 8px;">Spedizione: € 0.00</div>
         <h3 id="cart-total-display" style="margin: 0 0 20px 0; font-size: 1.6rem;">Totale: € 0.00</h3>
-        <button id="btn-cart-checkout" class="btn-add" style="background:var(--gizzi-gold); font-size:1.1rem;" onclick="openCheckout()">PROSEGUI</button>
+        <button id="btn-cart-checkout" class="btn-add" style="background:var(--gizzi-gold);" onclick="openCheckout()">PROSEGUI</button>
     </div>
 </div>
 
@@ -144,11 +152,7 @@
     <div style="padding:40px;"><h2>Grazie!</h2><p>L'ordine è stato inviato.</p><button onclick="clearAndReload()" style="background:var(--gizzi-gold); color:white; border:none; padding:15px 40px; border-radius:50px; cursor:pointer;">HOME</button></div>
 </div>
 
-<footer>
-    <div class="container">
-        <p>© 2026 Gruppo Gizzi. Cilento Authentic Experience.</p>
-    </div>
-</footer>
+<footer><div class="container"><p>© 2026 Gruppo Gizzi. Cilento Authentic Experience.</p></div></footer>
 
 <script>
     const CONFIG = {
@@ -220,6 +224,7 @@
         const cK = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
         const activeProds = products.filter(p => p.Disponibile === 'SI');
 
+        // Carousel 
         const feat = shuffleArray(activeProds.filter(p => p.Evidenza === 'SI'));
         originalFeatCount = feat.length;
         const fullFeat = [...feat, ...feat.slice(0, 4)];
@@ -231,6 +236,7 @@
 
         let html = "";
         if (currentView === 'all') {
+            // TUTTI I PRODOTTI RANDOMIZZATI
             html = `<div class="grid">${shuffleArray(activeProds).map(p => createCard(p, nK)).join('')}</div>`;
         } else {
             html = shuffledCats.map(c => {
@@ -259,7 +265,7 @@
         const track = document.getElementById('carousel-track');
         setInterval(() => {
             if(!track || track.children.length <= 1) return;
-            const width = track.children[0].offsetWidth + 20;
+            const width = track.children[0].offsetWidth + 15;
             carouselIndex++;
             track.classList.add('animate');
             track.style.transform = `translateX(-${carouselIndex * width}px)`;
@@ -296,12 +302,12 @@
         document.getElementById('cart-items').innerHTML = cart.map(c => {
             const rP = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
             sub += parseFloat(rP); weight += (parseWeight(c.Unità) * c.qty);
-            return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
+            return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #eee; padding-bottom:10px;">
                 <div style="flex:1;"><strong style="font-size:0.85rem;">${c[nK] || c.Nome}</strong><br><small>€ ${c.Prezzo}</small></div>
                 <div class="cart-qty-ctrl" style="display:flex; align-items:center; gap:10px; background:#f0f0f0; padding:4px 10px; border-radius:8px;">
-                    <button style="border:none;background:none;font-weight:bold;padding:5px;cursor:pointer;" onclick="updateCartQty('${c.ID}', -1)">-</button>
+                    <button style="border:none;background:none;font-weight:bold;padding:5px;" onclick="updateCartQty('${c.ID}', -1)">-</button>
                     <span>${c.qty}</span>
-                    <button style="border:none;background:none;font-weight:bold;padding:5px;cursor:pointer;" onclick="updateCartQty('${c.ID}', 1)">+</button>
+                    <button style="border:none;background:none;font-weight:bold;padding:5px;" onclick="updateCartQty('${c.ID}', 1)">+</button>
                 </div>
                 <div style="min-width:60px; text-align:right; font-weight:700;">€ ${rP}</div>
                 <div onclick="removeProduct('${c.ID}')" style="cursor:pointer; color:#ff4d4d; margin-left:10px; font-size:1.2rem;">🗑️</div>
