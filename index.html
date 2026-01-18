@@ -26,8 +26,10 @@
         .btn-toggle-view { background: white; border: 2px solid var(--gizzi-deep); color: var(--gizzi-deep); padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: 700; font-family: 'Montserrat'; transition: 0.3s; margin: 0 5px; }
         .btn-toggle-view.active { background: var(--gizzi-deep); color: white; }
 
+        /* CAROUSEL INFINITO CSS */
         .carousel-viewport { position: relative; overflow: hidden; width: 100%; margin: 20px 0; }
-        .carousel-track { display: flex; gap: 20px; transition: transform 0.5s ease; width: max-content; }
+        .carousel-track { display: flex; gap: 20px; width: max-content; }
+        .carousel-track.animate { transition: transform 0.6s ease-in-out; }
         
         .card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #eee; text-align: center; width: 280px; flex-shrink: 0; display: flex; flex-direction: column; }
         .card img { width: 100%; height: 200px; object-fit: cover; }
@@ -38,6 +40,7 @@
         .btn-add { background: var(--gizzi-deep); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 700; width: 100%; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 30px; }
 
+        /* CARRELLO */
         #cart-panel { position: fixed; right: -450px; top: 0; width: 400px; max-width: 100%; height: 100vh; background: white; z-index: 3000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); padding: 0; display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.2); }
         #cart-panel.active { right: 0; }
         .cart-header { padding: 25px; border-bottom: 1px solid #eee; position: relative; }
@@ -87,7 +90,7 @@
     <section class="carousel-section">
         <h2 id="carousel-title" style="text-align:center; color:var(--gizzi-deep); font-size:2rem;">I Prodotti del Momento</h2>
         <div class="carousel-viewport">
-            <div id="carousel-track" class="carousel-track"></div>
+            <div id="carousel-track" class="carousel-track animate"></div>
         </div>
     </section>
 
@@ -102,14 +105,14 @@
 <div id="cart-panel">
     <div class="cart-header">
         <span style="position:absolute; top:20px; right:20px; font-size:1.5rem; cursor:pointer; color:#999;" onclick="toggleCart()">✕</span>
-        <h2 id="cart-label">Il Tuo Carrello</h2>
+        <h2 id="cart-label" style="margin:0; color:var(--gizzi-deep);">Il Tuo Carrello</h2>
         <button style="background:none; border:1px solid #ff4d4d; color:#ff4d4d; padding:4px 8px; border-radius:5px; font-size:0.7rem; cursor:pointer; font-family:'Montserrat';" onclick="emptyCart()">🗑️ Svuota</button>
     </div>
     <div id="cart-items"></div>
     <div class="cart-footer">
-        <div id="shipping-info" style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Spedizione: € 0.00</div>
-        <h3 id="cart-total-display" style="margin-bottom: 15px;">Totale: € 0.00</h3>
-        <button id="btn-cart-checkout" class="btn-add" style="background:var(--gizzi-gold); padding:15px;" onclick="openCheckout()">PROSEGUI</button>
+        <div id="shipping-info" style="font-size: 0.9rem; color: #666; margin-bottom: 5px; font-family:'Montserrat';">Spedizione: € 0.00</div>
+        <h3 id="cart-total-display" style="margin-bottom: 15px; font-size: 1.5rem; font-family:'Montserrat';">Totale: € 0.00</h3>
+        <button id="btn-cart-checkout" class="btn-add" style="background:var(--gizzi-gold); font-size:1.1rem; padding:15px;" onclick="openCheckout()">PROSEGUI</button>
     </div>
 </div>
 
@@ -150,7 +153,7 @@
         wa: "393358060715"
     };
 
-    let products = [], cart = [], lang = 'it', currentView = 'all', carouselIndex = 0;
+    let products = [], cart = [], lang = 'it', currentView = 'all', carouselIndex = 0, originalFeatCount = 0;
 
     function parseWeight(u) {
         if (!u) return 1;
@@ -186,27 +189,12 @@
         render(); startCarousel();
     }
 
-    // NUOVA LOGICA: Se clicchi una categoria dal menu, attiva la vista 'cats' e scrolla
     function handleCategoryClick(catId) {
-        if (currentView !== 'cats') {
-            switchView('cats');
-        }
-        // Piccola pausa per dare tempo al DOM di renderizzare le categorie prima dello scroll
+        if (currentView !== 'cats') switchView('cats');
         setTimeout(() => {
             const target = document.getElementById(catId);
-            if (target) {
-                const offset = 120; // spazio per l'header fisso
-                const bodyRect = document.body.getBoundingClientRect().top;
-                const elementRect = target.getBoundingClientRect().top;
-                const elementPosition = elementRect - bodyRect;
-                const offsetPosition = elementPosition - offset;
-
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        }, 100);
+            if (target) window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 120, behavior: 'smooth' });
+        }, 150);
     }
 
     function switchView(view) {
@@ -221,18 +209,17 @@
         const cK = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
         const activeProds = products.filter(p => p.Disponibile === 'SI');
 
-        // Carousel 
+        // LOGICA CAROUSEL INFINITO
         const feat = shuffleArray(activeProds.filter(p => p.Evidenza === 'SI'));
-        document.getElementById('carousel-track').innerHTML = feat.map(p => createCard(p, nK)).join('');
+        originalFeatCount = feat.length;
+        // Cloniamo i primi 4 per il loop infinito
+        const cloned = feat.slice(0, 4);
+        const fullFeat = [...feat, ...cloned];
+        document.getElementById('carousel-track').innerHTML = fullFeat.map(p => createCard(p, nK)).join('');
 
         const uniqueCats = [...new Set(activeProds.map(p => p[cK] || p.Categoria))];
         const shuffledCats = shuffleArray(uniqueCats);
-        
-        // Menu Ancora: Ogni link ora chiama handleCategoryClick
-        document.getElementById('anchor-menu').innerHTML = shuffledCats.map(c => {
-            const safeId = `cat-${c.replace(/\s+/g, '')}`;
-            return `<a onclick="handleCategoryClick('${safeId}')">${c}</a>`;
-        }).join('');
+        document.getElementById('anchor-menu').innerHTML = shuffledCats.map(c => `<a onclick="handleCategoryClick('cat-${c.replace(/\s+/g, '')}')">${c}</a>`).join('');
 
         let html = "";
         if (currentView === 'all') {
@@ -261,12 +248,21 @@
     }
 
     function startCarousel() {
+        const track = document.getElementById('carousel-track');
         setInterval(() => {
-            const track = document.getElementById('carousel-track');
-            if(track && track.children.length > 1) {
-                const width = track.children[0].offsetWidth + 20;
-                carouselIndex = (carouselIndex + 1) % track.children.length;
-                track.style.transform = `translateX(-${carouselIndex * width}px)`;
+            if(!track || track.children.length <= 1) return;
+            const width = track.children[0].offsetWidth + 20;
+            carouselIndex++;
+            track.classList.add('animate');
+            track.style.transform = `translateX(-${carouselIndex * width}px)`;
+
+            // Quando arriviamo ai cloni, resettiamo alla posizione 0 senza animazione
+            if (carouselIndex >= originalFeatCount) {
+                setTimeout(() => {
+                    track.classList.remove('animate');
+                    carouselIndex = 0;
+                    track.style.transform = `translateX(0)`;
+                }, 600); // durata della transizione CSS
             }
         }, 4000);
     }
