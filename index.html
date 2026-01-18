@@ -22,6 +22,11 @@
 
         .hero { height: 40vh; margin-top: 115px; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1240&hei=500&fit=constrain,1&fmt=webp'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; }
 
+        /* TOGGLE VIEW BUTTON */
+        .view-controls { text-align: center; margin: 30px 0; }
+        .btn-toggle-view { background: white; border: 2px solid var(--gizzi-deep); color: var(--gizzi-deep); padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: 700; font-family: 'Montserrat'; transition: 0.3s; }
+        .btn-toggle-view.active { background: var(--gizzi-deep); color: white; }
+
         .carousel-viewport { position: relative; overflow: hidden; width: 100%; margin: 20px 0; }
         .carousel-track { display: flex; gap: 20px; transition: transform 0.5s ease; width: max-content; }
         
@@ -32,31 +37,16 @@
         .price { color: var(--gizzi-gold); font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
 
         .btn-add { background: var(--gizzi-deep); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 700; width: 100%; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
-        .btn-add:hover { background: var(--gizzi-gold); }
-
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 30px; }
 
         #cart-panel { position: fixed; right: -450px; top: 0; width: 400px; max-width: 100%; height: 100vh; background: white; z-index: 3000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); padding: 0; display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.2); }
         #cart-panel.active { right: 0; }
-        
         .cart-header { padding: 25px; border-bottom: 1px solid #eee; position: relative; }
         .cart-footer { padding: 25px; border-top: 2px solid #eee; background: #fff; margin-top: auto; }
         #cart-items { flex: 1; overflow-y: auto; padding: 0 25px; max-height: calc(100vh - 250px); }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(27, 67, 50, 0.9); z-index: 4000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-content { background: var(--bg); padding: 40px; border-radius: 24px; width: 95%; max-width: 500px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border: 1px solid rgba(176, 141, 87, 0.3); }
-        .modal-content h2 { color: var(--gizzi-deep); font-size: 2rem; margin: 0 0 25px 0; text-align: center; border-bottom: 2px solid var(--gizzi-gold); padding-bottom: 15px; }
-
-        .form-row { display: flex; gap: 15px; }
-        .input-group { position: relative; width: 100%; margin-bottom: 15px; }
-        input, select { width: 100%; padding: 14px 16px; border-radius: 10px; border: 1px solid #ddd; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; background: white; outline: none; color: var(--text); }
-        input:focus { border-color: var(--gizzi-gold); }
-
-        .btn-order-now { background: var(--gizzi-deep); color: white; border: none; padding: 16px; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; font-size: 1.1rem; text-transform: uppercase; margin-top: 10px; transition: 0.3s; }
-        .btn-order-now:hover { background: #25D366; transform: translateY(-2px); }
-
-        .cart-qty-ctrl { display: flex; align-items: center; gap: 8px; background: #f0f0f0; border-radius: 5px; padding: 2px 6px; }
-        .cart-qty-btn { border: none; background: none; font-weight: bold; font-size: 1rem; cursor: pointer; color: var(--gizzi-deep); }
+        .modal-content { background: var(--bg); padding: 40px; border-radius: 24px; width: 95%; max-width: 500px; position: relative; }
 
         @media (max-width: 768px) {
             .card { width: calc(100vw - 60px); }
@@ -80,7 +70,7 @@
                 <option value="hu">🇭🇺 HU</option>
             </select>
             <div onclick="toggleCart()" style="cursor:pointer; font-size:1.5rem; position:relative;">
-                🛒 <span id="cart-count" style="position:absolute; top:-10px; right:-10px; background:var(--gizzi-gold); color:white; border-radius:50%; padding:2px 6px; font-size:0.7rem; font-family:'Montserrat';">0</span>
+                🛒 <span id="cart-count" style="position:absolute; top:-10px; right:-10px; background:var(--gizzi-gold); color:white; border-radius:50%; padding:2px 6px; font-size:0.7rem;">0</span>
             </div>
         </div>
     </div>
@@ -101,20 +91,26 @@
             <div id="carousel-track" class="carousel-track"></div>
         </div>
     </section>
+
+    <div class="view-controls">
+        <button id="btn-view-all" class="btn-toggle-view active" onclick="switchView('all')">Tutti i Prodotti</button>
+        <button id="btn-view-cats" class="btn-toggle-view" onclick="switchView('cats')">Per Categoria</button>
+    </div>
+    
     <div id="negozio"></div>
 </div>
 
 <div id="cart-panel">
     <div class="cart-header">
         <span style="position:absolute; top:20px; right:20px; font-size:1.5rem; cursor:pointer; color:#999;" onclick="toggleCart()">✕</span>
-        <h2 id="cart-label" style="margin:0; color:var(--gizzi-deep);">Il Tuo Carrello</h2>
-        <button id="btn-clear-txt" style="background:none; border:1px solid #ff4d4d; color:#ff4d4d; padding:4px 8px; border-radius:5px; font-size:0.7rem; cursor:pointer; margin-top:10px; font-family:'Montserrat';" onclick="emptyCart()">🗑️ Svuota Carrello</button>
+        <h2 id="cart-label">Il Tuo Carrello</h2>
+        <button id="btn-clear-txt" class="btn-toggle-view" style="font-size:0.7rem; padding:5px 10px;" onclick="emptyCart()">🗑️ Svuota</button>
     </div>
     <div id="cart-items"></div>
     <div class="cart-footer">
-        <div id="shipping-info" style="font-size: 0.9rem; color: #666; margin-bottom: 5px; font-family:'Montserrat';">Spedizione: € 0.00</div>
-        <h3 id="cart-total-display" style="margin-bottom: 15px; font-size: 1.5rem; font-family:'Montserrat';">Totale: € 0.00</h3>
-        <button id="btn-cart-checkout" class="btn-add" style="background:var(--gizzi-gold); font-size:1.1rem; padding:15px;" onclick="openCheckout()">PROSEGUI</button>
+        <div id="shipping-info" style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Spedizione: € 0.00</div>
+        <h3 id="cart-total-display" style="margin-bottom: 15px;">Totale: € 0.00</h3>
+        <button id="btn-cart-checkout" class="btn-add" style="background:var(--gizzi-gold); padding:15px;" onclick="openCheckout()">PROSEGUI</button>
     </div>
 </div>
 
@@ -123,34 +119,27 @@
         <span style="position:absolute; top:20px; right:20px; font-size:1.5rem; cursor:pointer; color:#999;" onclick="closeCheckout()">✕</span>
         <h2 id="checkout-header">Spedizione</h2>
         <form onsubmit="event.preventDefault(); processOrder();">
-            <div class="input-group"><input type="text" id="f-name" placeholder="Nome e Cognome *" required></div>
+            <input type="text" id="f-name" placeholder="Nome e Cognome *" required><br>
             <div class="form-row">
-                <div class="input-group"><input type="email" id="f-email" placeholder="Email *" required></div>
-                <div class="input-group"><input type="tel" id="f-phone" placeholder="Telefono *" required></div>
+                <input type="email" id="f-email" placeholder="Email *" required>
+                <input type="tel" id="f-phone" placeholder="Telefono *" required>
             </div>
-            <div class="input-group"><input type="text" id="f-street" placeholder="Indirizzo e Numero Civico *" required></div>
+            <input type="text" id="f-street" placeholder="Indirizzo e Numero Civico *" required><br>
             <div class="form-row">
-                <div class="input-group" style="flex: 2;"><input type="text" id="f-city" placeholder="Città *" required></div>
-                <div class="input-group" style="flex: 1;"><input type="text" id="f-cap" placeholder="CAP *" required></div>
+                <input type="text" id="f-city" placeholder="Città *" required>
+                <input type="text" id="f-cap" placeholder="CAP *" required>
             </div>
-            <div class="input-group">
-                <select id="f-country" onchange="updateCartUI()">
-                    <option value="Italia">Italia</option>
-                    <option value="Europa">Europa (UE)</option>
-                </select>
-            </div>
+            <select id="f-country" onchange="updateCartUI()">
+                <option value="Italia">Italia</option>
+                <option value="Europa">Europa (UE)</option>
+            </select>
             <button type="submit" id="btn-order-now" class="btn-order-now">ORDINA ORA</button>
-            <p onclick="closeCheckout()" style="text-align: center; color: #999; cursor: pointer; margin-top: 15px; font-size: 0.8rem; font-family:'Montserrat';">Annulla e continua lo shopping</p>
         </form>
     </div>
 </div>
 
 <div id="thanks-popup" style="display:none; position:fixed; inset:0; background:var(--gizzi-deep); z-index:5000; align-items:center; justify-content:center; color:white; text-align:center;">
-    <div style="padding:40px;">
-        <h2 id="thanks-h2-txt" style="font-size:3rem; margin-bottom:10px;">Grazie!</h2>
-        <p id="thanks-p-txt" style="font-size:1.2rem;">L'ordine è stato inviato. Verrai contattato a breve.</p>
-        <button onclick="clearAndReload()" style="background:var(--gizzi-gold); color:white; border:none; padding:15px 40px; border-radius:50px; cursor:pointer; font-weight:700; margin-top:30px; font-family:'Montserrat';">TORNA ALLA HOME</button>
-    </div>
+    <div style="padding:40px;"><h2>Grazie!</h2><p>L'ordine è stato inviato.</p><button onclick="clearAndReload()" style="background:var(--gizzi-gold); color:white; border:none; padding:15px 40px; border-radius:50px; cursor:pointer;">HOME</button></div>
 </div>
 
 <footer style="background:var(--gizzi-deep); color:white; padding:40px 0; text-align:center; margin-top:50px;"><p>© 2026 Gruppo Gizzi.</p></footer>
@@ -159,22 +148,10 @@
     const CONFIG = {
         catalog: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIumwZulbMAuesmG69DB8Y1bx2Y-NQXfyG7_m1-rdpZ-SoOxM0JyZtnj0_eV_K4t4drULTwV44nE5Y/pub?gid=0&single=true&output=csv",
         formURL: "https://docs.google.com/forms/d/e/1FAIpQLSend7KPNCjTNP1d-B3zd-wvhZAVXLS3P7341yN88fm3d7D4Jw/formResponse",
-        emailWebApp: "https://script.google.com/macros/s/AKfycbwv1iqWofz-uaNpOlOD-D6qhPx-heZ8IAp6ZdJ1FdbK7BU8xLmGu9sN3wqnDkQaXbkp/exec",
         wa: "393358060715"
     };
 
-    const UI = {
-        it: { h1: "L'Oro del Cilento, a casa tua.", p: "Eccellenza gastronomica.", add: "AGGIUNGI", total: "Totale", cart: "Il Tuo Carrello", proceed: "PROSEGUI", ship: "Spedizione", order: "ORDINA ORA", clear: "🗑️ Svuota Carrello", thanksH: "Grazie!", thanksP: "Ordine inviato con successo.", moments: "I Prodotti del Momento" },
-        en: { h1: "Cilento's Gold, at your doorstep.", p: "Gastronomic excellence.", add: "ADD", total: "Total", cart: "Your Cart", proceed: "CHECKOUT", ship: "Shipping", order: "ORDER NOW", clear: "🗑️ Empty Cart", thanksH: "Thank you!", thanksP: "Order sent successfully.", moments: "Featured Products" },
-        de: { h1: "Cilento Gold, vor Ihrer Tür.", p: "Kulinarische Exzellenz.", add: "HINZUFÜGEN", total: "Gesamt", cart: "Ihr Warenkorb", proceed: "KASSE", ship: "Versand", order: "JETZT BESTELLEN", clear: "🗑️ Warenkorb leeren", thanksH: "Danke!", thanksP: "Bestellung erfolgreich gesendet.", moments: "Unsere Highlights" },
-        hu: { h1: "Cilento Aranya, az Ön otthonában.", p: "Gasztronómiai kiválóság.", add: "HOZZÁADÁS", total: "Összesen", cart: "Kosár", proceed: "KASSZA", ship: "Szállítás", order: "MEGRENDELÉS", clear: "🗑️ Kosár ürítése", thanksH: "Köszönjük!", thanksP: "Rendelését rögzítettük.", moments: "Kiemelt Termékeink" }
-    };
-
-    let products = [], cart = [], lang = 'it', carouselIndex = 0, touchStartX = 0;
-
-    const cartPanel = document.getElementById('cart-panel');
-    cartPanel.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
-    cartPanel.addEventListener('touchend', e => { if (e.changedTouches[0].screenX > touchStartX + 100) toggleCart(); });
+    let products = [], cart = [], lang = 'it', currentView = 'all';
 
     function parseWeight(u) {
         if (!u) return 1;
@@ -210,61 +187,50 @@
         render(); startCarousel();
     }
 
-    function updateLang(val) {
-        lang = val;
-        document.getElementById('hero-h1').innerText = UI[lang].h1;
-        document.getElementById('hero-p').innerText = UI[lang].p;
-        document.getElementById('cart-label').innerText = UI[lang].cart;
-        document.getElementById('btn-clear-txt').innerText = UI[lang].clear;
-        document.getElementById('btn-cart-checkout').innerText = UI[lang].proceed;
-        document.getElementById('checkout-header').innerText = UI[lang].ship;
-        document.getElementById('btn-order-now').innerText = UI[lang].order;
-        document.getElementById('thanks-h2-txt').innerText = UI[lang].thanksH;
-        document.getElementById('thanks-p-txt').innerText = UI[lang].thanksP;
-        document.getElementById('carousel-title').innerText = UI[lang].moments;
-        document.getElementById('f-country').value = lang === 'it' ? "Italia" : "Europa";
-        render(); updateCartUI();
+    function switchView(view) {
+        currentView = view;
+        document.getElementById('btn-view-all').classList.toggle('active', view === 'all');
+        document.getElementById('btn-view-cats').classList.toggle('active', view === 'cats');
+        render();
     }
 
     function render() {
         const nK = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
         const cK = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
-        
-        // Carousel Casuale
-        const feat = shuffleArray(products.filter(p => p.Disponibile === 'SI' && p.Evidenza === 'SI'));
-        document.getElementById('carousel-track').innerHTML = feat.map(p => `
-            <div class="card">
-                <img src="${p.Immagine}">
-                <div class="card-body">
-                    <h3>${p[nK] || p.Nome}</h3>
-                    <div class="price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
-                    <button class="btn-add" onclick="addToCart('${p.ID}')">${UI[lang].add}</button>
-                </div>
-            </div>`).join('');
+        const activeProds = products.filter(p => p.Disponibile === 'SI');
 
-        // CATEGORIE CASUALI
-        const uniqueCats = [...new Set(products.filter(p => p.Disponibile === 'SI').map(p => p[cK] || p.Categoria))];
+        // Carousel Casuale
+        const feat = shuffleArray(activeProds.filter(p => p.Evidenza === 'SI'));
+        document.getElementById('carousel-track').innerHTML = feat.map(p => createCard(p, nK)).join('');
+
+        const uniqueCats = [...new Set(activeProds.map(p => p[cK] || p.Categoria))];
         const shuffledCats = shuffleArray(uniqueCats);
-        
-        // Menu Ancora (invariato o casuale come preferisci, qui casuale per coerenza)
         document.getElementById('anchor-menu').innerHTML = shuffledCats.map(c => `<a href="#cat-${c.replace(/\s+/g, '')}">${c}</a>`).join('');
-        
-        // Negozio Casuale
-        document.getElementById('negozio').innerHTML = shuffledCats.map(c => {
-            const cP = products.filter(p => p.Disponibile === 'SI' && (p[cK] === c || p.Categoria === c));
-            return `<div id="cat-${c.replace(/\s+/g, '')}" style="padding-top:100px; margin-top:-60px;">
-                <h2 style="font-family:'Fraunces'; color:var(--gizzi-deep); border-bottom:2px solid var(--gizzi-gold); display:inline-block;">${c}</h2>
-                <div class="grid">${cP.map(p => `
-                    <div class="card" style="width:100%;">
-                        <img src="${p.Immagine}">
-                        <div class="card-body">
-                            <h3>${p[nK] || p.Nome}</h3>
-                            <div class="price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
-                            <button class="btn-add" onclick="addToCart('${p.ID}')">${UI[lang].add}</button>
-                        </div>
-                    </div>`).join('')}</div>
-            </div>`;
-        }).join('');
+
+        let html = "";
+        if (currentView === 'all') {
+            html = `<div id="cat-all" class="grid">${shuffleArray(activeProds).map(p => createCard(p, nK)).join('')}</div>`;
+        } else {
+            html = shuffledCats.map(c => {
+                const cP = activeProds.filter(p => (p[cK] === c || p.Categoria === c));
+                return `<div id="cat-${c.replace(/\s+/g, '')}" style="padding-top:100px; margin-top:-60px;">
+                    <h2 style="color:var(--gizzi-deep); border-bottom:2px solid var(--gizzi-gold); display:inline-block;">${c}</h2>
+                    <div class="grid">${cP.map(p => createCard(p, nK)).join('')}</div>
+                </div>`;
+            }).join('');
+        }
+        document.getElementById('negozio').innerHTML = html;
+    }
+
+    function createCard(p, nK) {
+        return `<div class="card">
+            <img src="${p.Immagine}">
+            <div class="card-body">
+                <h3>${p[nK] || p.Nome}</h3>
+                <div class="price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
+                <button class="btn-add" onclick="addToCart('${p.ID}')">AGGIUNGI</button>
+            </div>
+        </div>`;
     }
 
     function startCarousel() {
@@ -287,8 +253,9 @@
     }
 
     function removeProduct(id) { cart = cart.filter(c => c.ID !== id); saveCartUI(); }
-    function emptyCart() { if(confirm(UI[lang].clear + "?")) { cart = []; saveCartUI(); } }
+    function emptyCart() { if(confirm("Vuoi svuotare tutto?")) { cart = []; saveCartUI(); } }
     function saveCartUI() { localStorage.setItem('gizzi_cart', JSON.stringify(cart)); updateCartUI(); }
+    
     function updateCartQty(id, delta) {
         const it = cart.find(c => c.ID == id);
         if(it) { it.qty += delta; if(it.qty <= 0) cart = cart.filter(c => c.ID !== id); }
@@ -302,20 +269,20 @@
             const rP = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
             sub += parseFloat(rP); weight += (parseWeight(c.Unità) * c.qty);
             return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
-                <div style="flex:1;"><strong style="font-size:0.85rem; font-family:'Montserrat';">${c[nK] || c.Nome}</strong><br><small>€ ${c.Prezzo}</small></div>
+                <div style="flex:1;"><strong style="font-size:0.85rem;">${c[nK] || c.Nome}</strong><br><small>€ ${c.Prezzo}</small></div>
                 <div class="cart-qty-ctrl">
                     <button class="cart-qty-btn" onclick="updateCartQty('${c.ID}', -1)">-</button>
                     <span style="font-weight:700;">${c.qty}</span>
                     <button class="cart-qty-btn" onclick="updateCartQty('${c.ID}', 1)">+</button>
                 </div>
-                <div style="min-width:60px; text-align:right; font-weight:700; font-family:'Montserrat';">€ ${rP}</div>
-                <div onclick="removeProduct('${c.ID}')" style="cursor:pointer; color:#ff4d4d; font-size:1.1rem; margin-left:10px;">🗑️</div>
+                <div style="min-width:60px; text-align:right; font-weight:700;">€ ${rP}</div>
+                <div onclick="removeProduct('${c.ID}')" style="cursor:pointer; color:#ff4d4d; margin-left:10px;">🗑️</div>
             </div>`;
         }).join('');
         const country = document.getElementById('f-country').value;
         let ship = country === "Italia" ? (sub >= 120 ? 0 : Math.ceil(weight / 20) * 13) : (sub >= 300 ? 0 : 50);
-        document.getElementById('shipping-info').innerText = `${UI[lang].ship} (${country}): € ${ship.toFixed(2)}`;
-        document.getElementById('cart-total-display').innerText = `${UI[lang].total}: € ${(sub + ship).toFixed(2)}`;
+        document.getElementById('shipping-info').innerText = `Spedizione (${country}): € ${ship.toFixed(2)}`;
+        document.getElementById('cart-total-display').innerText = `Totale: € ${(sub + ship).toFixed(2)}`;
         document.getElementById('cart-count').innerText = cart.reduce((a,b) => a + b.qty, 0);
     }
 
@@ -328,29 +295,10 @@
         const name = document.getElementById('f-name').value, email = document.getElementById('f-email').value, phone = document.getElementById('f-phone').value;
         const addr = `${document.getElementById('f-street').value}, ${document.getElementById('f-cap').value} ${document.getElementById('f-city').value} (${document.getElementById('f-country').value})`;
         const fT = document.getElementById('cart-total-display').innerText.split('€')[1].trim(), oID = "GZ-" + Date.now().toString().slice(-6);
-        
-        const detailRows = cart.map(c => {
-            const rowTot = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
-            return `${c.qty}x ${c.Nome} (€ ${c.Prezzo}) = € ${rowTot}`;
-        });
-        const prodStrForSheet = detailRows.join(" | ");
-
-        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ 
-            'entry.442927045': oID, 
-            'entry.333212320': name, 
-            'entry.1385104048': email, 
-            'entry.844983788': phone, 
-            'entry.334440207': addr, 
-            'entry.1856379113': prodStrForSheet, 
-            'entry.146792905': fT 
-        })});
-        
-        document.getElementById('modal').style.display = 'none';
-        document.getElementById('thanks-popup').style.display = 'flex';
-
-        const prodDetailsWA = detailRows.map(row => "• " + row).join("\n");
-        const msg = `*NUOVO ORDINE ${oID}*\n\n*CLIENTE:* ${name}\n*EMAIL:* ${email}\n*TEL:* ${phone}\n*IND:* ${addr}\n\n*DETTAGLIO PRODOTTI:* \n${prodDetailsWA}\n\n*TOTALE FINALE:* *€ ${fT}*`;
-        window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`);
+        const detailRows = cart.map(c => `${c.qty}x ${c.Nome} (€ ${c.Prezzo}) = € ${(parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2)}`);
+        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ 'entry.442927045': oID, 'entry.333212320': name, 'entry.1385104048': email, 'entry.844983788': phone, 'entry.334440207': addr, 'entry.1856379113': detailRows.join(" | "), 'entry.146792905': fT })});
+        document.getElementById('modal').style.display = 'none'; document.getElementById('thanks-popup').style.display = 'flex';
+        window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent("*NUOVO ORDINE*\n" + detailRows.map(r => "• " + r).join("\n") + "\n\n*TOTALE:* € " + fT)}`);
     }
     load();
 </script>
