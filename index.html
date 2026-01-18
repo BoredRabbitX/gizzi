@@ -7,51 +7,69 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --gizzi-deep: #1b4332; --gizzi-gold: #b08d57; --bg: #fdfaf5; --white: #ffffff; --text: #2d2d2d; --danger: #d90429; }
+        
         * { box-sizing: border-box; scroll-behavior: smooth; }
-        html, body { overflow-x: hidden; width: 100%; margin: 0; padding: 0; }
+        html, body { overflow-x: hidden; width: 100%; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+        
         body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
         h1, h2, h3, .logo { font-family: 'Fraunces', serif; font-weight: 700; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 15px; width: 100%; }
-        header { position: fixed; top: 0; width: 100%; background: white; z-index: 2000; border-bottom: 1px solid #eee; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
+        header { position: fixed; top: 0; width: 100%; background: white; z-index: 2000; border-bottom: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
         .nav-top { height: 70px; display: flex; align-items: center; justify-content: space-between; }
         .logo { font-size: 1.4rem; color: var(--gizzi-deep); text-decoration: none; }
         
         .category-menu { display: flex; justify-content: center; gap: 10px; padding: 12px; background: white; border-top: 1px solid #f0f0f0; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
-        .category-menu a { text-decoration: none; color: #666; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 8px 16px; border: 1px solid #eee; border-radius: 50px; cursor: pointer; }
+        .category-menu::-webkit-scrollbar { display: none; }
+        .category-menu a { text-decoration: none; color: #666; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 8px 16px; border: 1px solid #eee; border-radius: 50px; cursor: pointer; transition: 0.3s; }
+        .category-menu a:hover { border-color: var(--gizzi-gold); color: var(--gizzi-gold); }
 
-        .hero { height: 40vh; margin-top: 115px; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1240&hei=500&fit=constrain,1&fmt=webp'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; width: 100%; }
+        .hero { height: 45vh; margin-top: 115px; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1240&hei=500&fit=constrain,1&fmt=webp'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 0 20px; }
+        .hero h1 { font-size: 2.2rem; margin-bottom: 10px; }
 
-        .carousel-viewport { position: relative; overflow: hidden; width: 100%; margin: 20px 0; }
+        .view-controls { text-align: center; margin: 40px 0; display: flex; justify-content: center; gap: 12px; }
+        .btn-toggle-view { background: white; border: 2px solid var(--gizzi-deep); color: var(--gizzi-deep); padding: 12px 24px; border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 0.85rem; transition: 0.4s; }
+        .btn-toggle-view.active { background: var(--gizzi-deep); color: white; transform: scale(1.05); }
+
+        .carousel-viewport { position: relative; overflow: hidden; width: 100%; margin: 20px 0; padding: 10px 0; }
         .carousel-track { display: flex; gap: 20px; width: max-content; }
         .carousel-track.animate { transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1); }
         
-        .card { background: white; border-radius: 20px; overflow: hidden; border: 1px solid #f0f0f0; text-align: center; width: 280px; flex-shrink: 0; display: flex; flex-direction: column; box-shadow: 0 8px 20px rgba(0,0,0,0.05); transition: 0.3s; opacity: 0; transform: translateY(15px); }
+        .card { 
+            background: white; border-radius: 20px; overflow: hidden; border: 1px solid #f0f0f0; 
+            text-align: center; width: 290px; flex-shrink: 0; display: flex; flex-direction: column; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); transition: 0.4s ease; opacity: 0; transform: translateY(20px);
+        }
         .card.visible { opacity: 1; transform: translateY(0); }
-        .card img { width: 100%; height: 200px; object-fit: cover; }
-        .card-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .card img { width: 100%; height: 210px; object-fit: cover; }
+        .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
         
-        .stock-tag { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 5px; }
-        .s-ok { color: #2a9d8f; }
-        .s-low { color: var(--danger); }
-        .s-out { color: #999; }
+        .stock-badge { font-size: 0.7rem; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stock-low { color: var(--danger); }
+        .stock-ok { color: #2a9d8f; }
 
-        .btn-add { background: var(--gizzi-deep); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 700; width: 100%; text-transform: uppercase; font-size: 0.8rem; }
+        .card-body h3 { font-size: 1.15rem; margin: 0 0 10px; min-height: 2.8em; color: var(--gizzi-deep); line-height: 1.3; }
+        .price { color: var(--gizzi-gold); font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
+        .price small { font-size: 0.8rem; opacity: 0.7; font-weight: 400; }
+
+        .btn-add { background: var(--gizzi-deep); color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; text-transform: uppercase; font-size: 0.85rem; transition: 0.3s; }
         .btn-add:disabled { background: #ccc; cursor: not-allowed; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-top: 30px; justify-items: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 30px; justify-items: center; width: 100%; }
 
-        #cart-panel { position: fixed; right: -100%; top: 0; width: 100%; max-width: 400px; height: 100%; background: white; z-index: 3000; transition: 0.5s cubic-bezier(0.85, 0, 0.15, 1); display: flex; flex-direction: column; }
+        #cart-panel { position: fixed; right: -100%; top: 0; width: 100%; max-width: 420px; height: 100%; background: white; z-index: 3000; transition: 0.5s cubic-bezier(0.85, 0, 0.15, 1); display: flex; flex-direction: column; }
         #cart-panel.active { right: 0; }
+        .cart-header { padding: 20px 25px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
         .cart-footer { padding: 25px; border-top: 1px solid #eee; background: white; }
 
         @media (max-width: 768px) {
+            .hero h1 { font-size: 1.7rem; }
             .category-menu { justify-content: flex-start; }
-            .card { width: 85vw; margin: 0 auto; }
+            .card { width: 82vw; margin: 0 auto; }
             .grid { grid-template-columns: 1fr; }
         }
 
-        footer { background: var(--gizzi-deep); color: white; padding: 40px 0; text-align: center; margin-top: 60px; width: 100%; }
+        footer { background: var(--gizzi-deep); color: white; padding: 50px 0; text-align: center; margin-top: 60px; width: 100%; }
     </style>
 </head>
 <body>
@@ -62,14 +80,14 @@
     <div class="container nav-top">
         <a href="#" class="logo">GRUPPO GIZZI</a>
         <div style="display:flex; gap:12px; align-items:center;">
-            <select id="lang-sel" onchange="updateLang(this.value)" style="border:none; font-weight:700; background:transparent;">
+            <select id="lang-sel" onchange="updateLang(this.value)" style="border:none; font-weight:700; background:transparent; cursor:pointer; font-family:'Montserrat';">
                 <option value="it">🇮🇹 IT</option>
                 <option value="en">🇬🇧 EN</option>
                 <option value="de">🇩🇪 DE</option>
                 <option value="hu">🇭🇺 HU</option>
             </select>
             <div onclick="toggleCart()" style="cursor:pointer; font-size:1.6rem; position:relative;">
-                🛒 <span id="cart-count" style="position:absolute; top:-8px; right:-8px; background:var(--gizzi-gold); color:white; border-radius:50%; padding:2px 6px; font-size:0.65rem;">0</span>
+                🛒 <span id="cart-count" style="position:absolute; top:-8px; right:-8px; background:var(--gizzi-gold); color:white; border-radius:50%; padding:2px 7px; font-size:0.65rem; font-weight:bold;">0</span>
             </div>
         </div>
     </div>
@@ -83,13 +101,13 @@
 
 <div class="container">
     <section class="carousel-section">
-        <h2 id="carousel-title" style="text-align:center; color:var(--gizzi-deep); font-size:1.6rem; margin-top:40px;">I Prodotti del Momento</h2>
+        <h2 id="carousel-title" style="text-align:center; color:var(--gizzi-deep); font-size:1.8rem; margin-top:50px;">I Prodotti del Momento</h2>
         <div class="carousel-viewport">
             <div id="carousel-track" class="carousel-track animate"></div>
         </div>
     </section>
 
-    <div class="view-controls" style="text-align:center; margin: 30px 0;">
+    <div class="view-controls">
         <button id="btn-view-all" class="btn-toggle-view active" onclick="switchView('all')">Tutti i Prodotti</button>
         <button id="btn-view-cats" class="btn-toggle-view" onclick="switchView('cats')">Per Categoria</button>
     </div>
@@ -97,36 +115,41 @@
 </div>
 
 <div id="cart-panel">
-    <div class="cart-header" style="padding:20px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center;">
-        <h2 style="margin:0; font-size:1.2rem;">Il Tuo Carrello</h2>
-        <span style="font-size:1.8rem; cursor:pointer;" onclick="toggleCart()">✕</span>
+    <div class="cart-header">
+        <h2 style="margin:0; font-size:1.3rem;">Il Tuo Carrello</h2>
+        <span style="font-size:2rem; cursor:pointer; color:#ccc;" onclick="toggleCart()">✕</span>
     </div>
-    <div id="cart-items" style="flex:1; overflow-y:auto; padding:20px;"></div>
+    <div style="padding:15px 25px;"><button style="background:none; border:1px solid #ff4d4d; color:#ff4d4d; padding:8px; border-radius:8px; font-size:0.75rem; width:100%; cursor:pointer; font-weight:600;" onclick="emptyCart()">SVUOTA CARRELLO</button></div>
+    <div id="cart-items" style="flex:1; overflow-y:auto; padding: 0 25px;"></div>
     <div class="cart-footer">
-        <h3 id="cart-total-display" style="margin:0 0 15px 0;">Totale: € 0.00</h3>
-        <button class="btn-add" style="background:var(--gizzi-gold); padding:15px;" onclick="openCheckout()">PROSEGUI</button>
+        <div id="shipping-info" style="font-size: 0.9rem; color: #666; margin-bottom: 8px;">Spedizione: € 0.00</div>
+        <h3 id="cart-total-display" style="margin: 0 0 20px 0; font-size: 1.5rem;">Totale: € 0.00</h3>
+        <button class="btn-add" style="background:var(--gizzi-gold); padding:18px;" onclick="openCheckout()">PROSEGUI ALL'ORDINE</button>
     </div>
 </div>
 
-<div id="modal" style="display:none; position:fixed; inset:0; background:rgba(27,67,50,0.9); z-index:4000; align-items:center; justify-content:center; backdrop-filter:blur(5px);">
-    <div style="background:var(--bg); padding:30px; border-radius:20px; width:95%; max-width:500px; position:relative;">
-        <h2 style="margin-top:0;">Spedizione</h2>
+<div id="modal" style="display:none; position:fixed; inset:0; background:rgba(27,67,50,0.9); z-index:4000; align-items:center; justify-content:center; backdrop-filter:blur(8px);">
+    <div style="background:var(--bg); padding:35px; border-radius:24px; width:95%; max-width:500px; position:relative;">
+        <span style="position:absolute; top:20px; right:20px; font-size:1.5rem; cursor:pointer;" onclick="closeCheckout()">✕</span>
+        <h2 id="checkout-header" style="margin-top:0;">Dati Spedizione</h2>
         <form onsubmit="event.preventDefault(); processOrder();">
-            <input type="text" id="f-name" placeholder="Nome *" required style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
-            <input type="tel" id="f-phone" placeholder="Telefono *" required style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
-            <input type="text" id="f-addr" placeholder="Indirizzo Completo *" required style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:1px solid #ddd;">
-            <select id="f-country" onchange="updateCartUI()" style="width:100%; padding:12px; margin-bottom:15px;">
+            <input type="text" id="f-name" placeholder="Nome e Cognome *" required style="width:100%; padding:14px; margin-bottom:12px; border-radius:12px; border:1px solid #ddd; font-family:'Montserrat';">
+            <div style="display:flex; gap:10px;">
+                <input type="email" id="f-email" placeholder="Email *" required style="width:100%; padding:14px; margin-bottom:12px; border-radius:12px; border:1px solid #ddd; font-family:'Montserrat';">
+                <input type="tel" id="f-phone" placeholder="Telefono *" required style="width:100%; padding:14px; margin-bottom:12px; border-radius:12px; border:1px solid #ddd; font-family:'Montserrat';">
+            </div>
+            <input type="text" id="f-addr" placeholder="Indirizzo Completo (Via, Civico, Città, CAP) *" required style="width:100%; padding:14px; margin-bottom:15px; border-radius:12px; border:1px solid #ddd; font-family:'Montserrat';">
+            <select id="f-country" onchange="updateCartUI()" style="width:100%; padding:14px; margin-bottom:20px; border-radius:12px; border:1px solid #ddd; font-family:'Montserrat';">
                 <option value="Italia">Italia</option>
-                <option value="Europa">Europa</option>
+                <option value="Europa">Europa (UE)</option>
             </select>
-            <button type="submit" class="btn-add">ORDINA ORA</button>
-            <p onclick="closeCheckout()" style="text-align:center; cursor:pointer; color:#999; margin-top:10px; font-size:0.8rem;">Chiudi</p>
+            <button type="submit" class="btn-add" style="padding:18px;">CONFERMA E ORDINA</button>
         </form>
     </div>
 </div>
 
 <div id="thanks-popup" style="display:none; position:fixed; inset:0; background:var(--gizzi-deep); z-index:5000; align-items:center; justify-content:center; color:white; text-align:center;">
-    <div style="padding:40px;"><h2>Grazie!</h2><p>Ordine inviato con successo via WhatsApp.</p><button onclick="clearAndReload()" style="background:var(--gizzi-gold); color:white; border:none; padding:15px 40px; border-radius:50px; cursor:pointer; margin-top:20px;">TORNA AL SITO</button></div>
+    <div style="padding:40px;"><h2>Grazie!</h2><p>L'ordine è stato inviato correttamente.</p><button onclick="clearAndReload()" style="background:var(--gizzi-gold); color:white; border:none; padding:15px 40px; border-radius:50px; cursor:pointer; font-weight:700; margin-top:20px;">TORNA AL SITO</button></div>
 </div>
 
 <footer><div class="container"><p>© 2026 Gruppo Gizzi. Cilento Authentic Experience.</p></div></footer>
@@ -134,10 +157,20 @@
 <script>
     const CONFIG = {
         catalog: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIumwZulbMAuesmG69DB8Y1bx2Y-NQXfyG7_m1-rdpZ-SoOxM0JyZtnj0_eV_K4t4drULTwV44nE5Y/pub?gid=0&single=true&output=csv",
+        formURL: "https://docs.google.com/forms/d/e/1FAIpQLSend7KPNCjTNP1d-B3zd-wvhZAVXLS3P7341yN88fm3d7D4Jw/formResponse",
         wa: "393358060715"
     };
 
     let products = [], cart = [], lang = 'it', currentView = 'all', carouselIndex = 0, originalFeatCount = 0;
+
+    function shuffleArray(array) {
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
 
     async function load() {
         const res = await fetch(CONFIG.catalog);
@@ -150,32 +183,82 @@
             let o = {};
             headers.forEach((h, i) => o[h] = cols[i]?.replace(/"/g, '').trim());
             
-            // LOGICA STOCK ROBUSTA
-            let stockVal = o.Stock || o.Quantità || o.stock || o.quantità;
-            o.StockNum = (stockVal === "" || stockVal === undefined) ? 999 : parseInt(stockVal);
+            // Stock Parsing
+            let sVal = o.Stock || o.Quantità || o.stock;
+            o.StockNum = (sVal === "" || sVal === undefined) ? 999 : parseInt(sVal);
             return o;
         });
         
         const saved = localStorage.getItem('gizzi_cart');
         if (saved) { cart = JSON.parse(saved); updateCartUI(); }
         render(); startCarousel();
-        setTimeout(() => document.querySelectorAll('.card').forEach(c => c.classList.add('visible')), 200);
+        setTimeout(() => document.querySelectorAll('.card').forEach(el => el.classList.add('visible')), 200);
     }
 
     function createCard(p, nK) {
         const isOut = p.StockNum <= 0;
         const isLow = p.StockNum > 0 && p.StockNum < 5;
-        const tag = isOut ? '<div class="stock-tag s-out">Esaurito</div>' : (isLow ? `<div class="stock-tag s-low">Ultime ${p.StockNum} unità!</div>` : '<div class="stock-tag s-ok">Disponibile</div>');
-
-        return `<div class="card">
-            <img src="${p.Immagine}" style="${isOut ? 'filter:grayscale(1); opacity:0.6;' : ''}">
+        let stockLabel = isOut ? "Esaurito" : (isLow ? "Disponibilità limitata" : "Disponibile");
+        
+        return `<div class="card ${isOut ? 'out-of-stock' : ''}">
+            <img src="${p.Immagine}" loading="lazy" style="${isOut ? 'filter:grayscale(1); opacity:0.6;' : ''}">
             <div class="card-body">
-                ${tag}
-                <h3 style="font-size:1rem; margin:5px 0;">${p[nK] || p.Nome}</h3>
-                <div style="color:var(--gizzi-gold); font-weight:700; margin-bottom:10px;">€ ${p.Prezzo}</div>
-                <button class="btn-add" ${isOut ? 'disabled' : ''} onclick="addToCart('${p.ID}')">${isOut ? 'Esaurito' : 'Aggiungi'}</button>
+                <div class="stock-badge ${isLow || isOut ? 'stock-low' : 'stock-ok'}">${stockLabel}</div>
+                <h3>${p[nK] || p.Nome}</h3>
+                <div class="price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
+                <button class="btn-add" ${isOut ? 'disabled' : ''} onclick="addToCart('${p.ID}')">
+                    ${isOut ? 'NON DISPONIBILE' : 'AGGIUNGI'}
+                </button>
             </div>
         </div>`;
+    }
+
+    function render() {
+        const nK = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
+        const cK = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
+        const activeProds = products.filter(p => p.Disponibile === 'SI');
+
+        // CAROUSEL: Solo prodotti NON esauriti
+        const feat = shuffleArray(activeProds.filter(p => p.Evidenza === 'SI' && p.StockNum > 0));
+        originalFeatCount = feat.length;
+        const fullFeat = [...feat, ...feat.slice(0, 4)];
+        document.getElementById('carousel-track').innerHTML = fullFeat.map(p => createCard(p, nK)).join('');
+
+        const uniqueCats = [...new Set(activeProds.map(p => p[cK] || p.Categoria))];
+        const shuffledCats = shuffleArray(uniqueCats);
+        document.getElementById('anchor-menu').innerHTML = shuffledCats.map(c => `<a onclick="handleCategoryClick('cat-${c.replace(/\s+/g, '')}')">${c}</a>`).join('');
+
+        let html = "";
+        if (currentView === 'all') {
+            html = `<div class="grid">${shuffleArray(activeProds).map(p => createCard(p, nK)).join('')}</div>`;
+        } else {
+            html = shuffledCats.map(c => {
+                const cP = activeProds.filter(p => (p[cK] === c || p.Categoria === c));
+                return `<div id="cat-${c.replace(/\s+/g, '')}" style="margin-top:40px; width:100%;">
+                    <h2 style="color:var(--gizzi-deep); border-bottom:2px solid var(--gizzi-gold); display:inline-block; font-size:1.6rem; margin-bottom:20px;">${c}</h2>
+                    <div class="grid">${cP.map(p => createCard(p, nK)).join('')}</div>
+                </div>`;
+            }).join('');
+        }
+        document.getElementById('negozio').innerHTML = html;
+    }
+
+    function startCarousel() {
+        const track = document.getElementById('carousel-track');
+        setInterval(() => {
+            if(!track || track.children.length <= 1) return;
+            const width = track.children[0].offsetWidth + 20;
+            carouselIndex++;
+            track.classList.add('animate');
+            track.style.transform = `translateX(-${carouselIndex * width}px)`;
+            if (carouselIndex >= originalFeatCount) {
+                setTimeout(() => {
+                    track.classList.remove('animate');
+                    carouselIndex = 0;
+                    track.style.transform = `translateX(0)`;
+                }, 800);
+            }
+        }, 4000);
     }
 
     function addToCart(id) {
@@ -183,7 +266,7 @@
         const ex = cart.find(c => c.ID == id);
         if (ex) {
             if (ex.qty < p.StockNum) ex.qty++;
-            else alert("Quantità massima raggiunta per questo prodotto.");
+            else alert("Spiacenti, disponibilità massima raggiunta.");
         } else {
             if (p.StockNum > 0) cart.push({...p, qty: 1});
         }
@@ -201,71 +284,48 @@
         saveCartUI();
     }
 
-    function render() {
-        const nK = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
-        const cK = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
-        const activeProds = products.filter(p => p.Disponibile === 'SI');
-
-        const feat = shuffleArray(activeProds.filter(p => p.Evidenza === 'SI'));
-        originalFeatCount = feat.length;
-        const fullFeat = [...feat, ...feat.slice(0, 4)];
-        document.getElementById('carousel-track').innerHTML = fullFeat.map(p => createCard(p, nK)).join('');
-
-        const uniqueCats = [...new Set(activeProds.map(p => p[cK] || p.Categoria))];
-        const shuffledCats = shuffleArray(uniqueCats);
-        document.getElementById('anchor-menu').innerHTML = shuffledCats.map(c => `<a onclick="handleCategoryClick('cat-${c.replace(/\s+/g, '')}')">${c}</a>`).join('');
-
-        let html = "";
-        if (currentView === 'all') {
-            html = `<div class="grid">${shuffleArray(activeProds).map(p => createCard(p, nK)).join('')}</div>`;
-        } else {
-            html = shuffledCats.map(c => {
-                const cP = activeProds.filter(p => (p[cK] === c || p.Categoria === c));
-                return `<div id="cat-${c.replace(/\s+/g, '')}" style="margin-top:30px; width:100%;">
-                    <h2 style="color:var(--gizzi-deep); border-bottom:2px solid var(--gizzi-gold); display:inline-block; font-size:1.4rem;">${c}</h2>
-                    <div class="grid">${cP.map(p => createCard(p, nK)).join('')}</div>
-                </div>`;
-            }).join('');
-        }
-        document.getElementById('negozio').innerHTML = html;
-    }
-
-    // ... (restanti funzioni standard: updateCartUI, switchView, toggleCart, startCarousel, etc.)
-    function shuffleArray(array) { let arr = [...array]; for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
-    function startCarousel() { const track = document.getElementById('carousel-track'); setInterval(() => { if(!track || track.children.length <= 1) return; const width = track.children[0].offsetWidth + 20; carouselIndex++; track.classList.add('animate'); track.style.transform = `translateX(-${carouselIndex * width}px)`; if (carouselIndex >= originalFeatCount) { setTimeout(() => { track.classList.remove('animate'); carouselIndex = 0; track.style.transform = `translateX(0)`; }, 800); } }, 4000); }
-    function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); document.getElementById('cart-overlay').style.display = (document.getElementById('cart-overlay').style.display === 'block' ? 'none' : 'block'); }
-    function saveCartUI() { localStorage.setItem('gizzi_cart', JSON.stringify(cart)); updateCartUI(); }
     function updateCartUI() {
+        const nK = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
         let sub = 0;
         document.getElementById('cart-items').innerHTML = cart.map(c => {
+            const p = products.find(x => x.ID == c.ID);
             const rP = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
             sub += parseFloat(rP);
-            return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <div style="font-size:0.8rem;">${c.Nome}</div>
-                <div style="display:flex; align-items:center; gap:5px;">
-                    <button onclick="updateCartQty('${c.ID}', -1)">-</button>
+            return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:12px;">
+                <div style="flex:1;"><strong style="font-size:0.9rem;">${c[nK] || c.Nome}</strong><br><small>Disponibilità: ${p.StockNum}</small></div>
+                <div style="display:flex; align-items:center; gap:10px; background:#f5f5f5; padding:4px 10px; border-radius:10px;">
+                    <button style="border:none;background:none;font-weight:bold;cursor:pointer;padding:5px;" onclick="updateCartQty('${c.ID}', -1)">-</button>
                     <span>${c.qty}</span>
-                    <button onclick="updateCartQty('${c.ID}', 1)">+</button>
+                    <button style="border:none;background:none;font-weight:bold;cursor:pointer;padding:5px;" onclick="updateCartQty('${c.ID}', 1)">+</button>
                 </div>
-                <div style="font-weight:700;">€ ${rP}</div>
+                <div style="min-width:60px; text-align:right; font-weight:700;">€ ${rP}</div>
             </div>`;
         }).join('');
         const country = document.getElementById('f-country').value;
         let ship = country === "Italia" ? (sub >= 120 ? 0 : 13) : 50;
+        document.getElementById('shipping-info').innerText = `Spedizione (${country}): € ${ship.toFixed(2)}`;
         document.getElementById('cart-total-display').innerText = `Totale: € ${(sub + ship).toFixed(2)}`;
         document.getElementById('cart-count').innerText = cart.reduce((a,b) => a + b.qty, 0);
     }
+
+    function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); document.getElementById('cart-overlay').style.display = (document.getElementById('cart-overlay').style.display === 'block' ? 'none' : 'block'); }
     function switchView(v) { currentView = v; document.getElementById('btn-view-all').classList.toggle('active', v === 'all'); document.getElementById('btn-view-cats').classList.toggle('active', v === 'cats'); render(); setTimeout(() => document.querySelectorAll('.card').forEach(c => c.classList.add('visible')), 50); }
     function openCheckout() { document.getElementById('modal').style.display = 'flex'; }
     function closeCheckout() { document.getElementById('modal').style.display = 'none'; }
+    function saveCartUI() { localStorage.setItem('gizzi_cart', JSON.stringify(cart)); updateCartUI(); }
     function clearAndReload() { localStorage.removeItem('gizzi_cart'); location.reload(); }
     function handleCategoryClick(id) { if(currentView !== 'cats') switchView('cats'); setTimeout(() => { const t = document.getElementById(id); if(t) window.scrollTo({top: t.offsetTop - 120, behavior:'smooth'}); }, 100); }
-    function processOrder() {
-        const n = document.getElementById('f-name').value, p = document.getElementById('f-phone').value, a = document.getElementById('f-addr').value;
-        const fT = document.getElementById('cart-total-display').innerText.split('€')[1].trim();
-        const msg = `*ORDINE GIZZI*\n\nCliente: ${n}\nTel: ${p}\nIndirizzo: ${a}\n\nProdotti:\n` + cart.map(c => `• ${c.qty}x ${c.Nome}`).join("\n") + `\n\n*Totale:* € ${fT}`;
-        window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`);
-        document.getElementById('thanks-popup').style.display = 'flex';
+    function updateLang(v) { lang = v; render(); updateCartUI(); }
+
+    async function processOrder() {
+        const name = document.getElementById('f-name').value, phone = document.getElementById('f-phone').value, addr = document.getElementById('f-addr').value;
+        const fT = document.getElementById('cart-total-display').innerText.split('€')[1].trim(), oID = "GZ-" + Date.now().toString().slice(-6);
+        const detailRows = cart.map(c => `${c.qty}x ${c.Nome} (€ ${c.Prezzo}) = € ${(parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2)}`);
+        
+        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ 'entry.442927045': oID, 'entry.333212320': name, 'entry.844983788': phone, 'entry.334440207': addr, 'entry.1856379113': detailRows.join(" | "), 'entry.146792905': fT })});
+        
+        document.getElementById('modal').style.display = 'none'; document.getElementById('thanks-popup').style.display = 'flex';
+        window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent("*ORDINE " + oID + "*\n\n*CLIENTE:* " + name + "\n\n" + detailRows.join("\n") + "\n\n*TOTALE:* € " + fT)}`);
     }
     load();
 </script>
