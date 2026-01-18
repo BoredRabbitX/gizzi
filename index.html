@@ -36,10 +36,21 @@
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 30px; }
 
-        /* CARRELLO DINAMICO */
-        #cart-panel { position: fixed; right: -450px; top: 0; width: 400px; max-width: 100%; height: 100vh; background: white; z-index: 3000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); padding: 25px; display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.2); }
+        /* CARRELLO OTTIMIZZATO */
+        #cart-panel { 
+            position: fixed; right: -450px; top: 0; width: 400px; max-width: 100%; height: 100vh; 
+            background: white; z-index: 3000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); 
+            padding: 0; display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.2); 
+        }
         #cart-panel.active { right: 0; }
-        #cart-items { flex-grow: 1; overflow-y: auto; margin-bottom: 15px; padding-right: 5px; }
+        
+        .cart-header { padding: 25px; border-bottom: 1px solid #eee; position: relative; }
+        .cart-footer { padding: 25px; border-top: 2px solid #eee; background: #fff; margin-top: auto; }
+        
+        #cart-items { 
+            flex: 1; overflow-y: auto; padding: 0 25px; 
+            max-height: calc(100vh - 250px); /* Impedisce al carrello di spingere i totali fuori schermo */
+        }
 
         /* MODAL PROFESSIONALE */
         .modal { display: none; position: fixed; inset: 0; background: rgba(27, 67, 50, 0.9); z-index: 4000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
@@ -63,9 +74,6 @@
             margin-top: 10px; box-shadow: 0 4px 15px rgba(27, 67, 50, 0.2); transition: 0.3s;
         }
         .btn-order-now:hover { background: #25D366; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3); }
-
-        .close-modal { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #999; transition: 0.3s; }
-        .close-modal:hover { color: var(--gizzi-gold); transform: rotate(90deg); }
 
         .cart-qty-ctrl { display: flex; align-items: center; gap: 8px; background: #f0f0f0; border-radius: 5px; padding: 2px 6px; }
         .cart-qty-btn { border: none; background: none; font-weight: bold; font-size: 1rem; cursor: pointer; color: var(--gizzi-deep); }
@@ -118,43 +126,37 @@
 </div>
 
 <div id="cart-panel">
-    <span style="position:absolute; top:20px; right:20px; font-size:1.5rem; cursor:pointer; color:#999;" onclick="toggleCart()">✕</span>
-    <h2 id="cart-label" style="color:var(--gizzi-deep);">Il Tuo Carrello</h2>
-    <button id="btn-clear-txt" style="background:none; border:1px solid #ff4d4d; color:#ff4d4d; padding:5px 10px; border-radius:5px; font-size:0.75rem; cursor:pointer; margin-bottom:15px; align-self:flex-start; font-family:'Montserrat';" onclick="emptyCart()">🗑️ Svuota Carrello</button>
+    <div class="cart-header">
+        <span style="position:absolute; top:20px; right:20px; font-size:1.5rem; cursor:pointer; color:#999;" onclick="toggleCart()">✕</span>
+        <h2 id="cart-label" style="margin:0; color:var(--gizzi-deep);">Il Tuo Carrello</h2>
+        <button id="btn-clear-txt" style="background:none; border:1px solid #ff4d4d; color:#ff4d4d; padding:4px 8px; border-radius:5px; font-size:0.7rem; cursor:pointer; margin-top:10px; font-family:'Montserrat';" onclick="emptyCart()">🗑️ Svuota Carrello</button>
+    </div>
+    
     <div id="cart-items"></div>
-    <div style="border-top: 2px solid #eee; padding-top: 15px;">
+    
+    <div class="cart-footer">
         <div id="shipping-info" style="font-size: 0.9rem; color: #666; margin-bottom: 5px; font-family:'Montserrat';">Spedizione: € 0.00</div>
         <h3 id="cart-total-display" style="margin-bottom: 15px; font-size: 1.5rem; font-family:'Montserrat';">Totale: € 0.00</h3>
-        <button id="btn-cart-checkout" class="btn-add" style="background:var(--gizzi-gold); font-size:1.1rem;" onclick="openCheckout()">PROSEGUI</button>
+        <button id="btn-cart-checkout" class="btn-add" style="background:var(--gizzi-gold); font-size:1.1rem; padding:15px;" onclick="openCheckout()">PROSEGUI</button>
     </div>
 </div>
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <span class="close-modal" onclick="closeCheckout()">✕</span>
+        <span style="position:absolute; top:20px; right:20px; font-size:1.5rem; cursor:pointer; color:#999;" onclick="closeCheckout()">✕</span>
         <h2 id="checkout-header">Spedizione</h2>
         <form onsubmit="event.preventDefault(); processOrder();">
             <div class="input-group">
                 <input type="text" id="f-name" placeholder="Nome e Cognome *" required>
             </div>
             <div class="form-row">
-                <div class="input-group">
-                    <input type="email" id="f-email" placeholder="Email *" required>
-                </div>
-                <div class="input-group">
-                    <input type="tel" id="f-phone" placeholder="Telefono *" required>
-                </div>
+                <div class="input-group"><input type="email" id="f-email" placeholder="Email *" required></div>
+                <div class="input-group"><input type="tel" id="f-phone" placeholder="Telefono *" required></div>
             </div>
-            <div class="input-group">
-                <input type="text" id="f-street" placeholder="Indirizzo e Numero Civico *" required>
-            </div>
+            <div class="input-group"><input type="text" id="f-street" placeholder="Indirizzo e Numero Civico *" required></div>
             <div class="form-row">
-                <div class="input-group" style="flex: 2;">
-                    <input type="text" id="f-city" placeholder="Città *" required>
-                </div>
-                <div class="input-group" style="flex: 1;">
-                    <input type="text" id="f-cap" placeholder="CAP *" required>
-                </div>
+                <div class="input-group" style="flex: 2;"><input type="text" id="f-city" placeholder="Città *" required></div>
+                <div class="input-group" style="flex: 1;"><input type="text" id="f-cap" placeholder="CAP *" required></div>
             </div>
             <div class="input-group">
                 <select id="f-country" onchange="updateCartUI()">
@@ -303,7 +305,6 @@
     function removeProduct(id) { cart = cart.filter(c => c.ID !== id); saveCartUI(); }
     function emptyCart() { if(confirm(UI[lang].clear + "?")) { cart = []; saveCartUI(); } }
     function saveCartUI() { localStorage.setItem('gizzi_cart', JSON.stringify(cart)); updateCartUI(); }
-    
     function updateCartQty(id, delta) {
         const it = cart.find(c => c.ID == id);
         if(it) { it.qty += delta; if(it.qty <= 0) cart = cart.filter(c => c.ID !== id); }
@@ -344,22 +345,13 @@
         const addr = `${document.getElementById('f-street').value}, ${document.getElementById('f-cap').value} ${document.getElementById('f-city').value} (${document.getElementById('f-country').value})`;
         const fT = document.getElementById('cart-total-display').innerText.split('€')[1].trim(), oID = "GZ-" + Date.now().toString().slice(-6);
         
-        // CREAZIONE STRINGA DETTAGLIATA PER GOOGLE SHEET
         const detailRows = cart.map(c => {
             const rowTot = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
             return `${c.qty}x ${c.Nome} (€ ${c.Prezzo}) = € ${rowTot}`;
         });
         const prodStrForSheet = detailRows.join(" | ");
 
-        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ 
-            'entry.442927045': oID, 
-            'entry.333212320': name, 
-            'entry.1385104048': email, 
-            'entry.844983788': phone, 
-            'entry.334440207': addr, 
-            'entry.1856379113': prodStrForSheet, 
-            'entry.146792905': fT 
-        })});
+        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ 'entry.442927045': oID, 'entry.333212320': name, 'entry.1385104048': email, 'entry.844983788': phone, 'entry.334440207': addr, 'entry.1856379113': prodStrForSheet, 'entry.146792905': fT })});
         
         document.getElementById('modal').style.display = 'none';
         document.getElementById('thanks-popup').style.display = 'flex';
