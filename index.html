@@ -32,10 +32,9 @@
         .stock-badge { font-size: 0.7rem; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
         .stock-low { color: var(--danger); }
         .stock-ok { color: #2a9d8f; }
-        .card-body h3 { font-size: 1.15rem; margin: 0 0 10px; min-height: 2.8em; color: var(--gizzi-deep); line-height: 1.3; }
         .price { color: var(--gizzi-gold); font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
         .price small { font-size: 0.8rem; opacity: 0.7; font-weight: 400; }
-        .btn-add { background: var(--gizzi-deep); color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; text-transform: uppercase; font-size: 0.85rem; transition: 0.3s; }
+        .btn-add { background: var(--gizzi-deep); color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; text-transform: uppercase; font-size: 0.85rem; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 30px; justify-items: center; width: 100%; }
         #cart-panel { position: fixed; right: -100%; top: 0; width: 100%; max-width: 420px; height: 100%; background: white; z-index: 3000; transition: 0.5s cubic-bezier(0.85, 0, 0.15, 1); display: flex; flex-direction: column; }
         #cart-panel.active { right: 0; }
@@ -88,22 +87,22 @@
 
 <div id="cart-panel">
     <div class="cart-header">
-        <h2 style="margin:0; font-size:1.3rem;">Il Tuo Carrello</h2>
+        <h2 id="cart-label" style="margin:0; font-size:1.3rem;">Il Tuo Carrello</h2>
         <span style="font-size:2rem; cursor:pointer; color:#ccc;" onclick="toggleCart()">✕</span>
     </div>
-    <div style="padding:15px 25px;"><button style="background:none; border:1px solid #ff4d4d; color:#ff4d4d; padding:8px; border-radius:8px; font-size:0.75rem; width:100%; cursor:pointer; font-weight:600;" onclick="emptyCart()">SVUOTA CARRELLO</button></div>
+    <div style="padding:15px 25px;"><button id="btn-clear" style="background:none; border:1px solid #ff4d4d; color:#ff4d4d; padding:8px; border-radius:8px; font-size:0.75rem; width:100%; cursor:pointer; font-weight:600;" onclick="emptyCart()">SVUOTA CARRELLO</button></div>
     <div id="cart-items" style="flex:1; overflow-y:auto; padding: 0 25px;"></div>
     <div class="cart-footer">
         <div id="shipping-info" style="font-size: 0.9rem; color: #666; margin-bottom: 8px;">Spedizione: € 0.00</div>
         <h3 id="cart-total-display" style="margin: 0 0 20px 0; font-size: 1.5rem;">Totale: € 0.00</h3>
-        <button class="btn-add" style="background:var(--gizzi-gold); padding:18px;" onclick="openCheckout()">PROSEGUI ALL'ORDINE</button>
+        <button id="btn-checkout" class="btn-add" style="background:var(--gizzi-gold); padding:18px;" onclick="openCheckout()">PROSEGUI ALL'ORDINE</button>
     </div>
 </div>
 
 <div id="modal" style="display:none; position:fixed; inset:0; background:rgba(27,67,50,0.9); z-index:4000; align-items:center; justify-content:center; backdrop-filter:blur(8px);">
     <div style="background:var(--bg); padding:35px; border-radius:24px; width:95%; max-width:500px; position:relative;">
         <span style="position:absolute; top:20px; right:20px; font-size:1.5rem; cursor:pointer;" onclick="closeCheckout()">✕</span>
-        <h2 id="checkout-header" style="margin-top:0;">Dati Spedizione</h2>
+        <h2 id="modal-header">Dati Spedizione</h2>
         <form onsubmit="event.preventDefault(); processOrder();">
             <input type="text" id="f-name" placeholder="Nome e Cognome *" required style="width:100%; padding:14px; margin-bottom:12px; border-radius:12px; border:1px solid #ddd; font-family:'Montserrat';">
             <div style="display:flex; gap:10px;">
@@ -115,13 +114,13 @@
                 <option value="Italia">Italia</option>
                 <option value="Europa">Europa (UE)</option>
             </select>
-            <button type="submit" class="btn-add" style="padding:18px;">CONFERMA E ORDINA</button>
+            <button id="btn-submit" type="submit" class="btn-add" style="padding:18px;">CONFERMA E ORDINA</button>
         </form>
     </div>
 </div>
 
 <div id="thanks-popup" style="display:none; position:fixed; inset:0; background:var(--gizzi-deep); z-index:5000; align-items:center; justify-content:center; color:white; text-align:center;">
-    <div style="padding:40px;"><h2>Grazie!</h2><p>L'ordine è stato inviato correttamente.</p><button onclick="clearAndReload()" style="background:var(--gizzi-gold); color:white; border:none; padding:15px 40px; border-radius:50px; cursor:pointer; font-weight:700; margin-top:20px;">TORNA AL SITO</button></div>
+    <div style="padding:40px;"><h2 id="thanks-h">Grazie!</h2><p id="thanks-p">L'ordine è stato inviato correttamente.</p><button id="thanks-btn" onclick="clearAndReload()" style="background:var(--gizzi-gold); color:white; border:none; padding:15px 40px; border-radius:50px; cursor:pointer; font-weight:700; margin-top:20px;">TORNA AL SITO</button></div>
 </div>
 
 <footer><div class="container"><p>© 2026 Gruppo Gizzi. Cilento Authentic Experience.</p></div></footer>
@@ -131,6 +130,13 @@
         catalog: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIumwZulbMAuesmG69DB8Y1bx2Y-NQXfyG7_m1-rdpZ-SoOxM0JyZtnj0_eV_K4t4drULTwV44nE5Y/pub?gid=0&single=true&output=csv",
         formURL: "https://docs.google.com/forms/d/e/1FAIpQLSend7KPNCjTNP1d-B3zd-wvhZAVXLS3P7341yN88fm3d7D4Jw/formResponse",
         wa: "393358060715"
+    };
+
+    const UI = {
+        it: { h1: "L'Oro del Cilento, a casa tua.", p: "Eccellenza gastronomica.", add: "AGGIUNGI", total: "Totale", cart: "Il Tuo Carrello", ship: "Spedizione", order: "ORDINA ORA", clear: "SVUOTA CARRELLO", moments: "I Prodotti del Momento", all: "Tutti i Prodotti", byCat: "Per Categoria", maxQty: "Quantità massima", out: "Esaurito", low: "Disponibilità limitata", ok: "Disponibile", alertStock: "Disponibilità massima raggiunta.", alertEmpty: "Il carrello è vuoto!", thanksH: "Grazie!", thanksP: "L'ordine è stato inviato correttamente.", back: "TORNA AL SITO", modH: "Dati Spedizione", conf: "CONFERMA E ORDINA" },
+        en: { h1: "Cilento's Gold at home.", p: "Gastronomic excellence.", add: "ADD", total: "Total", cart: "Your Cart", ship: "Shipping", order: "ORDER NOW", clear: "EMPTY CART", moments: "Best Sellers", all: "All Products", byCat: "By Category", maxQty: "Max quantity", out: "Out of Stock", low: "Limited availability", ok: "Available", alertStock: "Maximum availability reached.", alertEmpty: "Cart is empty!", thanksH: "Thank you!", thanksP: "Order sent successfully.", back: "BACK TO HOME", modH: "Shipping Details", conf: "CONFIRM ORDER" },
+        de: { h1: "Cilento Gold für Sie.", p: "Kulinarische Exzellenz.", add: "ZUFÜGEN", total: "Gesamt", cart: "Warenkorb", ship: "Versand", order: "JETZT BESTELLEN", clear: "LEEREN", moments: "Highlights", all: "Alle Produkte", byCat: "Nach Kategorie", maxQty: "Maximalmenge", out: "Ausverkauft", low: "Begrenzte Menge", ok: "Verfügbar", alertStock: "Maximal verfügbare Menge erreicht.", alertEmpty: "Warenkorb ist leer!", thanksH: "Danke!", thanksP: "Bestellung erfolgreich gesendet.", back: "ZURÜCK", modH: "Versanddetails", conf: "BESTÄTIGEN" },
+        hu: { h1: "Cilento Aranya otthonában.", p: "Gasztronómiai élmény.", add: "HOZZÁAD", total: "Összesen", cart: "Kosár", ship: "Szállítás", order: "RENDELÉS", clear: "ÜRETÉS", moments: "Kiemelt termékek", all: "Összes termék", byCat: "Kategóriák", maxQty: "Max. mennyiség", out: "Elfogyott", low: "Limitált készlet", ok: "Elérhető", alertStock: "Elérte a maximális készletet.", alertEmpty: "A kosár üres!", thanksH: "Köszönjük!", thanksP: "Rendelés sikeresen elküldve.", back: "VISSZA", modH: "Szállítási adatok", conf: "RENDELÉS MEGERŐSÍTÉSE" }
     };
 
     let products = [], cart = [], lang = 'it', currentView = 'all', carouselIndex = 0, originalFeatCount = 0;
@@ -153,20 +159,37 @@
         const saved = localStorage.getItem('gizzi_cart');
         if (saved) { cart = JSON.parse(saved); updateCartUI(); }
         render(); startCarousel();
-        setTimeout(() => document.querySelectorAll('.card').forEach(el => el.classList.add('visible')), 200);
+    }
+
+    function updateLang(v) {
+        lang = v;
+        document.getElementById('hero-h1').innerText = UI[lang].h1;
+        document.getElementById('hero-p').innerText = UI[lang].p;
+        document.getElementById('carousel-title').innerText = UI[lang].moments;
+        document.getElementById('btn-view-all').innerText = UI[lang].all;
+        document.getElementById('btn-view-cats').innerText = UI[lang].byCat;
+        document.getElementById('cart-label').innerText = UI[lang].cart;
+        document.getElementById('btn-clear').innerText = UI[lang].clear;
+        document.getElementById('btn-checkout').innerText = UI[lang].order;
+        document.getElementById('modal-header').innerText = UI[lang].modH;
+        document.getElementById('btn-submit').innerText = UI[lang].conf;
+        document.getElementById('thanks-h').innerText = UI[lang].thanksH;
+        document.getElementById('thanks-p').innerText = UI[lang].thanksP;
+        document.getElementById('thanks-btn').innerText = UI[lang].back;
+        render(); updateCartUI();
     }
 
     function createCard(p, nK) {
         const isOut = p.StockNum <= 0;
         const isLow = p.StockNum > 0 && p.StockNum < 5;
-        let stockLabel = isOut ? "Esaurito" : (isLow ? "Disponibilità limitata" : "Disponibile");
-        return `<div class="card">
+        let stockLabel = isOut ? UI[lang].out : (isLow ? UI[lang].low : UI[lang].ok);
+        return `<div class="card visible">
             <img src="${p.Immagine}" loading="lazy" style="${isOut ? 'filter:grayscale(1); opacity:0.6;' : ''}">
             <div class="card-body">
                 <div class="stock-badge ${isLow || isOut ? 'stock-low' : 'stock-ok'}">${stockLabel}</div>
                 <h3>${p[nK] || p.Nome}</h3>
                 <div class="price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
-                <button class="btn-add" ${isOut ? 'disabled' : ''} onclick="addToCart('${p.ID}')">${isOut ? 'NON DISPONIBILE' : 'AGGIUNGI'}</button>
+                <button class="btn-add" ${isOut ? 'disabled' : ''} onclick="addToCart('${p.ID}')">${isOut ? UI[lang].out : UI[lang].add}</button>
             </div>
         </div>`;
     }
@@ -196,7 +219,7 @@
             const rP = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
             sub += parseFloat(rP);
             return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:12px;">
-                <div style="flex:1;"><strong style="font-size:0.9rem;">${c[nK] || c.Nome}</strong><br><small>Stock: ${p.StockNum}</small></div>
+                <div style="flex:1;"><strong style="font-size:0.9rem;">${c[nK] || c.Nome}</strong><br><small>${UI[lang].maxQty}: ${p.StockNum}</small></div>
                 <div style="display:flex; align-items:center; gap:10px; background:#f5f5f5; padding:4px 10px; border-radius:10px;">
                     <button style="border:none;background:none;font-weight:bold;cursor:pointer;" onclick="updateCartQty('${c.ID}', -1)">-</button>
                     <span>${c.qty}</span>
@@ -207,25 +230,23 @@
             </div>`;
         }).join('');
         const country = document.getElementById('f-country').value;
-        // LOGICA SPESE SPEDIZIONE: 0 se carrello vuoto
         let ship = (cart.length === 0) ? 0 : (country === "Italia" ? (sub >= 120 ? 0 : 13) : 50);
-        document.getElementById('shipping-info').innerText = `Spedizione (${country}): € ${ship.toFixed(2)}`;
-        document.getElementById('cart-total-display').innerText = `Totale: € ${(sub + ship).toFixed(2)}`;
+        document.getElementById('shipping-info').innerText = `${UI[lang].ship} (${country}): € ${ship.toFixed(2)}`;
+        document.getElementById('cart-total-display').innerText = `${UI[lang].total}: € ${(sub + ship).toFixed(2)}`;
         document.getElementById('cart-count').innerText = cart.reduce((a,b) => a + b.qty, 0);
     }
 
-    function addToCart(id) { const p = products.find(x => x.ID == id); const ex = cart.find(c => c.ID == id); if (ex) { if (ex.qty < p.StockNum) ex.qty++; else alert("Spiacenti, disponibilità massima raggiunta."); } else { if (p.StockNum > 0) cart.push({...p, qty: 1}); } saveCartUI(); if(!document.getElementById('cart-panel').classList.contains('active')) toggleCart(); }
+    function addToCart(id) { const p = products.find(x => x.ID == id); const ex = cart.find(c => c.ID == id); if (ex) { if (ex.qty < p.StockNum) ex.qty++; else alert(UI[lang].alertStock); } else { if (p.StockNum > 0) cart.push({...p, qty: 1}); } saveCartUI(); if(!document.getElementById('cart-panel').classList.contains('active')) toggleCart(); }
+    function updateCartQty(id, delta) { const it = cart.find(c => c.ID == id); const p = products.find(x => x.ID == id); if(it) { if (delta > 0 && it.qty >= p.StockNum) return alert(UI[lang].alertStock); it.qty += delta; if(it.qty <= 0) cart = cart.filter(c => c.ID !== id); } saveCartUI(); }
     function removeProduct(id) { cart = cart.filter(c => c.ID !== id); saveCartUI(); }
-    function emptyCart() { if(confirm("Svuotare il carrello?")) { cart = []; saveCartUI(); } }
-    function updateCartQty(id, delta) { const it = cart.find(c => c.ID == id); const p = products.find(x => x.ID == id); if(it) { if (delta > 0 && it.qty >= p.StockNum) return alert("Scorte esaurite."); it.qty += delta; if(it.qty <= 0) cart = cart.filter(c => c.ID !== id); } saveCartUI(); }
-    function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); document.getElementById('cart-overlay').style.display = (document.getElementById('cart-overlay').style.display === 'block' ? 'none' : 'block'); }
-    function switchView(v) { currentView = v; document.getElementById('btn-view-all').classList.toggle('active', v === 'all'); document.getElementById('btn-view-cats').classList.toggle('active', v === 'cats'); render(); setTimeout(() => document.querySelectorAll('.card').forEach(c => c.classList.add('visible')), 50); }
-    function openCheckout() { if(cart.length === 0) return alert("Il carrello è vuoto!"); document.getElementById('modal').style.display = 'flex'; }
-    function closeCheckout() { document.getElementById('modal').style.display = 'none'; }
+    function emptyCart() { if(confirm(UI[lang].clear + "?")) { cart = []; saveCartUI(); } }
     function saveCartUI() { localStorage.setItem('gizzi_cart', JSON.stringify(cart)); updateCartUI(); }
-    function clearAndReload() { localStorage.removeItem('gizzi_cart'); location.reload(); }
+    function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); document.getElementById('cart-overlay').style.display = (document.getElementById('cart-overlay').style.display === 'block' ? 'none' : 'block'); }
+    function switchView(v) { currentView = v; document.getElementById('btn-view-all').classList.toggle('active', v === 'all'); document.getElementById('btn-view-cats').classList.toggle('active', v === 'cats'); render(); }
     function handleCategoryClick(id) { if(currentView !== 'cats') switchView('cats'); setTimeout(() => { const t = document.getElementById(id); if(t) window.scrollTo({top: t.offsetTop - 120, behavior:'smooth'}); }, 100); }
-    function updateLang(v) { lang = v; render(); updateCartUI(); }
+    function openCheckout() { if(cart.length === 0) return alert(UI[lang].alertEmpty); document.getElementById('modal').style.display = 'flex'; }
+    function closeCheckout() { document.getElementById('modal').style.display = 'none'; }
+    function clearAndReload() { localStorage.removeItem('gizzi_cart'); location.reload(); }
     function startCarousel() { const track = document.getElementById('carousel-track'); setInterval(() => { if(!track || track.children.length <= 1) return; const width = track.children[0].offsetWidth + 20; carouselIndex++; track.classList.add('animate'); track.style.transform = `translateX(-${carouselIndex * width}px)`; if (carouselIndex >= originalFeatCount) { setTimeout(() => { track.classList.remove('animate'); carouselIndex = 0; track.style.transform = `translateX(0)`; }, 800); } }, 4000); }
 
     async function processOrder() {
