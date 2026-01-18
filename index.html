@@ -33,15 +33,17 @@
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 30px; }
 
+        /* CARRELLO E OVERLAY */
         #cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2500; display: none; opacity: 0; transition: 0.3s; }
         #cart-overlay.active { display: block; opacity: 1; }
 
-        #cart-panel { position: fixed; right: -450px; top: 0; width: 400px; max-width: 100%; height: 100vh; background: white; z-index: 3000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); padding: 30px; display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.2); }
+        #cart-panel { position: fixed; right: -450px; top: 0; width: 400px; max-width: 100%; height: 100vh; background: white; z-index: 3000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); padding: 25px; display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.2); }
         #cart-panel.active { right: 0; }
         
         .close-cart { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #999; }
         .btn-clear-cart { background: none; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 5px 10px; border-radius: 5px; font-size: 0.75rem; cursor: pointer; margin-bottom: 15px; align-self: flex-start; font-weight: 600; }
 
+        #cart-items { flex-grow: 1; overflow-y: auto; padding-right: 5px; margin-bottom: 15px; max-height: 60vh; }
         .cart-qty-ctrl { display: flex; align-items: center; gap: 8px; background: #f0f0f0; border-radius: 5px; padding: 2px 6px; }
         .cart-qty-btn { border: none; background: none; font-weight: bold; font-size: 1rem; cursor: pointer; color: var(--gizzi-deep); }
 
@@ -50,11 +52,12 @@
             .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
             .grid .card img { height: 140px; }
             .grid .card-body h3 { font-size: 0.9rem; min-height: 2.2em; }
+            #cart-panel { width: 100%; right: -100%; }
         }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 4000; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 95%; max-width: 450px; }
-        input, select { width: 100%; padding: 10px; margin-bottom: 12px; border-radius: 5px; border: 1px solid #ddd; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 95%; max-width: 450px; position: relative; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 1rem; }
         .thanks-popup { display: none; position: fixed; inset: 0; background: var(--gizzi-deep); z-index: 5000; align-items: center; justify-content: center; color: white; text-align: center; }
         footer { background: var(--gizzi-deep); color: white; padding: 40px 0; text-align: center; margin-top: 50px; }
     </style>
@@ -102,17 +105,18 @@
     <span class="close-cart" onclick="toggleCart()">✕</span>
     <h2 id="cart-label">Il Tuo Carrello</h2>
     <button id="btn-clear-txt" class="btn-clear-cart" onclick="emptyCart()">🗑️ Svuota Carrello</button>
-    <div id="cart-items" style="flex-grow:1; overflow-y:auto;"></div>
-    <div style="border-top: 1px solid #eee; padding-top: 20px;">
-        <div id="shipping-info" style="font-size: 0.8rem; color: #666; margin-bottom: 5px;">Spedizione: € 0.00</div>
-        <h3 id="cart-total-display">Totale: € 0.00</h3>
-        <button id="btn-cart-checkout" class="btn-add" style="background:var(--gizzi-gold);" onclick="openCheckout()">PROSEGUI</button>
+    <div id="cart-items"></div>
+    <div style="border-top: 2px solid #eee; padding-top: 15px; background: white;">
+        <div id="shipping-info" style="font-size: 0.9rem; color: #666; margin-bottom: 5px; font-weight: 600;">Spedizione: € 0.00</div>
+        <h3 id="cart-total-display" style="margin-bottom: 15px; font-size: 1.4rem;">Totale: € 0.00</h3>
+        <button id="btn-cart-checkout" class="btn-add" style="background:var(--gizzi-gold); padding: 15px; font-size: 1.1rem;" onclick="openCheckout()">PROSEGUI</button>
     </div>
 </div>
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <h2 id="checkout-header">Spedizione</h2>
+        <span class="close-cart" onclick="closeCheckout()">✕</span>
+        <h2 id="checkout-header" style="margin-bottom: 20px;">Spedizione</h2>
         <form onsubmit="event.preventDefault(); processOrder();">
             <input type="text" id="f-name" placeholder="Nome e Cognome *" required>
             <input type="email" id="f-email" placeholder="Email *" required>
@@ -124,7 +128,8 @@
                 <option value="Europa">Europa (UE)</option>
                 <option value="Ungheria">Ungheria</option>
             </select>
-            <button type="submit" id="btn-order-now" class="btn-add" style="background:#25D366;">ORDINA ORA</button>
+            <button type="submit" id="btn-order-now" class="btn-add" style="background:#25D366; padding: 15px;">ORDINA ORA</button>
+            <p onclick="closeCheckout()" style="text-align: center; color: #999; cursor: pointer; margin-top: 15px; font-size: 0.9rem;">Continua lo shopping</p>
         </form>
     </div>
 </div>
@@ -133,7 +138,7 @@
     <div style="padding:40px;">
         <h2 id="thanks-h2-txt">Grazie!</h2>
         <p id="thanks-p-txt">Ordine inviato con successo.</p>
-        <button onclick="clearAndReload()" style="background:var(--gizzi-gold); color:white; border:none; padding:15px 40px; border-radius:50px; cursor:pointer;">OK</button>
+        <button onclick="clearAndReload()" style="background:var(--gizzi-gold); color:white; border:none; padding:15px 40px; border-radius:50px; cursor:pointer; margin-top: 20px;">TORNA ALLA HOME</button>
     </div>
 </div>
 
@@ -196,7 +201,6 @@
 
     function updateLang(val) {
         lang = val;
-        // Aggiorna testi UI
         document.getElementById('hero-h1').innerText = UI[lang].h1;
         document.getElementById('hero-p').innerText = UI[lang].p;
         document.getElementById('cart-label').innerText = UI[lang].cart;
@@ -208,18 +212,12 @@
         document.getElementById('thanks-p-txt').innerText = UI[lang].thanksP;
         document.getElementById('carousel-title').innerText = UI[lang].moments;
 
-        // AUTO-SET NAZIONE E SPEDIZIONE
         const countrySel = document.getElementById('f-country');
-        if (lang === 'it') {
-            countrySel.value = "Italia";
-        } else if (lang === 'hu') {
-            countrySel.value = "Ungheria";
-        } else {
-            countrySel.value = "Europa";
-        }
+        if (lang === 'it') countrySel.value = "Italia";
+        else if (lang === 'hu') countrySel.value = "Ungheria";
+        else countrySel.value = "Europa";
 
-        render(); 
-        updateCartUI();
+        render(); updateCartUI();
     }
 
     function render() {
@@ -276,6 +274,7 @@
     function removeProduct(id) { cart = cart.filter(c => c.ID !== id); saveCartUI(); }
     function emptyCart() { if(confirm(UI[lang].clear + "?")) { cart = []; saveCartUI(); } }
     function saveCartUI() { localStorage.setItem('gizzi_cart', JSON.stringify(cart)); updateCartUI(); }
+    
     function updateCartQty(id, delta) {
         const it = cart.find(c => c.ID == id);
         if(it) { it.qty += delta; if(it.qty <= 0) cart = cart.filter(c => c.ID !== id); }
@@ -289,7 +288,7 @@
             const rP = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
             sub += parseFloat(rP); weight += (parseWeight(c.Unità) * c.qty);
             return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
-                <div style="flex:1;"><strong>${c[nK] || c.Nome}</strong><br><small>€ ${c.Prezzo}</small></div>
+                <div style="flex:1;"><strong style="font-size:0.85rem;">${c[nK] || c.Nome}</strong><br><small>€ ${c.Prezzo}</small></div>
                 <div class="cart-qty-ctrl">
                     <button class="cart-qty-btn" onclick="updateCartQty('${c.ID}', -1)">-</button>
                     <span style="font-weight:700;">${c.qty}</span>
@@ -301,8 +300,9 @@
         }).join('');
         const country = document.getElementById('f-country').value;
         let ship = country === "Italia" ? (sub >= 120 ? 0 : Math.ceil(weight / 20) * 13) : (sub >= 300 ? 0 : 50);
-        document.getElementById('shipping-info').innerText = `${UI[lang].ship} (${country}): € ${ship.toFixed(2)} (Weight: ${weight.toFixed(2)} Kg)`;
-        document.getElementById('cart-total-display').innerText = `${UI[lang].total}: € ${(sub + ship).toFixed(2)}`;
+        const finalTot = sub + ship;
+        document.getElementById('shipping-info').innerText = `${UI[lang].ship} (${country}): € ${ship.toFixed(2)} (Peso: ${weight.toFixed(2)} Kg)`;
+        document.getElementById('cart-total-display').innerText = `${UI[lang].total}: € ${finalTot.toFixed(2)}`;
         document.getElementById('cart-count').innerText = cart.reduce((a,b) => a + b.qty, 0);
     }
 
@@ -314,10 +314,17 @@
     async function processOrder() {
         const name = document.getElementById('f-name').value, email = document.getElementById('f-email').value, phone = document.getElementById('f-phone').value;
         const addr = `${document.getElementById('f-street').value}, ${document.getElementById('f-city').value} (${document.getElementById('f-country').value})`;
-        const fT = document.getElementById('cart-total-display').innerText.split('€')[1].trim(), oID = "GZ-" + Date.now().toString().slice(-6), prodStr = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
-        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ 'entry.442927045': oID, 'entry.333212320': name, 'entry.1385104048': email, 'entry.844983788': phone, 'entry.334440207': addr, 'entry.1856379113': prodStr, 'entry.146792905': fT })});
-        document.getElementById('modal').style.display = 'none'; document.getElementById('thanks-popup').style.display = 'flex';
-        const msg = `*ORDINE ${oID}*\n*CLIENTE:* ${name}\n*EMAIL:* ${email}\n*TEL:* ${phone}\n*IND:* ${addr}\n*PROD:* ${prodStr}\n*TOT:* € ${fT}`;
+        const finalTotVal = document.getElementById('cart-total-display').innerText.split('€')[1].trim();
+        const oID = "GZ-" + Date.now().toString().slice(-6), prodStr = cart.map(c => `${c.qty}x ${c.Nome}`).join(", ");
+        
+        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ 'entry.442927045': oID, 'entry.333212320': name, 'entry.1385104048': email, 'entry.844983788': phone, 'entry.334440207': addr, 'entry.1856379113': prodStr, 'entry.146792905': finalTotVal })});
+        
+        document.getElementById('modal').style.display = 'none';
+        document.getElementById('thanks-popup').style.display = 'flex';
+
+        // WHATSAPP CON ELENCO PUNTATO
+        const prodListWA = cart.map(c => `• ${c.qty}x ${c.Nome}`).join("\n");
+        const msg = `*NUOVO ORDINE ${oID}*\n\n*CLIENTE:* ${name}\n*EMAIL:* ${email}\n*TEL:* ${phone}\n*IND:* ${addr}\n\n*PRODOTTI:* \n${prodListWA}\n\n*TOTALE ORDINE:* € ${finalTotVal}`;
         window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`);
     }
     load();
