@@ -1,0 +1,209 @@
+/* ==========================================================================
+   MOBILE SPECIFIC FIXES
+   ========================================================================== */
+
+/* 1. CAROUSEL MOBILE FIX */
+@media (max-width: 768px) {
+    .carousel-section {
+        padding: 40px 0;
+        margin-left: -16px;
+        margin-right: -16px;
+        background: var(--white);
+        width: 100vw;
+    }
+    
+    .carousel-viewport {
+        padding: 0 16px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .carousel-track {
+        display: flex;
+        gap: 16px;
+        padding: 10px 0;
+        width: max-content;
+        transition: none; /* Disabilita animazione JS su mobile */
+    }
+    
+    .carousel-track.infinite {
+        animation: none; /* Disabilita animazione infinita su mobile */
+    }
+    
+    .carousel-item {
+        flex: 0 0 calc(85vw - 32px);
+        max-width: 320px;
+        scroll-snap-align: start;
+    }
+    
+    .carousel-dots {
+        padding: 20px 0;
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    /* Nascondi dots su mobile se non necessari */
+    .carousel-nav {
+        display: none;
+    }
+}
+
+/* 2. CART ICON MOBILE FIX */
+@media (max-width: 768px) {
+    .cart-btn {
+        font-size: 1.2rem;
+        padding: 6px 10px;
+        border-radius: 8px;
+        min-width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    
+    .cart-count {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        background: var(--gizzi-gold);
+        color: white;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 700;
+        border: 1.5px solid var(--white);
+        z-index: 100;
+        line-height: 1;
+        text-align: center;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Assicura che sia sempre visibile quando ci sono prodotti */
+    .cart-count.show {
+        display: flex !important;
+    }
+}
+
+/* 3. HEADER MOBILE FIX */
+@media (max-width: 768px) {
+    .header-controls {
+        gap: 8px;
+    }
+    
+    .lang-select {
+        font-size: 0.75rem;
+        padding: 6px 8px;
+        min-width: 50px;
+    }
+    
+    .theme-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+        padding: 6px;
+    }
+    
+    .cart-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.2rem;
+    }
+}
+
+/* 4. FIX CONTATORE CARRELLO PER TUTTI I DISPOSITIVI */
+.cart-count {
+    background: var(--gizzi-gold);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1;
+    border: 2px solid var(--white);
+    z-index: 1000;
+    min-width: 20px;
+    min-height: 20px;
+    font-size: 0.75rem;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+/* Nascondi quando vuoto */
+.cart-count:empty {
+    display: none;
+}
+
+/* Mostra quando ci sono prodotti */
+.cart-count:not(:empty) {
+    display: flex !important;
+}
+
+/* 5. CAROUSEL TOUCH FIX PER MOBILE */
+@media (max-width: 768px) {
+    .carousel-viewport {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+    }
+    
+    .carousel-viewport::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+    }
+    
+    /* Abilita swipe gestures */
+    .carousel-item {
+        touch-action: pan-y;
+    }
+}
+
+/* 6. FIX Z-INDEX GENERALI */
+.cart-count {
+    z-index: 9999;
+}
+
+.header {
+    z-index: 2000;
+}
+
+.category-menu {
+    z-index: 1500;
+}
+
+/* 7. MIGLIORAMENTI CAROUSEL PER MOBILE */
+@media (max-width: 480px) {
+    .carousel-item {
+        flex: 0 0 calc(90vw - 32px);
+        max-width: 280px;
+    }
+    
+    .carousel-track {
+        gap: 12px;
+    }
+    
+    .carousel-viewport {
+        padding: 0 16px;
+    }
+}
+
+/* 8. ACCESSIBILITÀ CONTATORE */
+@media (prefers-contrast: high) {
+    .cart-count {
+        background: var(--gizzi-deep);
+        border-color: var(--gizzi-gold);
+        color: var(--gizzi-gold);
+        font-weight: 800;
+    }
+}
