@@ -1,0 +1,174 @@
+/* ==========================================================================
+   CAROUSEL MOBILE FIX DEFINITIVO
+   ========================================================================== */
+
+/* CAROUSEL CONTAINER */
+.carousel-section {
+    background: var(--white);
+    padding: 40px 0;
+    position: relative;
+    width: 100%;
+}
+
+/* MOBILE CAROUSEL */
+@media (max-width: 768px) {
+    .carousel-section {
+        padding: 30px 0;
+        margin: 0 -16px; /* Full width */
+        background: var(--white);
+    }
+    
+    .carousel-viewport {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+        padding: 0 16px; /* Padding per non attaccare ai bordi */
+    }
+    
+    .carousel-viewport::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+    }
+    
+    .carousel-track {
+        display: flex;
+        gap: 16px;
+        padding: 5px 0; /* Spaziatura verticale */
+        width: max-content;
+        transition: none; /* Disabilitiamo animazione JS */
+    }
+    
+    .carousel-item {
+        flex: 0 0 280px; /* Fixed width su mobile */
+        max-width: 280px;
+        scroll-snap-align: start;
+        touch-action: pan-y; /* Permette solo scroll orizzontale */
+    }
+    
+    /* Nascondi dots su mobile */
+    .carousel-nav {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-item {
+        flex: 0 0 260px; /* Più piccolo su smartphone piccoli */
+        max-width: 260px;
+    }
+}
+
+/* CONTATORE CARRELLO - POSIZIONE FINALE */
+.cart-count {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    background: var(--gizzi-gold);
+    color: white;
+    border-radius: 50%;
+    border: 2px solid var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1;
+    z-index: 10000; /* Massimo z-index */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: 0.7rem;
+    min-width: 18px;
+    min-height: 18px;
+    padding: 2px;
+    transition: all 0.2s ease;
+}
+
+/* DESKTOP - Dimensioni normali */
+@media (min-width: 769px) {
+    .cart-count {
+        min-width: 20px;
+        min-height: 20px;
+        font-size: 0.75rem;
+        top: -6px;
+        right: -6px;
+    }
+}
+
+/* SEMPRE VISIBILE CON PRODOTTI */
+.cart-count.show {
+    display: flex !important;
+}
+
+.cart-count:not(:empty) {
+    display: flex !important;
+}
+
+/* MOBILE - Dimensioni ridotte */
+@media (max-width: 768px) {
+    .cart-count {
+        min-width: 16px;
+        min-height: 16px;
+        font-size: 0.65rem;
+        top: -2px;
+        right: -2px;
+        border-width: 1.5px;
+    }
+}
+
+/* ANIMAZIONE CONTATORE */
+@keyframes bounce-in {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.cart-count.animate {
+    animation: bounce-in 0.3s ease-out;
+}
+
+/* CAROUSEL MOBILE SWIPE INDICATORI */
+@media (max-width: 768px) {
+    .carousel-swipe-indicators {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 20px;
+        padding: 0 16px;
+    }
+    
+    .swipe-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--border);
+        transition: all 0.3s ease;
+    }
+    
+    .swipe-indicator.active {
+        background: var(--gizzi-gold);
+        transform: scale(1.2);
+    }
+}
+
+/* FISSAGGIO HEADER MOBILE */
+@media (max-width: 768px) {
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999; /* Header sopra tutto */
+    }
+    
+    .cart-btn {
+        position: relative;
+        z-index: 10001; /* Carrello sopra header */
+    }
+}
