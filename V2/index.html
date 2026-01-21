@@ -81,18 +81,16 @@
     <header role="banner">
         <div class="container nav-top">
             <a href="#" class="logo" aria-label="Gruppo Gizzi - Torna alla home">GRUPPO GIZZI</a>
-            <div class="nav-center">
-                <div class="header-actions">
-                    <select id="lang-sel" onchange="updateLang(this.value)" aria-label="Seleziona lingua">
-                        <option value="it">IT</option>
-                        <option value="en">EN</option>
-                        <option value="de">DE</option>
-                        <option value="hu">HU</option>
-                    </select>
-                    <button onclick="toggleDarkMode()" class="theme-toggle" aria-label="Attiva/Disattiva modalità scura">
-                        <img src="assets/img/theme-icon.svg" alt="Theme toggle" class="theme-icon">
-                    </button>
-                </div>
+            <div class="header-actions">
+                <select id="lang-sel" onchange="updateLang(this.value)" aria-label="Seleziona lingua">
+                    <option value="it">🇮🇹</option>
+                    <option value="en">🇬🇧</option>
+                    <option value="de">🇩🇪</option>
+                    <option value="hu">🇭🇺</option>
+                </select>
+                <button onclick="toggleDarkMode()" class="theme-toggle" aria-label="Attiva/Disattiva modalità scura">
+                    <img src="assets/img/theme-icon.svg" alt="Theme toggle" class="theme-icon">
+                </button>
             </div>
             <div class="header-actions">
                 <button onclick="toggleCart()" class="cart-btn" aria-label="Apri carrello">
@@ -115,9 +113,15 @@
             </div>
         </section>
 
-        <section class="container featured-section" aria-labelledby="featured-title">
+        <section class="container carousel-section" aria-labelledby="featured-title">
             <h2 id="featured-title" class="section-title">I Prodotti del Momento</h2>
-            <div id="featured-grid" class="featured-grid"></div>
+            <div class="carousel-wrapper">
+                <button class="carousel-nav prev" onclick="moveCarousel(-1)" aria-label="Prodotti precedenti" id="prevBtn">‹</button>
+                <div class="carousel-viewport">
+                    <div id="carousel-track" class="carousel-track"></div>
+                </div>
+                <button class="carousel-nav next" onclick="moveCarousel(1)" aria-label="Prodotti successivi" id="nextBtn">›</button>
+            </div>
         </section>
 
         <section class="container search-section" aria-label="Ricerca prodotti">
