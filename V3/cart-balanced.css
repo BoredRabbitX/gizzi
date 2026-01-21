@@ -1,0 +1,125 @@
+/* ==========================================================================
+   CARRELLO ICONA BILANCIATA CON TEMA
+   ========================================================================== */
+
+/* Icona Tema - Stesse dimensioni del tema */
+.theme-btn,
+.cart-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Pulsante Tema */
+.theme-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+.theme-btn:hover {
+    background: var(--gizzi-gold);
+    color: var(--gizzi-white);
+    border-color: var(--gizzi-gold);
+    transform: scale(1.05);
+}
+
+/* Pulsante Carrello - Stesse dimensioni del tema */
+.cart-btn {
+    background: var(--gizzi-deep);
+    color: var(--gizzi-white);
+    border: none;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+}
+
+.cart-btn:hover {
+    background: var(--gizzi-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(27, 67, 50, 0.2);
+}
+
+/* Contatore - Posizionato perfettamente */
+.cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--gizzi-gold);
+    color: var(--gizzi-white);
+    border: 2px solid var(--gizzi-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1;
+    z-index: 10000;
+    font-size: 0.7rem;
+    min-width: 18px;
+    min-height: 18px;
+    padding: 1px 3px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+}
+
+/* Sempre visibile */
+.cart-count:not(:empty) {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Animazione */
+.cart-count.updated {
+    animation: cart-bounce 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes cart-bounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Nascondi quando vuoto */
+.cart-count:empty {
+    display: none !important;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .theme-btn {
+    background: var(--bg);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+[data-theme="dark"] .theme-btn:hover {
+    background: var(--gizzi-gold);
+    color: var(--gizzi-white);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .theme-btn,
+    .cart-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .cart-count {
+        top: -3px;
+        right: -3px;
+        min-width: 16px;
+        min-height: 16px;
+        font-size: 0.65rem;
+        border-width: 1.5px;
+    }
+}
