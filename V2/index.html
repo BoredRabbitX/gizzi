@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>Gruppo Gizzi | Cilento Authentic Experience - Eccellenza Gastronomica</title>
+    
+    <meta name="description" content="Gruppo Gizzi: eccellenza gastronomica del Cilento. Olio, vino, salumi e prodotti tipici del Parco Nazionale del Cilento direttamente a casa tua. Spedizioni in Italia e Europa.">
+    <meta name="keywords" content="Cilento, prodotti tipici, olio extravergine, vino, salumi, gastronomia campana, Parco Nazionale Cilento, eccellenza italiana">
+    <meta name="author" content="Gruppo Gizzi">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#1b4332">
+    
+    <link rel="canonical" href="https://gizzi.it/">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gizzi.it/">
+    <meta property="og:title" content="Gruppo Gizzi | Cilento Authentic Experience">
+    <meta property="og:description" content="Eccellenza gastronomica del Cilento a casa tua. Scopri i nostri prodotti tipici del Parco Nazionale.">
+    <meta property="og:image" content="https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1200&hei=630">
+    <meta property="og:locale" content="it_IT">
+    <meta property="og:site_name" content="Gruppo Gizzi">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://gizzi.it/">
+    <meta name="twitter:title" content="Gruppo Gizzi | Cilento Authentic Experience">
+    <meta name="twitter:description" content="Eccellenza gastronomica del Cilento a casa tua.">
+    <meta name="twitter:image" content="https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1200&hei=630">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Gruppo Gizzi",
+        "url": "https://gizzi.it/",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://gizzi.it/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        },
+        "sameAs": [
+            "https://www.facebook.com/gruppogizzi",
+            "https://www.instagram.com/gruppogizzi"
+        ]
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Gruppo Gizzi",
+        "image": "https://gizzi.it/logo.png",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "IT",
+            "addressRegion": "Campania",
+            "addressLocality": "Cilento"
+        },
+        "priceRange": "$$"
+    }
+    </script>
+</head>
+<body class="light-mode">
+    
+    <div id="toast-container" role="alert" aria-live="polite"></div>
+    <div id="loading-overlay" class="loading-overlay" aria-hidden="false">
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <div id="cart-overlay" class="cart-overlay" onclick="toggleCart()" aria-hidden="true"></div>
+    
+    <header role="banner">
+        <div class="container nav-top">
+            <a href="#" class="logo" aria-label="Gruppo Gizzi - Torna alla home">GRUPPO GIZZI</a>
+            <div class="header-actions">
+                <select id="lang-sel" onchange="updateLang(this.value)" aria-label="Seleziona lingua">
+                    <option value="it">IT</option>
+                    <option value="en">EN</option>
+                    <option value="de">DE</option>
+                    <option value="hu">HU</option>
+                </select>
+                <button onclick="toggleDarkMode()" class="theme-toggle" aria-label="Attiva/Disattiva modalità scura">
+                    <img src="assets/img/theme-icon.svg" alt="Theme toggle" class="theme-icon">
+                </button>
+                <button onclick="toggleCart()" class="cart-btn" aria-label="Apri carrello">
+                    <img src="assets/img/cart-icon.svg" alt="Cart" class="cart-icon">
+                    <span id="cart-count" class="cart-count" aria-live="polite">0</span>
+                </button>
+            </div>
+        </div>
+        <nav class="category-menu" role="navigation" aria-label="Menu categorie">
+            <div id="category-menu" class="category-scroll"></div>
+        </nav>
+    </header>
+
+    <main role="main">
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-content">
+                <h1 id="hero-title" class="hero-title">L'Oro del Cilento, a casa tua.</h1>
+                <p id="hero-subtitle" class="hero-subtitle">Eccellenza gastronomica dal cuore del Parco Nazionale.</p>
+                <button onclick="scrollToProducts()" class="btn-cta" aria-label="Scorri ai prodotti">SCOPRI I PRODOTTI</button>
+            </div>
+        </section>
+
+        <section class="container carousel-section" aria-labelledby="featured-title">
+            <h2 id="featured-title" class="section-title">I Prodotti del Momento</h2>
+            <div class="carousel-wrapper">
+                <button class="carousel-nav prev" onclick="moveCarousel(-1)" aria-label="Prodotti precedenti">
+                    <img src="assets/img/prev-icon.svg" alt="Previous">
+                </button>
+                <div class="carousel-viewport">
+                    <div id="carousel-track" class="carousel-track"></div>
+                </div>
+                <button class="carousel-nav next" onclick="moveCarousel(1)" aria-label="Prodotti successivi">
+                    <img src="assets/img/next-icon.svg" alt="Next">
+                </button>
+            </div>
+        </section>
+
+        <section class="container search-section" aria-label="Ricerca prodotti">
+            <div class="search-box">
+                <input type="search" id="search-input" placeholder="Cerca prodotti..." oninput="handleSearch(this.value)" aria-label="Cerca prodotti nel catalogo">
+                <img src="assets/img/search-icon.svg" alt="Search" class="search-icon">
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="view-controls">
+                <button id="btn-view-all" class="btn-toggle-view active" onclick="switchView('all')">Tutti i Prodotti</button>
+                <button id="btn-view-cats" class="btn-toggle-view" onclick="switchView('cats')">Per Categoria</button>
+            </div>
+            <div id="negozio" class="products-grid"></div>
+        </section>
+    </main>
+
+    <aside id="cart-panel" class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+        <div class="cart-header">
+            <h2 id="cart-title">Il Tuo Carrello</h2>
+            <button onclick="toggleCart()" class="close-btn" aria-label="Chiudi carrello">
+                <img src="assets/img/close-icon.svg" alt="Close" class="close-icon">
+            </button>
+        </div>
+        <div class="cart-actions">
+            <button id="btn-clear" class="btn-clear" onclick="emptyCart()">SVUOTA CARRELLO</button>
+        </div>
+        <div id="cart-items" class="cart-items" role="list" aria-label="Articoli nel carrello"></div>
+        <div class="cart-footer">
+            <div id="shipping-info" class="shipping-info">Spedizione: € 0.00</div>
+            <div id="cart-total-display" class="cart-total">Totale: € 0.00</div>
+            <button id="btn-checkout" class="btn-checkout" onclick="openCheckout()">PROSEGUI ALL'ORDINE</button>
+        </div>
+    </aside>
+
+    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <button onclick="closeCheckout()" class="modal-close" aria-label="Chiudi modale">
+                <img src="assets/img/close-icon.svg" alt="Close" class="modal-close-icon">
+            </button>
+            <h2 id="modal-title">Dati Spedizione</h2>
+            <form id="checkout-form" onsubmit="event.preventDefault(); processOrder();" novalidate>
+                <div class="form-group">
+                    <label for="f-name">Nome e Cognome *</label>
+                    <input type="text" id="f-name" required aria-required="true">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="f-email">Email *</label>
+                        <input type="email" id="f-email" required aria-required="true">
+                    </div>
+                    <div class="form-group">
+                        <label for="f-phone">Telefono *</label>
+                        <input type="tel" id="f-phone" required aria-required="true">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="f-addr">Indirizzo Completo (Via, Civico, Città, CAP) *</label>
+                    <input type="text" id="f-addr" required aria-required="true">
+                </div>
+                <div class="form-group">
+                    <label for="f-country">Paese</label>
+                    <select id="f-country" onchange="updateCartUI()">
+                        <option value="Italia">Italia</option>
+                        <option value="Europa">Europa (UE)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit">CONFERMA E ORDINA</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="thanks-popup" class="thanks-popup" role="alertdialog" aria-labelledby="thanks-title">
+        <div class="thanks-content">
+            <h2 id="thanks-title">Grazie!</h2>
+            <p id="thanks-message">L'ordine è stato inviato correttamente.</p>
+            <button id="thanks-btn" onclick="clearAndReload()" class="btn-thanks">TORNA AL SITO</button>
+        </div>
+    </div>
+
+    <footer role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3 class="footer-logo">GRUPPO GIZZI</h3>
+                    <p>Cilento Authentic Experience</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" aria-label="Facebook">Facebook</a>
+                    <a href="#" aria-label="Instagram">Instagram</a>
+                    <a href="#" aria-label="WhatsApp">WhatsApp</a>
+                </div>
+            </div>
+            <p class="footer-copy">© 2026 Gruppo Gizzi. Tutti i diritti riservati. P.IVA: IT12345678901</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js" defer></script>
+</body>
+</html>

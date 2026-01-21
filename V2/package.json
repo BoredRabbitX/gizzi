@@ -1,0 +1,25 @@
+{
+  "name": "gizzi-v2",
+  "version": "2.0.0",
+  "description": "Gruppo Gizzi E-commerce - Versione 2 Improved",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve -s . -p 3000",
+    "dev": "npx serve -s . -p 3000 -o",
+    "build": "echo 'No build step required for static site'",
+    "lint": "echo 'Linting not configured'",
+    "format": "echo 'Formatting not configured'"
+  },
+  "keywords": [
+    "ecommerce",
+    "cilento",
+    "gruppo-gizzi",
+    "italian-food",
+    "static-site"
+  ],
+  "author": "Gruppo Gizzi",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}
