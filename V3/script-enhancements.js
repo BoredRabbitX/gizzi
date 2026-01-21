@@ -271,6 +271,16 @@ async function processOrder() {
 async function confirmOrder(name, email, phone, addr, country, orderSummary, total) {
     // Chiudi alert
     closeAlert();
+    
+    // Assicura che i pulsanti siano cliccabili dopo un piccolo delay
+    setTimeout(() => {
+        const submitBtn = document.querySelector('#modal button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.style.pointerEvents = 'auto';
+            submitBtn.style.cursor = 'pointer';
+            submitBtn.style.zIndex = '1';
+        }
+    }, 100);
 
     // Disabilita pulsante
     const submitBtn = document.querySelector('#modal button[type="submit"]');
@@ -408,5 +418,40 @@ function confirmEmptyCart() {
     cart = [];
     saveCartUI();
     closeAlert();
-    showAlert('Carrello svuotato con successo', 'success');
 }
+
+// FUNZIONE PER CORREGGERE CAROUSEL
+function fixCarouselWidth() {
+    const carouselSection = document.querySelector('.carousel-section');
+    if (carouselSection) {
+        // Assicura che il carousel sia full width
+        const container = carouselSection.querySelector('.container');
+        if (container) {
+            container.style.maxWidth = '100vw';
+            container.style.paddingLeft = '0';
+            container.style.paddingRight = '0';
+            container.style.marginLeft = '0';
+            container.style.marginRight = '0';
+        }
+    }
+}
+
+// FIX PER PULSANTI MODAL
+function fixModalButtons() {
+    const buttons = document.querySelectorAll('.alert-btn, .btn-checkout');
+    buttons.forEach(button => {
+        button.style.pointerEvents = 'auto';
+        button.style.cursor = 'pointer';
+        button.style.position = 'relative';
+        button.style.zIndex = '10';
+    });
+}
+
+// AGGIORNA INIT
+document.addEventListener('DOMContentLoaded', () => {
+    // Fix carousel
+    setTimeout(fixCarouselWidth, 100);
+    
+    // Fix pulsanti modal
+    setTimeout(fixModalButtons, 200);
+});

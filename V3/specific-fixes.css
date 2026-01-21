@@ -1,0 +1,218 @@
+/* ==========================================================================
+   CORREZIONI FINALI - FIX specifici
+   ========================================================================== */
+
+/* 1. CART COUNT VISIBILE */
+.cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--gizzi-gold);
+    color: white;
+    border-radius: 50%;
+    padding: 3px 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    min-width: 20px;
+    height: 20px;
+    text-align: center;
+    border: 2px solid var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    line-height: 1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 2. MODAL BUTTONS CLICKABLE */
+.alert-popup {
+    pointer-events: auto;
+}
+
+.alert-btn,
+.btn-checkout {
+    pointer-events: auto;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+}
+
+.alert-btn:disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* 3. CATEGORY SPACES FIXED */
+.category-section {
+    margin: 40px 0;
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+}
+
+.category-section:first-child {
+    margin-top: 0;
+    border-top: none;
+}
+
+.section-title {
+    color: var(--gizzi-deep);
+    font-size: 1.6rem;
+    border-bottom: 3px solid var(--gizzi-gold);
+    display: inline-block;
+    padding-bottom: 8px;
+    margin-bottom: 30px;
+    margin-top: 0;
+}
+
+.category-menu {
+    display: flex;
+    justify-content: center;
+    gap: 12px; /* Aumentato gap tra categorie */
+    padding: 14px 24px;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    flex-wrap: wrap; /* Permette wrapping su mobile */
+}
+
+.category-menu::-webkit-scrollbar { 
+    display: none; 
+}
+
+.category-link {
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    margin: 2px 0; /* Margin verticale minimo */
+}
+
+/* 4. CAROUSEL BACKGROUND FIX */
+.carousel-section {
+    padding: 60px 0;
+    background: var(--white); /* Assicura sfondo bianco */
+    width: 100vw; /* Full width */
+    margin-left: calc(-50vw + 50%); /* Centra full width */
+    position: relative;
+}
+
+.carousel-viewport {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 1200px; /* Limita larghezza massima */
+    margin: 0 auto; /* Centra il contenuto */
+    padding: 0 24px; /* Padding per contenuto */
+}
+
+/* 5. CONTAINER WRAPPER PER CAROUSEL */
+.carousel-wrapper {
+    background: var(--white);
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Fix per modal buttons positioning */
+.modal-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* Fix per z-index problemi */
+.alert-backdrop {
+    z-index: 10000;
+}
+
+.alert-popup {
+    z-index: 10001;
+}
+
+#modal {
+    z-index: 4000;
+}
+
+#modal .modal-content {
+    z-index: 4001;
+}
+
+/* Fix per button actions */
+function fixModalButtons() {
+    setTimeout(() => {
+        const buttons = document.querySelectorAll('.alert-btn, .btn-checkout');
+        buttons.forEach(button => {
+            button.style.pointerEvents = 'auto';
+            button.style.cursor = 'pointer';
+            button.style.position = 'relative';
+            button.style.zIndex = '1';
+        });
+    }, 100);
+}
+
+/* Fix per carousel track positioning */
+.carousel-track {
+    display: flex;
+    gap: 24px;
+    width: max-content;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile fixes */
+@media (max-width: 768px) {
+    .category-menu {
+        gap: 8px;
+        padding: 12px 16px;
+        justify-content: flex-start;
+    }
+    
+    .category-link {
+        font-size: 0.75rem;
+        padding: 8px 14px;
+    }
+    
+    .carousel-section {
+        padding: 40px 0;
+        margin-left: -24px;
+        margin-right: -24px;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+    
+    .carousel-viewport {
+        padding: 0 16px;
+    }
+    
+    .cart-count {
+        top: -3px;
+        right: -3px;
+        min-width: 18px;
+        height: 18px;
+        font-size: 0.65rem;
+        padding: 2px 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-section {
+        margin-left: -16px;
+        margin-right: -16px;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    
+    .category-section {
+        margin: 30px 0;
+        padding: 16px 0;
+    }
+}

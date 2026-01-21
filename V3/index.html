@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="enhancements.css">
     <link rel="stylesheet" href="final-fixes.css">
+    <link rel="stylesheet" href="specific-fixes.css">
 </head>
 <body>
     <div id="cart-overlay" onclick="toggleCart()"></div>
@@ -41,11 +42,15 @@
 
     <div class="container">
         <section class="carousel-section">
-            <h2 id="carousel-title">I Prodotti del Momento</h2>
+            <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+                <h2 id="carousel-title" style="text-align: center; color: var(--gizzi-deep); font-size: 1.8rem; margin-bottom: 30px;">I Prodotti del Momento</h2>
+            </div>
             <div class="carousel-viewport">
                 <div id="carousel-track" class="carousel-track"></div>
             </div>
-            <div id="carousel-dots" class="carousel-nav"></div>
+            <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+                <div id="carousel-dots" class="carousel-nav"></div>
+            </div>
         </section>
 
         <div class="view-controls">
