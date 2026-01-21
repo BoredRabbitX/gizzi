@@ -946,12 +946,73 @@ async function processOrder() {
     const name = document.getElementById('f-name').value.trim();
     const email = document.getElementById('f-email').value.trim();
     const phone = document.getElementById('f-phone').value.trim();
-    const address = document.getElementById('f-addr').value.trim();
+    const address = document.getElementById('f-def');
     
     if (!name || !email || !phone || !address) {
         ToastManager.show(UI[lang].requiredFields, 'error');
         return;
     }
+    
+    if (!validateEmail(email)) {
+        ToastManager.show(UI[lang].validEmail, 'error');
+        return;
+    }
+    
+    if (!validatePhone(phone)) {
+        ToastManager.show(UI[lang].validPhone, 'error');
+        return;
+    }
+    
+    // Mostra un'animazione di caricamento durante l'invio
+    ToastManager.show('Invio ordine in corso...', 'success');
+    
+    const totalDisplay = document.getElementById('cart-total-display').textContent.split('€')[1].trim();
+    const orderId = "GZ-" + Date.now().toString().slice(-6);
+    
+    const detailRows = cart.map(item => 
+        `${item.qty}x ${item.Nome} (€ ${item.Prezzo}) = € ${(parseFloat(item.Prezzo.replace(',', '.')) * item.qty).toFixed(2)}`
+    );
+    
+    const formData = new URLSearchParams({
+        'entry.442927045': orderId,
+        'entry.333212320': name,
+        'entry.1385104048': email,
+        'entry.844983788': phone,
+        'entry.334440207': address,
+        'entry.1856379113': detailRows.join(" | "),
+        'entry.146792905': totalDisplay
+    });
+    
+    try {
+        await fetch(CONFIG.formURL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: formData
+        });
+        
+        closeCheckout();
+        
+        // Mostra popup di conferma con stai attesa
+        const thanksPopup = document.getElementById('thanks-popup');
+        thanksPopup.style.display = 'flex';
+        thanksPopup.classList.add('active');
+        
+        // Template WhatsApp migliorato e più professionale
+        const whatsappMessage = `🛒 *GRUPPO GIZZI - NUOVO ORDINE*\n\n📦 *Dettagli Cliente*\n\nNome: ${name}\n*Email: ${email}\n*TEL:* ${phone}\n*INDIRIZO:* ${address}\n\n📋 *Riepilogo Ordine*\n\n${detailRows.join("\n")}\n\n💰 *Totale Ordine*: € ${totalDisplay}\n\n✅ *Stato*: Confermato e in preparazione*`;
+        
+        window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
+        
+        // Nascondi popup dopo 3 secondi e ricarica la pagina
+        setTimeout(() => {
+            thanksPopup.style.display = 'none';
+            thanksPopup.classList.remove('active');
+        }, 3000);
+        
+    } catch (error) {
+        console.error('Error processing order:', error);
+        ToastManager.show(UI[lang].orderError, 'error');
+    }
+}
     
     if (!validateEmail(email)) {
         ToastManager.show(UI[lang].validEmail, 'error');

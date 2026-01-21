@@ -4,292 +4,1339 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gruppo Gizzi | Cilento Authentic Experience</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..72,700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gizzi-deep: #1b4332; --gizzi-gold: #b08d57; --bg: #fdfaf5; --white: #ffffff; --text: #2d2d2d; --danger: #d90429; }
-        
+        :root {
+            --gizzi-deep: #1b4332;
+            --gizzi-gold: #b08d57;
+            --bg: #fdfaf5;
+            --white: #ffffff;
+            --text: #2d2d2d;
+            --danger: #d90429;
+            --border: #e8e4de;
+            --shadow: rgba(27, 67, 50, 0.08);
+        }
+
+        [data-theme="dark"] {
+            --gizzi-deep: #2d5f47;
+            --gizzi-gold: #c4a060;
+            --bg: #1a1a1a;
+            --white: #252525;
+            --text: #f5f5f5;
+            --danger: #ff6b6b;
+            --border: #3a3a3a;
+            --shadow: rgba(0, 0, 0, 0.4);
+        }
+
         * { box-sizing: border-box; scroll-behavior: smooth; }
-        html, body { overflow-x: hidden; width: 100%; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
-        
-        body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        html, body { width: 100%; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
         h1, h2, h3, .logo { font-family: 'Fraunces', serif; font-weight: 700; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
-        header { position: fixed; top: 0; width: 100%; background: white; z-index: 2000; border-bottom: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
-        .nav-top { height: 70px; display: flex; align-items: center; justify-content: space-between; }
-        .logo { font-size: 1.4rem; color: var(--gizzi-deep); text-decoration: none; }
-        
-        .category-menu { display: flex; justify-content: center; gap: 10px; padding: 12px; background: white; border-top: 1px solid #f0f0f0; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
-        .category-menu::-webkit-scrollbar { display: none; }
-        .category-menu a { text-decoration: none; color: #666; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 8px 16px; border: 1px solid #eee; border-radius: 50px; cursor: pointer; transition: 0.3s; }
-        .category-menu a:hover { border-color: var(--gizzi-gold); color: var(--gizzi-gold); }
-
-        .hero { height: 45vh; margin-top: 115px; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1240&hei=500&fit=constrain,1&fmt=webp'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 0 20px; }
-        .hero h1 { font-size: 2.2rem; margin-bottom: 10px; }
-
-        .view-controls { text-align: center; margin: 40px 0; display: flex; justify-content: center; gap: 12px; }
-        .btn-toggle-view { background: white; border: 2px solid var(--gizzi-deep); color: var(--gizzi-deep); padding: 12px 24px; border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 0.85rem; transition: 0.4s; }
-        .btn-toggle-view.active { background: var(--gizzi-deep); color: white; transform: scale(1.05); }
-
-        .carousel-viewport { position: relative; overflow: hidden; width: 100%; margin: 20px 0; padding: 10px 0; }
-        .carousel-track { display: flex; gap: 20px; width: max-content; }
-        .carousel-track.animate { transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1); }
-        
-        .card { 
-            background: white; border-radius: 20px; overflow: hidden; border: 1px solid #f0f0f0; 
-            text-align: center; width: 290px; flex-shrink: 0; display: flex; flex-direction: column; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); transition: 0.4s ease; opacity: 0; transform: translateY(20px);
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
         }
-        .card.visible { opacity: 1; transform: translateY(0); }
-        .card img { width: 100%; height: 210px; object-fit: cover; }
-        .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        
-        .stock-badge { font-size: 0.7rem; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            z-index: 2000;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 12px var(--shadow);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .nav-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            color: var(--gizzi-deep);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            flex-shrink: 0;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-left: auto;
+        }
+
+        .lang-select {
+            border: none;
+            font-weight: 600;
+            background: transparent;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            appearance: none;
+            background-color: var(--bg);
+            min-width: 70px;
+        }
+
+        .lang-select:focus { outline: 2px solid var(--gizzi-gold); outline-offset: 2px; }
+
+        .theme-btn {
+            border: none;
+            background: var(--bg);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 10px;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        .theme-btn:hover { transform: scale(1.1); }
+        .theme-btn:focus { outline: 2px solid var(--gizzi-gold); outline-offset: 2px; }
+
+        .cart-btn {
+            cursor: pointer;
+            font-size: 1.5rem;
+            position: relative;
+            background: var(--gizzi-deep);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 12px;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        .cart-btn:hover { transform: scale(1.05); }
+        .cart-btn:focus { outline: 2px solid var(--gizzi-gold); outline-offset: 2px; }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--gizzi-gold);
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .category-menu {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            background: var(--white);
+            border-top: 1px solid var(--border);
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .category-menu::-webkit-scrollbar { display: none; }
+        .category-menu a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 10px 18px;
+            border: 1.5px solid var(--border);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .category-menu a:hover,
+        .category-menu a.active {
+            border-color: var(--gizzi-gold);
+            color: var(--gizzi-gold);
+            background: rgba(176, 141, 87, 0.08);
+        }
+
+        .hero {
+            height: 50vh;
+            min-height: 400px;
+            margin-top: 115px;
+            background: linear-gradient(rgba(27, 67, 50, 0.5), rgba(27, 67, 50, 0.5)),
+                        url('https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1240&hei=500&fit=constrain,1&fmt=webp');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 0 24px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            max-width: 700px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 500px;
+        }
+
+        .view-controls {
+            text-align: center;
+            margin: 50px 0 40px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-toggle-view {
+            background: var(--white);
+            border: 2px solid var(--gizzi-deep);
+            color: var(--gizzi-deep);
+            padding: 14px 28px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-toggle-view:hover { transform: translateY(-2px); box-shadow: 0 4px 12px var(--shadow); }
+        .btn-toggle-view.active { background: var(--gizzi-deep); color: white; }
+
+        .carousel-section { margin-top: 40px; }
+        .carousel-section h2 { text-align: center; color: var(--gizzi-deep); font-size: 1.8rem; margin-bottom: 30px; }
+
+        .carousel-viewport {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            padding: 10px 0;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 24px;
+            width: max-content;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active { background: var(--gizzi-gold); transform: scale(1.2); }
+
+        .card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            text-align: center;
+            width: 300px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 24px var(--shadow);
+            transition: all 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 40px var(--shadow);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .stock-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .stock-low { color: var(--danger); }
         .stock-ok { color: #2a9d8f; }
 
-        .card-body h3 { font-size: 1.15rem; margin: 0 0 10px; min-height: 2.8em; color: var(--gizzi-deep); line-height: 1.3; }
-        .price { color: var(--gizzi-gold); font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
-        .price small { font-size: 0.8rem; opacity: 0.7; font-weight: 400; }
-
-        .btn-add { background: var(--gizzi-deep); color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; text-transform: uppercase; font-size: 0.85rem; transition: 0.3s; }
-        .btn-add:disabled { background: #ccc; cursor: not-allowed; }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 30px; justify-items: center; width: 100%; }
-
-        #cart-panel { position: fixed; right: -100%; top: 0; width: 100%; max-width: 420px; height: 100%; background: white; z-index: 3000; transition: 0.5s cubic-bezier(0.85, 0, 0.15, 1); display: flex; flex-direction: column; }
-        #cart-panel.active { right: 0; }
-        .cart-header { padding: 20px 25px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-        .cart-footer { padding: 25px; border-top: 1px solid #eee; background: white; }
-
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 1.7rem; }
-            .category-menu { justify-content: flex-start; }
-            .card { width: 82vw; margin: 0 auto; }
-            .grid { grid-template-columns: 1fr; }
+        .card-body h3 {
+            font-size: 1.1rem;
+            margin: 0 0 12px;
+            min-height: 2.6em;
+            color: var(--gizzi-deep);
+            line-height: 1.4;
         }
 
-        footer { background: var(--gizzi-deep); color: white; padding: 50px 0; text-align: center; margin-top: 60px; width: 100%; }
+        .price {
+            color: var(--gizzi-gold);
+            font-weight: 700;
+            font-size: 1.35rem;
+            margin-bottom: 16px;
+        }
+
+        .price small { font-size: 0.8rem; opacity: 0.7; font-weight: 500; }
+
+        .btn-add {
+            background: var(--gizzi-deep);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add:hover { background: var(--gizzi-gold); transform: translateY(-2px); }
+        .btn-add:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+            justify-items: center;
+            width: 100%;
+            padding-bottom: 60px;
+        }
+
+        .grid .card { width: 100%; max-width: 340px; }
+
+        .section-title {
+            color: var(--gizzi-deep);
+            font-size: 1.6rem;
+            border-bottom: 3px solid var(--gizzi-gold);
+            display: inline-block;
+            padding-bottom: 8px;
+            margin-bottom: 30px;
+        }
+
+        #cart-panel {
+            position: fixed;
+            right: -100%;
+            top: 0;
+            width: 100%;
+            max-width: 450px;
+            height: 100%;
+            background: var(--white);
+            z-index: 3000;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: -8px 0 30px rgba(0, 0, 0, 0.2);
+        }
+
+        #cart-panel.active { right: 0; }
+
+        .cart-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header h2 { margin: 0; font-size: 1.4rem; color: var(--gizzi-deep); }
+
+        .cart-close {
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text);
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .cart-close:hover { opacity: 1; }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cart-item-info { flex: 1; }
+        .cart-item-name { font-weight: 600; font-size: 0.95rem; color: var(--text); margin-bottom: 4px; }
+        .cart-item-stock { font-size: 0.75rem; opacity: 0.6; }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg);
+            padding: 6px 12px;
+            border-radius: 10px;
+        }
+
+        .qty-btn {
+            border: none;
+            background: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: var(--gizzi-deep);
+            padding: 4px 8px;
+            transition: color 0.2s ease;
+        }
+
+        .qty-btn:hover { color: var(--gizzi-gold); }
+        .qty-value { font-weight: 600; min-width: 24px; text-align: center; }
+
+        .cart-item-price {
+            font-weight: 700;
+            color: var(--gizzi-gold);
+            font-size: 1rem;
+            min-width: 70px;
+            text-align: right;
+        }
+
+        .cart-remove {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 8px;
+            opacity: 0.5;
+            transition: opacity 0.2s ease;
+        }
+
+        .cart-remove:hover { opacity: 1; }
+
+        .cart-footer {
+            padding: 24px;
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .cart-shipping {
+            font-size: 0.9rem;
+            color: var(--text);
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+
+        .cart-total {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gizzi-deep);
+            margin-bottom: 20px;
+        }
+
+        .btn-clear-cart {
+            background: none;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            width: 100%;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-clear-cart:hover { background: var(--danger); color: white; }
+
+        .btn-checkout {
+            background: var(--gizzi-gold);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-checkout:hover { background: var(--gizzi-deep); transform: translateY(-2px); }
+
+        #cart-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2500;
+            display: none;
+            backdrop-filter: blur(4px);
+        }
+
+        footer {
+            background: var(--gizzi-deep);
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        footer p { opacity: 0.8; font-size: 0.9rem; }
+
+        #gdpr-banner {
+            position: fixed;
+            bottom: -100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            padding: 24px;
+            box-shadow: 0 -4px 20px var(--shadow);
+            z-index: 4000;
+            transition: bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border-top: 3px solid var(--gizzi-gold);
+        }
+
+        #gdpr-banner.active { bottom: 0; }
+
+        #gdpr-banner h3 {
+            color: var(--gizzi-deep);
+            margin: 0 0 12px;
+            font-size: 1.2rem;
+        }
+
+        #gdpr-banner p {
+            font-size: 0.9rem;
+            color: var(--text);
+            opacity: 0.8;
+            margin: 0 0 16px;
+            line-height: 1.5;
+        }
+
+        .gdpr-buttons { display: flex; gap: 12px; }
+
+        .btn-gdpr {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-gdpr-accept {
+            background: var(--gizzi-deep);
+            color: white;
+            border: none;
+        }
+
+        .btn-gdpr-accept:hover { background: var(--gizzi-gold); }
+
+        .btn-gdpr-decline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        #modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(27, 67, 50, 0.95);
+            z-index: 4000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+            padding: 20px;
+        }
+
+        #modal.active { display: flex; }
+
+        .modal-content {
+            background: var(--bg);
+            padding: 40px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--text);
+            opacity: 0.5;
+        }
+
+        .modal-close:hover { opacity: 1; }
+
+        .modal-content h2 {
+            color: var(--gizzi-deep);
+            margin: 0 0 24px;
+            font-size: 1.5rem;
+        }
+
+        .form-group { margin-bottom: 16px; }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            background: var(--white);
+            color: var(--text);
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gizzi-gold);
+        }
+
+        .form-row { display: flex; gap: 12px; }
+        .form-row .form-group { flex: 1; }
+
+        #thanks-popup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--gizzi-deep);
+            z-index: 5000;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        #thanks-popup.active { display: flex; }
+
+        .thanks-content { padding: 40px; }
+        .thanks-content h2 { font-size: 2rem; margin-bottom: 12px; }
+        .thanks-content p { opacity: 0.9; margin-bottom: 24px; }
+
+        .btn-back {
+            background: var(--gizzi-gold);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero { margin-top: 110px; min-height: 350px; }
+            .hero h1 { font-size: 1.8rem; }
+            .hero p { font-size: 1rem; }
+
+            .nav-top { height: 60px; padding: 0 16px; }
+            .logo { font-size: 1.2rem; }
+            .header-controls { gap: 10px; }
+            .lang-select { font-size: 0.8rem; padding: 6px 10px; min-width: 60px; }
+            .theme-btn { width: 40px; height: 40px; font-size: 1.1rem; padding: 8px; }
+            .cart-btn { font-size: 1.3rem; padding: 8px 12px; }
+
+            .category-menu {
+                justify-content: flex-start;
+                padding: 12px 16px;
+                gap: 6px;
+            }
+
+            .category-menu a {
+                font-size: 0.75rem;
+                padding: 8px 14px;
+            }
+
+            .view-controls {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                margin: 30px 0;
+            }
+
+            .btn-toggle-view {
+                width: 100%;
+                max-width: 280px;
+                padding: 14px 20px;
+            }
+
+            .card { width: 280px; }
+            .carousel-track .card { min-width: 280px; max-width: 280px; }
+            .card img { height: 180px; }
+            .card-body { padding: 20px; }
+            .card-body h3 { font-size: 1rem; min-height: 2.4em; }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                justify-items: center;
+            }
+
+            .grid .card { max-width: 320px; }
+
+            .cart-item {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .cart-item-info { width: 100%; order: 1; }
+
+            .gdpr-buttons { flex-direction: column; }
+            .btn-gdpr { width: 100%; }
+
+            .modal-content { padding: 28px; }
+            .form-row { flex-direction: column; gap: 0; }
+        }
+
+        @media (max-width: 480px) {
+            .hero { height: 40vh; min-height: 300px; }
+            .hero h1 { font-size: 1.5rem; }
+            .container { padding: 0 16px; }
+            .card { width: 100%; max-width: 320px; }
+            .carousel-track .card { min-width: 100%; max-width: 100%; }
+        }
     </style>
 </head>
 <body>
+    <div id="cart-overlay" onclick="toggleCart()"></div>
 
-<div id="cart-overlay" style="position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2500; display:none; backdrop-filter: blur(2px);" onclick="toggleCart()"></div>
-
-<header>
-    <div class="container nav-top">
-        <a href="#" class="logo">GRUPPO GIZZI</a>
-        <div style="display:flex; gap:12px; align-items:center;">
-            <select id="lang-sel" onchange="updateLang(this.value)" style="border:none; font-weight:700; background:transparent; cursor:pointer; font-family:'Montserrat';">
-                <option value="it">🇮🇹 IT</option>
-                <option value="en">🇬🇧 EN</option>
-                <option value="de">🇩🇪 DE</option>
-                <option value="hu">🇭🇺 HU</option>
-            </select>
-            <div onclick="toggleCart()" style="cursor:pointer; font-size:1.6rem; position:relative;">
-                🛒 <span id="cart-count" style="position:absolute; top:-8px; right:-8px; background:var(--gizzi-gold); color:white; border-radius:50%; padding:2px 7px; font-size:0.65rem; font-weight:bold;">0</span>
+    <header>
+        <div class="nav-top container">
+            <a href="#" class="logo">GRUPPO GIZZI</a>
+            <div class="header-controls">
+                <select id="lang-sel" class="lang-select" onchange="updateLang(this.value)">
+                    <option value="it">🇮🇹 IT</option>
+                    <option value="en">🇬🇧 EN</option>
+                    <option value="de">🇩🇪 DE</option>
+                    <option value="hu">🇭🇺 HU</option>
+                </select>
+                <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                <div class="cart-btn" onclick="toggleCart()" role="button" tabindex="0" aria-label="Carrello">
+                    🛒
+                    <span id="cart-count" class="cart-count">0</span>
+                </div>
             </div>
         </div>
-    </div>
-    <div id="anchor-menu" class="category-menu"></div>
-</header>
+        <nav id="anchor-menu" class="category-menu"></nav>
+    </header>
 
-<section class="hero">
-    <h1 id="hero-h1">L'Oro del Cilento, a casa tua.</h1>
-    <p id="hero-p">Eccellenza gastronomica dal cuore del Parco Nazionale.</p>
-</section>
-
-<div class="container">
-    <section class="carousel-section">
-        <h2 id="carousel-title" style="text-align:center; color:var(--gizzi-deep); font-size:1.8rem; margin-top:50px;">I Prodotti del Momento</h2>
-        <div class="carousel-viewport">
-            <div id="carousel-track" class="carousel-track animate"></div>
-        </div>
+    <section class="hero">
+        <h1 id="hero-h1">L'Oro del Cilento, a casa tua.</h1>
+        <p id="hero-p">Eccellenza gastronomica dal cuore del Parco Nazionale.</p>
     </section>
 
-    <div class="view-controls">
-        <button id="btn-view-all" class="btn-toggle-view active" onclick="switchView('all')">Tutti i Prodotti</button>
-        <button id="btn-view-cats" class="btn-toggle-view" onclick="switchView('cats')">Per Categoria</button>
-    </div>
-    <div id="negozio"></div>
-</div>
-
-<div id="cart-panel">
-    <div class="cart-header">
-        <h2 id="cart-label" style="margin:0; font-size:1.3rem;">Il Tuo Carrello</h2>
-        <span style="font-size:2rem; cursor:pointer; color:#ccc;" onclick="toggleCart()">✕</span>
-    </div>
-    <div style="padding:15px 25px;"><button id="btn-clear" style="background:none; border:1px solid #ff4d4d; color:#ff4d4d; padding:8px; border-radius:8px; font-size:0.75rem; width:100%; cursor:pointer; font-weight:600;" onclick="emptyCart()">SVUOTA CARRELLO</button></div>
-    <div id="cart-items" style="flex:1; overflow-y:auto; padding: 0 25px;"></div>
-    <div class="cart-footer">
-        <div id="shipping-info" style="font-size: 0.9rem; color: #666; margin-bottom: 8px;">Spedizione: € 0.00</div>
-        <h3 id="cart-total-display" style="margin: 0 0 20px 0; font-size: 1.5rem;">Totale: € 0.00</h3>
-        <button id="btn-checkout" class="btn-add" style="background:var(--gizzi-gold); padding:18px;" onclick="openCheckout()">PROSEGUI ALL'ORDINE</button>
-    </div>
-</div>
-
-<div id="modal" style="display:none; position:fixed; inset:0; background:rgba(27,67,50,0.9); z-index:4000; align-items:center; justify-content:center; backdrop-filter:blur(8px);">
-    <div style="background:var(--bg); padding:35px; border-radius:24px; width:95%; max-width:500px; position:relative;">
-        <span style="position:absolute; top:20px; right:20px; font-size:1.5rem; cursor:pointer;" onclick="closeCheckout()">✕</span>
-        <h2 id="modal-header">Dati Spedizione</h2>
-        <form onsubmit="event.preventDefault(); processOrder();">
-            <input type="text" id="f-name" placeholder="Nome e Cognome *" required style="width:100%; padding:14px; margin-bottom:12px; border-radius:12px; border:1px solid #ddd; font-family:'Montserrat';">
-            <div style="display:flex; gap:10px;">
-                <input type="email" id="f-email" placeholder="Email *" required style="width:100%; padding:14px; margin-bottom:12px; border-radius:12px; border:1px solid #ddd; font-family:'Montserrat';">
-                <input type="tel" id="f-phone" placeholder="Telefono *" required style="width:100%; padding:14px; margin-bottom:12px; border-radius:12px; border:1px solid #ddd; font-family:'Montserrat';">
+    <div class="container">
+        <section class="carousel-section">
+            <h2 id="carousel-title">I Prodotti del Momento</h2>
+            <div class="carousel-viewport">
+                <div id="carousel-track" class="carousel-track"></div>
             </div>
-            <input type="text" id="f-addr" placeholder="Indirizzo Completo (Via, Civico, Città, CAP) *" required style="width:100%; padding:14px; margin-bottom:15px; border-radius:12px; border:1px solid #ddd; font-family:'Montserrat';">
-            <select id="f-country" onchange="updateCartUI()" style="width:100%; padding:14px; margin-bottom:20px; border-radius:12px; border:1px solid #ddd; font-family:'Montserrat';">
-                <option value="Italia">Italia</option>
-                <option value="Europa">Europa (UE)</option>
-            </select>
-            <button id="btn-submit" type="submit" class="btn-add" style="padding:18px;">CONFERMA E ORDINA</button>
-        </form>
+            <div id="carousel-dots" class="carousel-nav"></div>
+        </section>
+
+        <div class="view-controls">
+            <button id="btn-view-all" class="btn-toggle-view active" onclick="switchView('all')">Tutti i Prodotti</button>
+            <button id="btn-view-cats" class="btn-toggle-view" onclick="switchView('cats')">Per Categoria</button>
+        </div>
+        <div id="negozio"></div>
     </div>
-</div>
 
-<div id="thanks-popup" style="display:none; position:fixed; inset:0; background:var(--gizzi-deep); z-index:5000; align-items:center; justify-content:center; color:white; text-align:center;">
-    <div style="padding:40px;"><h2 id="thanks-h">Grazie!</h2><p id="thanks-p">L'ordine è stato inviato correttamente.</p><button id="thanks-btn" onclick="clearAndReload()" style="background:var(--gizzi-gold); color:white; border:none; padding:15px 40px; border-radius:50px; cursor:pointer; font-weight:700; margin-top:20px;">TORNA AL SITO</button></div>
-</div>
+    <div id="cart-panel">
+        <div class="cart-header">
+            <h2 id="cart-label">Il Tuo Carrello</h2>
+            <button class="cart-close" onclick="toggleCart()">✕</button>
+        </div>
+        <div style="padding: 16px 24px;">
+            <button class="btn-clear-cart" onclick="emptyCart()">🗑️ SVUOTA CARRELLO</button>
+        </div>
+        <div id="cart-items" class="cart-items"></div>
+        <div class="cart-footer">
+            <div id="shipping-info" class="cart-shipping">Spedizione: € 0.00</div>
+            <div id="cart-total-display" class="cart-total">Totale: € 0.00</div>
+            <button class="btn-checkout" onclick="openCheckout()">PROSEGUI ALL'ORDINE</button>
+        </div>
+    </div>
 
-<footer><div class="container"><p>© 2026 Gruppo Gizzi. Cilento Authentic Experience.</p></div></footer>
-
-<script>
-    const CONFIG = {
-        catalog: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIumwZulbMAuesmG69DB8Y1bx2Y-NQXfyG7_m1-rdpZ-SoOxM0JyZtnj0_eV_K4t4drULTwV44nE5Y/pub?gid=0&single=true&output=csv",
-        formURL: "https://docs.google.com/forms/d/e/1FAIpQLSend7KPNCjTNP1d-B3zd-wvhZAVXLS3P7341yN88fm3d7D4Jw/formResponse",
-        wa: "393667540018"
-    };
-
-    const UI = {
-        it: { h1: "L'Oro del Cilento, a casa tua.", p: "Eccellenza gastronomica.", add: "AGGIUNGI", total: "Totale", cart: "Il Tuo Carrello", ship: "Spedizione", order: "ORDINA ORA", clear: "SVUOTA CARRELLO", moments: "I Prodotti del Momento", all: "Tutti i Prodotti", byCat: "Per Categoria", maxQty: "Quantità massima", out: "Esaurito", low: "Disponibilità limitata", ok: "Disponibile", alertStock: "Disponibilità massima raggiunta.", alertEmpty: "Il carrello è vuoto!", thanksH: "Grazie!", thanksP: "L'ordine è stato inviato correttamente.", back: "TORNA AL SITO", modH: "Dati Spedizione", conf: "CONFERMA E ORDINA" },
-        en: { h1: "Cilento's Gold at home.", p: "Gastronomic excellence.", add: "ADD", total: "Total", cart: "Your Cart", ship: "Shipping", order: "ORDER NOW", clear: "EMPTY CART", moments: "Best Sellers", all: "All Products", byCat: "By Category", maxQty: "Max quantity", out: "Out of Stock", low: "Limited availability", ok: "Available", alertStock: "Maximum availability reached.", alertEmpty: "Cart is empty!", thanksH: "Thank you!", thanksP: "Order sent successfully.", back: "BACK TO HOME", modH: "Shipping Details", conf: "CONFIRM ORDER" },
-        de: { h1: "Cilento Gold für Sie.", p: "Kulinarische Exzellenz.", add: "ZUFÜGEN", total: "Gesamt", cart: "Warenkorb", ship: "Versand", order: "JETZT BESTELLEN", clear: "LEEREN", moments: "Highlights", all: "Alle Produkte", byCat: "Nach Kategorie", maxQty: "Maximalmenge", out: "Ausverkauft", low: "Begrenzte Menge", ok: "Verfügbar", alertStock: "Maximal verfügbare Menge erreicht.", alertEmpty: "Warenkorb ist leer!", thanksH: "Danke!", thanksP: "Bestellung erfolgreich gesendet.", back: "ZURÜCK", modH: "Versanddetails", conf: "BESTÄTIGEN" },
-        hu: { h1: "Cilento Aranya otthonában.", p: "Gasztronómiai élmény.", add: "HOZZÁAD", total: "Összesen", cart: "Kosár", ship: "Szállítás", order: "RENDELÉS", clear: "ÜRETÉS", moments: "Kiemelt termékek", all: "Összes termék", byCat: "Kategóriák", maxQty: "Max. mennyiség", out: "Elfogyott", low: "Limitált készlet", ok: "Elérhető", alertStock: "Elérte a maximális készletet.", alertEmpty: "A kosár üres!", thanksH: "Köszönjük!", thanksP: "Rendelés sikeresen elküldve.", back: "VISSZA", modH: "Szállítási adatok", conf: "RENDELÉS MEGERŐSÍTÉSE" }
-    };
-
-    let products = [], cart = [], lang = 'it', currentView = 'all', carouselIndex = 0, originalFeatCount = 0;
-
-    function shuffleArray(array) { let arr = [...array]; for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
-
-    async function load() {
-        const res = await fetch(CONFIG.catalog);
-        const text = await res.text();
-        const rows = text.split('\n').filter(r => r.trim() !== "");
-        const headers = rows[0].split(',').map(h => h.trim());
-        products = rows.slice(1).map(row => {
-            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            let o = {};
-            headers.forEach((h, i) => o[h] = cols[i]?.replace(/"/g, '').trim());
-            let sVal = o.Stock || o.Quantità || o.stock;
-            o.StockNum = (sVal === "" || sVal === undefined) ? 999 : parseInt(sVal);
-            return o;
-        });
-        const saved = localStorage.getItem('gizzi_cart');
-        if (saved) { cart = JSON.parse(saved); updateCartUI(); }
-        render(); startCarousel();
-        setTimeout(() => document.querySelectorAll('.card').forEach(el => el.classList.add('visible')), 200);
-    }
-
-    function updateLang(v) {
-        lang = v;
-        document.getElementById('hero-h1').innerText = UI[lang].h1;
-        document.getElementById('hero-p').innerText = UI[lang].p;
-        document.getElementById('carousel-title').innerText = UI[lang].moments;
-        document.getElementById('btn-view-all').innerText = UI[lang].all;
-        document.getElementById('btn-view-cats').innerText = UI[lang].byCat;
-        document.getElementById('cart-label').innerText = UI[lang].cart;
-        document.getElementById('btn-clear').innerText = UI[lang].clear;
-        document.getElementById('btn-checkout').innerText = UI[lang].order;
-        document.getElementById('modal-header').innerText = UI[lang].modH;
-        document.getElementById('btn-submit').innerText = UI[lang].conf;
-        document.getElementById('thanks-h').innerText = UI[lang].thanksH;
-        document.getElementById('thanks-p').innerText = UI[lang].thanksP;
-        document.getElementById('thanks-btn').innerText = UI[lang].back;
-        render(); updateCartUI();
-    }
-
-    function createCard(p, nK) {
-        const isOut = p.StockNum <= 0;
-        const isLow = p.StockNum > 0 && p.StockNum < 5;
-        let stockLabel = isOut ? UI[lang].out : (isLow ? UI[lang].low : UI[lang].ok);
-        return `<div class="card visible">
-            <img src="${p.Immagine}" loading="lazy" style="${isOut ? 'filter:grayscale(1); opacity:0.6;' : ''}">
-            <div class="card-body">
-                <div class="stock-badge ${isLow || isOut ? 'stock-low' : 'stock-ok'}">${stockLabel}</div>
-                <h3>${p[nK] || p.Nome}</h3>
-                <div class="price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
-                <button class="btn-add" ${isOut ? 'disabled' : ''} onclick="addToCart('${p.ID}')">${isOut ? UI[lang].out : UI[lang].add}</button>
-            </div>
-        </div>`;
-    }
-
-    function render() {
-        const nK = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
-        const cK = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
-        const activeProds = products.filter(p => p.Disponibile === 'SI');
-        const feat = shuffleArray(activeProds.filter(p => p.Evidenza === 'SI' && p.StockNum > 0));
-        originalFeatCount = feat.length;
-        const fullFeat = [...feat, ...feat.slice(0, 4)];
-        document.getElementById('carousel-track').innerHTML = fullFeat.map(p => createCard(p, nK)).join('');
-        const uniqueCats = [...new Set(activeProds.map(p => p[cK] || p.Categoria))];
-        const shuffledCats = shuffleArray(uniqueCats);
-        document.getElementById('anchor-menu').innerHTML = shuffledCats.map(c => `<a onclick="handleCategoryClick('cat-${c.replace(/\s+/g, '')}')">${c}</a>`).join('');
-        let html = "";
-        if (currentView === 'all') { html = `<div class="grid">${shuffleArray(activeProds).map(p => createCard(p, nK)).join('')}</div>`; } 
-        else { html = shuffledCats.map(c => { const cP = activeProds.filter(p => (p[cK] === c || p.Categoria === c)); return `<div id="cat-${c.replace(/\s+/g, '')}" style="margin-top:40px; width:100%;"><h2 style="color:var(--gizzi-deep); border-bottom:2px solid var(--gizzi-gold); display:inline-block; font-size:1.6rem; margin-bottom:20px;">${c}</h2><div class="grid">${cP.map(p => createCard(p, nK)).join('')}</div></div>`; }).join(''); }
-        document.getElementById('negozio').innerHTML = html;
-    }
-
-    function updateCartUI() {
-        const nK = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
-        let sub = 0;
-        document.getElementById('cart-items').innerHTML = cart.map(c => {
-            const p = products.find(x => x.ID == c.ID);
-            const rP = (parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2);
-            sub += parseFloat(rP);
-            return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:12px;">
-                <div style="flex:1;"><strong style="font-size:0.9rem;">${c[nK] || c.Nome}</strong><br><small>${UI[lang].maxQty}: ${p.StockNum}</small></div>
-                <div style="display:flex; align-items:center; gap:10px; background:#f5f5f5; padding:4px 10px; border-radius:10px;">
-                    <button style="border:none;background:none;font-weight:bold;cursor:pointer;" onclick="updateCartQty('${c.ID}', -1)">-</button>
-                    <span>${c.qty}</span>
-                    <button style="border:none;background:none;font-weight:bold;cursor:pointer;" onclick="updateCartQty('${c.ID}', 1)">+</button>
+    <div id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeCheckout()">✕</button>
+            <h2 id="modal-header">Dati Spedizione</h2>
+            <form onsubmit="event.preventDefault(); processOrder();">
+                <div class="form-group">
+                    <input type="text" id="f-name" placeholder="Nome e Cognome *" required>
                 </div>
-                <div style="min-width:60px; text-align:right; font-weight:700;">€ ${rP}</div>
-                <div onclick="removeProduct('${c.ID}')" style="cursor:pointer; color:#ff4d4d; margin-left:12px; font-size:1.2rem;">🗑️</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="email" id="f-email" placeholder="Email *" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="f-phone" placeholder="Telefono *" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="f-addr" placeholder="Indirizzo Completo (Via, Civico, Città, CAP) *" required>
+                </div>
+                <div class="form-group">
+                    <select id="f-country" onchange="updateCartUI()">
+                        <option value="Italia">🇮🇹 Italia</option>
+                        <option value="Europa">🇪🇺 Europa (UE)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-add" style="padding: 18px;">CONFERMA E ORDINA</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="thanks-popup">
+        <div class="thanks-content">
+            <h2 id="thanks-h">Grazie!</h2>
+            <p id="thanks-p">L'ordine è stato inviato correttamente.</p>
+            <button class="btn-back" onclick="clearAndReload()">TORNA AL SITO</button>
+        </div>
+    </div>
+
+    <div id="gdpr-banner">
+        <h3>🍪 Privacy & Cookie Policy</h3>
+        <p>Utilizziamo cookie e dati per migliorare l'esperienza di navigazione, personalizzare contenuti e analizzare il traffico. Proseguendo, accetti la nostra Cookie Policy e le condizioni di privacy.</p>
+        <div class="gdpr-buttons">
+            <button class="btn-gdpr btn-gdpr-decline" onclick="rejectGDPR()">Rifiuta</button>
+            <button class="btn-gdpr btn-gdpr-accept" onclick="acceptGDPR()">Accetta Tutto</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Gruppo Gizzi. Cilento Authentic Experience.</p>
+        </div>
+    </footer>
+
+    <script>
+        const CONFIG = {
+            catalog: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIumwZulbMAuesmG69DB8Y1bx2Y-NQXfyG7_m1-rdpZ-SoOxM0JyZtnj0_eV_K4t4drULTwV44nE5Y/pub?gid=0&single=true&output=csv",
+            formURL: "https://docs.google.com/forms/d/e/1FAIpQLSend7KPNCjTNP1d-B3zd-wvhZAVXLS3P7341yN88fm3d7D4Jw/formResponse",
+            wa: "393667540018"
+        };
+
+        const UI = {
+            it: {
+                h1: "L'Oro del Cilento, a casa tua.",
+                p: "Eccellenza gastronomica dal cuore del Parco Nazionale.",
+                add: "AGGIUNGI",
+                total: "Totale",
+                cart: "Il Tuo Carrello",
+                ship: "Spedizione",
+                order: "ORDINA ORA",
+                clear: "SVUOTA CARRELLO",
+                moments: "I Prodotti del Momento",
+                all: "Tutti i Prodotti",
+                byCat: "Per Categoria",
+                maxQty: "Max disponibili",
+                out: "Esaurito",
+                low: "Ultimi pezzi",
+                ok: "Disponibile",
+                alertStock: "Hai raggiunto la disponibilità massima.",
+                alertEmpty: "Il carrello è vuoto!",
+                thanksH: "Grazie!",
+                thanksP: "L'ordine è stato inviato correttamente.",
+                back: "TORNA AL SITO",
+                modH: "Dati Spedizione",
+                conf: "CONFERMA E ORDINA"
+            },
+            en: {
+                h1: "Cilento's Gold at home.",
+                p: "Gastronomic excellence from the heart of the National Park.",
+                add: "ADD",
+                total: "Total",
+                cart: "Your Cart",
+                ship: "Shipping",
+                order: "ORDER NOW",
+                clear: "EMPTY CART",
+                moments: "Best Sellers",
+                all: "All Products",
+                byCat: "By Category",
+                maxQty: "Max available",
+                out: "Out of Stock",
+                low: "Last pieces",
+                ok: "Available",
+                alertStock: "You've reached maximum availability.",
+                alertEmpty: "Cart is empty!",
+                thanksH: "Thank you!",
+                thanksP: "Order sent successfully.",
+                back: "BACK TO SITE",
+                modH: "Shipping Details",
+                conf: "CONFIRM ORDER"
+            },
+            de: {
+                h1: "Cilento Gold für Sie.",
+                p: "Kulinarische Exzellenz aus dem Nationalpark.",
+                add: "ZUFÜGEN",
+                total: "Gesamt",
+                cart: "Warenkorb",
+                ship: "Versand",
+                order: "JETZT BESTELLEN",
+                clear: "LEEREN",
+                moments: "Highlights",
+                all: "Alle Produkte",
+                byCat: "Nach Kategorie",
+                maxQty: "Maximal",
+                out: "Ausverkauft",
+                low: "Letzte Stück",
+                ok: "Verfügbar",
+                alertStock: "Maximale Menge erreicht.",
+                alertEmpty: "Warenkorb ist leer!",
+                thanksH: "Danke!",
+                thanksP: "Bestellung erfolgreich gesendet.",
+                back: "ZURÜCK",
+                modH: "Versanddetails",
+                conf: "BESTÄTIGEN"
+            },
+            hu: {
+                h1: "Cilento Aranya otthonában.",
+                p: "Gasztronómiai élmény a Nemzeti Park szívéből.",
+                add: "HOZZÁAD",
+                total: "Összesen",
+                cart: "Kosár",
+                ship: "Szállítás",
+                order: "RENDELÉS",
+                clear: "ÜRÍTÉS",
+                moments: "Kiemelt termékek",
+                all: "Összes termék",
+                byCat: "Kategóriák",
+                maxQty: "Max. mennyiség",
+                out: "Elfogyott",
+                low: "Utolsó darabok",
+                ok: "Elérhető",
+                alertStock: "Elérte a maximális mennyiséget.",
+                alertEmpty: "A kosár üres!",
+                thanksH: "Köszönjük!",
+                thanksP: "Rendelés sikeresen elküldve.",
+                back: "VISSZA",
+                modH: "Szállítási adatok",
+                conf: "RENDELÉS MEGERŐSÍTÉSE"
+            }
+        };
+
+        let products = [], cart = [], lang = 'it', currentView = 'all';
+
+        function shuffleArray(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('gizzi_theme', newTheme);
+            const icon = document.getElementById('theme-icon');
+            icon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('gizzi_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const icon = document.getElementById('theme-icon');
+            icon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function acceptGDPR() {
+            localStorage.setItem('gizzi_gdpr', 'accepted');
+            document.getElementById('gdpr-banner').classList.remove('active');
+        }
+
+        function rejectGDPR() {
+            localStorage.setItem('gizzi_gdpr', 'declined');
+            document.getElementById('gdpr-banner').classList.remove('active');
+        }
+
+        function checkGDPR() {
+            const gdpr = localStorage.getItem('gizzi_gdpr');
+            if (!gdpr) {
+                setTimeout(() => {
+                    document.getElementById('gdpr-banner').classList.add('active');
+                }, 1500);
+            }
+        }
+
+        async function load() {
+            initTheme();
+            checkGDPR();
+
+            const res = await fetch(CONFIG.catalog);
+            const text = await res.text();
+            const rows = text.split('\n').filter(r => r.trim() !== "");
+            const headers = rows[0].split(',').map(h => h.trim());
+
+            products = rows.slice(1).map(row => {
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                let o = {};
+                headers.forEach((h, i) => o[h] = cols[i]?.replace(/"/g, '').trim());
+                let sVal = o.Stock || o.Quantità || o.stock;
+                o.StockNum = (sVal === "" || sVal === undefined) ? 999 : parseInt(sVal);
+                return o;
+            });
+
+            const saved = localStorage.getItem('gizzi_cart');
+            if (saved) { cart = JSON.parse(saved); updateCartUI(); }
+
+            render();
+            startCarousel();
+        }
+
+        function updateLang(v) {
+            lang = v;
+            document.getElementById('hero-h1').innerText = UI[lang].h1;
+            document.getElementById('hero-p').innerText = UI[lang].p;
+            document.getElementById('carousel-title').innerText = UI[lang].moments;
+            document.getElementById('btn-view-all').innerText = UI[lang].all;
+            document.getElementById('btn-view-cats').innerText = UI[lang].byCat;
+            document.getElementById('cart-label').innerText = UI[lang].cart;
+            document.getElementById('modal-header').innerText = UI[lang].modH;
+            document.getElementById('thanks-h').innerText = UI[lang].thanksH;
+            document.getElementById('thanks-p').innerText = UI[lang].thanksP;
+            render();
+            updateCartUI();
+        }
+
+        function createCard(p, nameKey) {
+            const isOut = p.StockNum <= 0;
+            const isLow = p.StockNum > 0 && p.StockNum < 5;
+            let stockLabel = isOut ? UI[lang].out : (isLow ? UI[lang].low : UI[lang].ok);
+            let stockClass = isOut || isLow ? 'stock-low' : 'stock-ok';
+
+            return `<div class="card">
+                <img src="${p.Immagine}" loading="lazy" alt="${p[nameKey]}" style="${isOut ? 'filter:grayscale(1); opacity:0.6;' : ''}">
+                <div class="card-body">
+                    <div>
+                        <div class="stock-badge ${stockClass}">${stockLabel}</div>
+                        <h3>${p[nameKey]}</h3>
+                    </div>
+                    <div>
+                        <div class="price">€ ${p.Prezzo} <small>/ ${p.Unità}</small></div>
+                        <button class="btn-add" ${isOut ? 'disabled' : ''} onclick="addToCart('${p.ID}')">
+                            ${isOut ? UI[lang].out : UI[lang].add}
+                        </button>
+                    </div>
+                </div>
             </div>`;
-        }).join('');
-        const country = document.getElementById('f-country').value;
-        let ship = (cart.length === 0) ? 0 : (country === "Italia" ? (sub >= 120 ? 0 : 13) : 50);
-        document.getElementById('shipping-info').innerText = `${UI[lang].ship} (${country}): € ${ship.toFixed(2)}`;
-        document.getElementById('cart-total-display').innerText = `${UI[lang].total}: € ${(sub + ship).toFixed(2)}`;
-        document.getElementById('cart-count').innerText = cart.reduce((a,b) => a + b.qty, 0);
-    }
+        }
 
-    function addToCart(id) { const p = products.find(x => x.ID == id); const ex = cart.find(c => c.ID == id); if (ex) { if (ex.qty < p.StockNum) ex.qty++; else alert(UI[lang].alertStock); } else { if (p.StockNum > 0) cart.push({...p, qty: 1}); } saveCartUI(); if(!document.getElementById('cart-panel').classList.contains('active')) toggleCart(); }
-    function removeProduct(id) { cart = cart.filter(c => c.ID !== id); saveCartUI(); }
-    function emptyCart() { if(confirm(UI[lang].clear + "?")) { cart = []; saveCartUI(); } }
-    function updateCartQty(id, delta) { const it = cart.find(c => c.ID == id); const p = products.find(x => x.ID == id); if(it) { if (delta > 0 && it.qty >= p.StockNum) return alert(UI[lang].alertStock); it.qty += delta; if(it.qty <= 0) cart = cart.filter(c => c.ID !== id); } saveCartUI(); }
-    function toggleCart() { document.getElementById('cart-panel').classList.toggle('active'); document.getElementById('cart-overlay').style.display = (document.getElementById('cart-overlay').style.display === 'block' ? 'none' : 'block'); }
-    function switchView(v) { currentView = v; document.getElementById('btn-view-all').classList.toggle('active', v === 'all'); document.getElementById('btn-view-cats').classList.toggle('active', v === 'cats'); render(); }
-    function handleCategoryClick(id) { if(currentView !== 'cats') switchView('cats'); setTimeout(() => { const t = document.getElementById(id); if(t) window.scrollTo({top: t.offsetTop - 120, behavior:'smooth'}); }, 100); }
-    function openCheckout() { if(cart.length === 0) return alert(UI[lang].alertEmpty); document.getElementById('modal').style.display = 'flex'; }
-    function closeCheckout() { document.getElementById('modal').style.display = 'none'; }
-    function saveCartUI() { localStorage.setItem('gizzi_cart', JSON.stringify(cart)); updateCartUI(); }
-    function clearAndReload() { localStorage.removeItem('gizzi_cart'); location.reload(); }
-    function startCarousel() { const track = document.getElementById('carousel-track'); setInterval(() => { if(!track || track.children.length <= 1) return; const width = track.children[0].offsetWidth + 20; carouselIndex++; track.classList.add('animate'); track.style.transform = `translateX(-${carouselIndex * width}px)`; if (carouselIndex >= originalFeatCount) { setTimeout(() => { track.classList.remove('animate'); carouselIndex = 0; track.style.transform = `translateX(0)`; }, 800); } }, 4000); }
+        function render() {
+            const nameKey = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
+            const catKey = lang === 'it' ? 'Categoria' : `Categoria_${lang.toUpperCase()}`;
 
-    async function processOrder() {
-        const name = document.getElementById('f-name').value, email = document.getElementById('f-email').value, phone = document.getElementById('f-phone').value, addr = document.getElementById('f-addr').value;
-        const fT = document.getElementById('cart-total-display').innerText.split('€')[1].trim(), oID = "GZ-" + Date.now().toString().slice(-6);
-        const detailRows = cart.map(c => `${c.qty}x ${c.Nome} (€ ${c.Prezzo}) = € ${(parseFloat(c.Prezzo.replace(',','.')) * c.qty).toFixed(2)}`);
-        
-        fetch(CONFIG.formURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ 'entry.442927045': oID, 'entry.333212320': name, 'entry.1385104048': email, 'entry.844983788': phone, 'entry.334440207': addr, 'entry.1856379113': detailRows.join(" | "), 'entry.146792905': fT })});
-        
-        document.getElementById('modal').style.display = 'none'; document.getElementById('thanks-popup').style.display = 'flex';
-        window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent("*ORDINE " + oID + "*\n\n*CLIENTE:* " + name + "\n*EMAIL:* " + email + "\n*TEL:* " + phone + "\n*IND:* " + addr + "\n\n" + detailRows.join("\n") + "\n\n*TOTALE:* € " + fT)}`);
-    }
-    load();
-</script>
+            const activeProds = products.filter(p => p.Disponibile === 'SI');
+            const feat = shuffleArray(activeProds.filter(p => p.Evidenza === 'SI' && p.StockNum > 0));
+
+            document.getElementById('carousel-track').innerHTML = feat.map(p => createCard(p, nameKey)).join('');
+            updateCarouselDots(feat.length);
+
+            const uniqueCats = [...new Set(activeProds.map(p => p[catKey] || p.Categoria))];
+            const shuffledCats = shuffleArray(uniqueCats);
+
+            document.getElementById('anchor-menu').innerHTML = shuffledCats.map(c =>
+                `<a onclick="handleCategoryClick('cat-${c.replace(/\s+/g, '')}')">${c}</a>`
+            ).join('');
+
+            let html = "";
+            if (currentView === 'all') {
+                html = `<div class="grid">${shuffleArray(activeProds).map(p => createCard(p, nameKey)).join('')}</div>`;
+            } else {
+                html = shuffledCats.map(c => {
+                    const cP = activeProds.filter(p => (p[catKey] === c || p.Categoria === c));
+                    return `<div id="cat-${c.replace(/\s+/g, '')}" style="width:100%;">
+                        <h2 class="section-title">${c}</h2>
+                        <div class="grid">${cP.map(p => createCard(p, nameKey)).join('')}</div>
+                    </div>`;
+                }).join('');
+            }
+            document.getElementById('negozio').innerHTML = html;
+        }
+
+        let carouselIndex = 0;
+        let carouselInterval;
+
+        function updateCarouselDots(count) {
+            const dotsContainer = document.getElementById('carousel-dots');
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < Math.min(count, 8); i++) {
+                const dot = document.createElement('button');
+                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goToCarouselSlide(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function goToCarouselSlide(index) {
+            const track = document.getElementById('carousel-track');
+            const cards = track.querySelectorAll('.card');
+            if (cards.length === 0) return;
+
+            const cardWidth = cards[0].offsetWidth + 24;
+            carouselIndex = index;
+            track.style.transform = `translateX(-${carouselIndex * cardWidth}px)`;
+
+            document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === carouselIndex);
+            });
+        }
+
+        function startCarousel() {
+            const track = document.getElementById('carousel-track');
+            if (!track || track.children.length <= 1) return;
+
+            const nextSlide = () => {
+                const cards = track.querySelectorAll('.card');
+                if (cards.length === 0) return;
+
+                const cardWidth = cards[0].offsetWidth + 24;
+                carouselIndex++;
+
+                if (carouselIndex >= cards.length) {
+                    carouselIndex = 0;
+                }
+
+                track.style.transform = `translateX(-${carouselIndex * cardWidth}px)`;
+
+                const dots = document.querySelectorAll('.carousel-dot');
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === carouselIndex);
+                });
+            };
+
+            carouselInterval = setInterval(nextSlide, 5000);
+        }
+
+        function updateCartUI() {
+            const nameKey = lang === 'it' ? 'Nome' : `Nome_${lang.toUpperCase()}`;
+            let subtotal = 0;
+
+            document.getElementById('cart-items').innerHTML = cart.map(c => {
+                const p = products.find(x => x.ID == c.ID);
+                const itemTotal = parseFloat(c.Prezzo.replace(',', '.')) * c.qty;
+                subtotal += itemTotal;
+
+                return `<div class="cart-item">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${c[nameKey] || c.Nome}</div>
+                        <div class="cart-item-stock">${UI[lang].maxQty}: ${p.StockNum}</div>
+                    </div>
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="updateCartQty('${c.ID}', -1)">−</button>
+                        <span class="qty-value">${c.qty}</span>
+                        <button class="qty-btn" onclick="updateCartQty('${c.ID}', 1)">+</button>
+                    </div>
+                    <div class="cart-item-price">€ ${itemTotal.toFixed(2)}</div>
+                    <button class="cart-remove" onclick="removeProduct('${c.ID}')">🗑️</button>
+                </div>`;
+            }).join('');
+
+            const country = document.getElementById('f-country').value;
+            let shipping = (cart.length === 0) ? 0 : (country === "Italia" ? (subtotal >= 120 ? 0 : 13) : 50);
+
+            document.getElementById('shipping-info').innerText = `${UI[lang].ship} (${country}): € ${shipping.toFixed(2)}`;
+            document.getElementById('cart-total-display').innerText = `${UI[lang].total}: € ${(subtotal + shipping).toFixed(2)}`;
+            document.getElementById('cart-count').innerText = cart.reduce((a, b) => a + b.qty, 0);
+        }
+
+        function addToCart(id) {
+            const p = products.find(x => x.ID == id);
+            const ex = cart.find(c => c.ID == id);
+            if (ex) {
+                if (ex.qty < p.StockNum) ex.qty++;
+                else alert(UI[lang].alertStock);
+            } else {
+                if (p.StockNum > 0) cart.push({...p, qty: 1});
+            }
+            saveCartUI();
+            if (!document.getElementById('cart-panel').classList.contains('active')) toggleCart();
+        }
+
+        function removeProduct(id) {
+            cart = cart.filter(c => c.ID !== id);
+            saveCartUI();
+        }
+
+        function emptyCart() {
+            if (confirm(UI[lang].clear + "?")) {
+                cart = [];
+                saveCartUI();
+            }
+        }
+
+        function updateCartQty(id, delta) {
+            const it = cart.find(c => c.ID == id);
+            const p = products.find(x => x.ID == id);
+            if (it) {
+                if (delta > 0 && it.qty >= p.StockNum) return alert(UI[lang].alertStock);
+                it.qty += delta;
+                if (it.qty <= 0) cart = cart.filter(c => c.ID !== id);
+            }
+            saveCartUI();
+        }
+
+        function toggleCart() {
+            const panel = document.getElementById('cart-panel');
+            const overlay = document.getElementById('cart-overlay');
+            panel.classList.toggle('active');
+            overlay.style.display = panel.classList.contains('active') ? 'block' : 'none';
+            document.body.style.overflow = panel.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function switchView(v) {
+            currentView = v;
+            document.getElementById('btn-view-all').classList.toggle('active', v === 'all');
+            document.getElementById('btn-view-cats').classList.toggle('active', v === 'cats');
+            render();
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function handleCategoryClick(id) {
+            if (currentView !== 'cats') switchView('cats');
+            document.querySelectorAll('.category-menu a').forEach(a => a.classList.remove('active'));
+            event.target.classList.add('active');
+            setTimeout(() => {
+                const t = document.getElementById(id);
+                if (t) window.scrollTo({top: t.offsetTop - 120, behavior: 'smooth'});
+            }, 100);
+        }
+
+        function openCheckout() {
+            if (cart.length === 0) return alert(UI[lang].alertEmpty);
+            document.getElementById('modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCheckout() {
+            document.getElementById('modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function saveCartUI() {
+            localStorage.setItem('gizzi_cart', JSON.stringify(cart));
+            updateCartUI();
+        }
+
+        function clearAndReload() {
+            localStorage.removeItem('gizzi_cart');
+            location.reload();
+        }
+
+        async function processOrder() {
+            const name = document.getElementById('f-name').value;
+            const email = document.getElementById('f-email').value;
+            const phone = document.getElementById('f-phone').value;
+            const addr = document.getElementById('f-addr').value;
+
+            const fT = document.getElementById('cart-total-display').innerText.split('€')[1].trim();
+            const oID = "GZ-" + Date.now().toString().slice(-6);
+
+            const detailRows = cart.map(c =>
+                `${c.qty}x ${c.Nome} (€ ${c.Prezzo}) = € ${(parseFloat(c.Prezzo.replace(',', '.')) * c.qty).toFixed(2)}`
+            );
+
+            fetch(CONFIG.formURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: new URLSearchParams({
+                    'entry.442927045': oID,
+                    'entry.333212320': name,
+                    'entry.1385104048': email,
+                    'entry.844983788': phone,
+                    'entry.334440207': addr,
+                    'entry.1856379113': detailRows.join(" | "),
+                    'entry.146792905': fT
+                })
+            });
+
+            document.getElementById('modal').classList.remove('active');
+            document.getElementById('thanks-popup').classList.add('active');
+
+            window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent("*ORDINE " + oID + "*\n\n*CLIENTE:* " + name + "\n*EMAIL:* " + email + "\n*TEL:* " + phone + "\n*IND:* " + addr + "\n\n" + detailRows.join("\n") + "\n\n*TOTALE:* € " + fT)}`);
+        }
+
+        load();
+    </script>
 </body>
 </html>
