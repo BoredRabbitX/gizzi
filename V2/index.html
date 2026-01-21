@@ -34,6 +34,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/gdpr-features.css">
     
     <script type="application/ld+json">
     {
@@ -131,6 +132,51 @@
             </div>
         </section>
 
+        <!-- Advanced Filters Section -->
+        <section class="filters-section">
+            <div class="filters-container">
+                <h3>Filtri Avanzati</h3>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <h4>Prezzo</h4>
+                        <div class="filter-options">
+                            <div class="price-range">
+                                <input type="number" id="min-price" placeholder="Min" step="10">
+                                <span>-</span>
+                                <input type="number" id="max-price" placeholder="Max" step="10">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <h4>Disponibilità</h4>
+                        <div class="filter-options">
+                            <div class="filter-option">
+                                <input type="checkbox" id="in-stock" checked>
+                                <label for="in-stock">Solo Disponibili</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="in-sale">
+                                <label for="in-sale">In Sconto</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <h4>Recensioni</h4>
+                        <div class="filter-options">
+                            <div class="filter-option">
+                                <input type="checkbox" id="rating-4">
+                                <label for="rating-4">⭐⭐⭐⭐+</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: var(--spacing-lg);">
+                    <button class="btn-gdpr" onclick="applyFilters()">Applica Filtri</button>
+                    <button class="btn-gdpr-secondary" onclick="resetFilters()">Reset</button>
+                </div>
+            </div>
+        </section>
+
         <section class="container">
             <div class="view-controls">
                 <button id="btn-view-all" class="btn-toggle-view active" onclick="switchView('all')">Tutti i Prodotti</button>
@@ -202,6 +248,95 @@
             <button id="thanks-btn" onclick="clearAndReload()" class="btn-thanks">TORNA AL SITO</button>
         </div>
     </div>
+
+    <!-- Product Reviews Section -->
+    <section class="reviews-section">
+        <div class="container">
+            <h2>Recensioni dei Nostri Clienti</h2>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="review-stars">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                    </div>
+                    <h4>Olio Extra Vergine</h4>
+                    <p class="review-text">"Qualità eccezionale, sapore unico del Cilento. Altamente raccomandato!"</p>
+                    <p class="review-author">- Marco Rossi</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <h4>Vini del Cilento</h4>
+                    <p class="review-text">"Ottima selezione di vini locali. Packaging curato e spedizione veloce."</p>
+                    <p class="review-author">- Laura Bianchi</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                    </div>
+                    <h4>Salumi Tipici</h4>
+                    <p class="review-text">"Sapori autentici della tradizione cilentana. Freschezza garantita!"</p>
+                    <p class="review-author">- Antonio Verdi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+        <div class="newsletter-content">
+            <h2>Iscriviti alla Nostra Newsletter</h2>
+            <p>Ricevi offerte esclusive e novità sui prodotti del Cilento</p>
+            <form class="newsletter-form" onsubmit="event.preventDefault(); subscribeNewsletter();">
+                <input type="email" placeholder="La tua email" required>
+                <button type="submit">ISCRIVITI</button>
+            </form>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: var(--spacing-sm);">
+                Privacy garantita. Cancellazione in qualsiasi momento.
+            </p>
+        </div>
+    </section>
+
+    <!-- Payment Methods Section -->
+    <section style="background: var(--bg-secondary); padding: var(--spacing-xl) 0;">
+        <div class="container">
+            <h2 style="text-align: center; color: var(--text-primary); margin-bottom: var(--spacing-xl);">Metodi di Pagamento Sicuri</h2>
+            <div class="payment-methods">
+                <div class="payment-method">
+                    <div class="payment-icons">💳</div>
+                    <h4>Carta di Credito</h4>
+                    <p>Visa, Mastercard, American Express</p>
+                </div>
+                <div class="payment-method">
+                    <div class="payment-icons">🏦</div>
+                    <h4>PayPal</h4>
+                    <p>Paga in modo sicuro e veloce</p>
+                </div>
+                <div class="payment-method">
+                    <div class="payment-icons">📱</div>
+                    <h4>Satispay</h4>
+                    <p>Paga direttamente dal tuo smartphone</p>
+                </div>
+                <div class="payment-method">
+                    <div class="payment-icons">🔒</div>
+                    <h4>Bonifico Bancario</h4>
+                    <p>Trasferimento sicuro diretto</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <footer role="contentinfo">
         <div class="container">
