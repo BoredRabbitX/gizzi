@@ -1,105 +1,87 @@
-# Gruppo Gizzi - V2 Amazon-Style
+# Gruppo Gizzi - V2 Terra-Amazon Style
 
-Versione ridisegnata con stile moderno e accattivante ispirato ad Amazon.
+Versione ottimizzata con colori terra mantenendo lo stile Amazon accattivante.
 
-## 🎨 Design System Amazon-Inspired
+## 🎨 **Nuova Palette Colori Terra-Inspired**
 
-### Palette Colori
-- **Primary**: #131921 - Nero Amazon
-- **Secondary**: #ff9900 - Arancione Amazon
-- **Primary Light**: #232f3e - Blu scuro
-- **Success**: #0f7938 - Verde conferma
-- **Warning**: #e47911 - Arancione avviso
-- **Danger**: #cc0c39 - Rosso errore
+### **Colori Primari Terra**
+- **Primary**: #2e402f - Terra scura profonda
+- **Primary Light**: #3d523f - Verde foresta
+- **Secondary**: #b87a3a - Arancione terra/aranciato
+- **Secondary Dark**: #9a6428 - Marrone scuro
+- **Accent**: #a66c39 - Oro bronzo terra
 
-### Backgrounds
-- **Primary**: #ffffff - Bianco puro
-- **Secondary**: #f7f8fa - Grigio chiaro
-- **Tertiary**: #eaeded - Grigio border
+### **Backgrounds Naturali**
+- **Primary**: #faf9f6 - Bianco avorio
+- **Secondary**: #f3f2ed - Crema chiaro
+- **Tertiary**: #edece5 - Sabbia naturale
 
-### Text Colors
-- **Primary**: #0f1111 - Nero profondo
-- **Secondary**: #565959 - Grigio medio
-- **Link**: #007185 - Blu Amazon
-- **Muted**: #888888 - Grigio disattivato
+### **Text Colors Leggibili**
+- **Primary**: #2c2722 - Marrone scuro
+- **Sectiondary**: #6b5d54 - Grigio terracotta
+- **Muted**: #8a7f78 - Sabbia scurita
+- **Link**: #4a7c59 - Verde salvia
 
-## 🔄 Cambiamenti Implementati
+### **Colori Stato**
+- **Success**: #4a7c59 - Verde salvia
+- **Warning**: #d48c39 - Arancione ambra
+- **Danger**: #a63939 - Terracotta
 
-### Header Amazon-Style
-- [x] Barra nera con logo dominante
-- [x] Carrello con contatore arancione
-- [x] Navigazione categorie stile Amazon
-- [x] Select lingua minimale
+## 🔄 **Miglioramenti Implementati**
 
-### Card Prodotti Amazon-Style
-- [x] Design pulito con border sottili
-- [x] Immagini con aspect ratio standard
-- [x] Prezzi in rosso arancione
-- [x] Button "Aggiungi" arancione Amazon
-- [x] Hover effect sottile con shadow
+### **1. Hero Section Potenziata**
+- [x] Altezza aumentata a 70vh (da 40vh)
+- [x] Min-height 500px per mobile
+- [x] Gradiente terra naturale più caldo
+- [x] Immagine più grande e dettagliata
 
-### UI Components
-- [x] Search box con icona e shadow
-- [x] Buttons arancioni con hover effect
-- [x] Form fields con border e focus states
-- [x] Toast notifications minimaliste
+### **2. Palette Terra Armoniosa**
+- [x] Colori terra caldi e naturali
+- [x] Contrasti ottimizzati per leggibilità
+- [x] Armonia visiva coerente
+- [x] Stile Amazon mantenuto ma personalizzato
 
-### Icone Professionali
-- [x] SVG icons puliti e moderni
-- [x] Carrello icon Amazon-style
-- [x] Search icon minimalista
-- [x] Close buttons eleganti
-- [x] Navigation arrows
+### **3. Header Terra-Amazon**
+- [x] Terra scura dominante ma naturale
+- [x] Shadow sottile per profondità
+- [x] Arancione terra per accenti
+- [x] Navigazione in verde foresta
 
-### Color Scheme
-- [x] Nero/arancione come Amazon
-- [x] Grigi professionali
-- [x] Blu per link
-- [x] Rosso per prezzi
+### **4. Cards Prodotti Perfezionate**
+- [x] Prezzi in arancione terra
+- [x] Stock badges con background terra
+- [x] Borders in sabbia naturale
+- [x] Hover effects smooth
 
-## 🎯 Caratteristiche Chiave
+### **5. UI Elements Raffinati**
+- [x] Toast con background terra semi-trasparente
+- [x] Buttons arancione terra eleganti
+- [x] Forms con focus terra
+- [x] Search box integrato
 
-### Accattivante e Moderno
-- Design pulito e professionale
-- Colori vivaci ma non eccessivi
-- Spaziature ottimizzate
-- Contrasti forti e leggibili
+## 🎯 **Risultato Finale**
 
-### User Experience
-- Intuitivo e familiare (Amazon)
-- Feedback visivo immediato
-- Animazioni fluide ma discrete
-- Responsive e touch-friendly
+### **Vantaggi Chiave**
+- **Accattivante**: Colori vivaci ma naturali
+- **Professionale**: Look Amazon ma personalizzato
+- **Terra**: Palette calda e avvolgente
+- **Leggibile**: Contrasti WCAG compliant
+- **Coeso**: Armonia visiva perfetta
 
-### Professionalità
-- Tipografia pulita e leggibile
-- Icons SVG vettoriali
-- Forms con validazione chiara
-- Error states ben definiti
+### **Psychology dei Colori**
+- **Terra**: Trasmissione di autenticità, naturale
+- **Arancione**: Calore, appetito, eccellenza
+- **Verde**: Freschezza, qualità, natura
+- **Crema**: Eleganza, lusso accessibile
 
-## 🌐 Browser Support
-
-- Chrome/Edge 90+
-- Firefox 88+
-- Safari 14+
-- Mobile browsers
-
-## 📱 Mobile Optimized
-
-- Touch targets >= 44px
-- Mobile-first approach
-- Swipe gestures per carousel
-- Optimized spacing
-
-## ⚡ Performance
-
-- CSS ottimizzato
-- SVG icons lightweight
-- Transizioni GPU accelerated
-- Minimal JavaScript overhead
+## 🌐 **Responsive e Moderno**
+- Hero responsive su tutti i dispositivi
+- Palette leggibile anche in dark mode
+- Touch targets ottimizzati
+- Performance mantenuta
 
 ---
 
-**Design Philosophy**: Modern, accattivante, familiare ma unico.  
-**Status**: Production Ready  
-**Version**: 2.1.0
+**Design Philosophy**: **Terra + Amazon = Autenticità + Professionalità**  
+**Status**: **Production Ready**  
+**Version**: **2.2.0**

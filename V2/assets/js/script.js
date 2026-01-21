@@ -308,7 +308,7 @@ async function load() {
         
         loadPreferences();
         render();
-        startCarousel();
+    
         
         setTimeout(() => {
             document.querySelectorAll('.card').forEach(el => el.classList.add('visible'));
@@ -443,11 +443,9 @@ function render() {
     }
     
     const featuredProducts = shuffleArray(filteredProducts.filter(p => p.Evidenza === 'SI' && p.StockNum > 0));
-    originalFeatCount = featuredProducts.length;
-    const fullFeatured = [...featuredProducts, ...featuredProducts.slice(0, 4)];
     
-    const carouselTrack = document.getElementById('carousel-track');
-    carouselTrack.innerHTML = fullFeatured.map(p => createCard(p, nameKey)).join('');
+    const featuredGrid = document.getElementById('featured-grid');
+    featuredGrid.innerHTML = featuredProducts.map(p => createCard(p, nameKey)).join('');
     
     const uniqueCategories = [...new Set(filteredProducts.map(p => p[categoryKey] || p.Categoria))];
     const shuffledCategories = shuffleArray(uniqueCategories);
@@ -657,24 +655,9 @@ function handleSearch(query) {
     render();
 }
 
-function moveCarousel(direction) {
-    const track = document.getElementById('carousel-track');
-    if (!track || track.children.length <= 1) return;
-    
-    const itemWidth = track.children[0].offsetWidth + 28;
-    const maxIndex = track.children.length - Math.ceil(track.parentElement.offsetWidth / itemWidth);
-    
-    carouselIndex += direction;
-    
-    if (carouselIndex < 0) carouselIndex = maxIndex;
-    if (carouselIndex > maxIndex) carouselIndex = 0;
-    
-    track.style.transform = `translateX(-${carouselIndex * itemWidth}px)`;
-}
 
-function startCarousel() {
-    setInterval(() => moveCarousel(1), 5000);
-}
+
+
 
 function openCheckout() {
     if (cart.length === 0) {

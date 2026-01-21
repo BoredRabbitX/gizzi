@@ -11,7 +11,7 @@
     <meta name="keywords" content="Cilento, prodotti tipici, olio extravergine, vino, salumi, gastronomia campana, Parco Nazionale Cilento, eccellenza italiana">
     <meta name="author" content="Gruppo Gizzi">
     <meta name="robots" content="index, follow">
-    <meta name="theme-color" content="#1b4332">
+    <meta name="theme-color" content="#374151">
     
     <link rel="canonical" href="https://gizzi.it/">
     
@@ -31,7 +31,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="assets/css/style.css">
     
@@ -81,16 +81,20 @@
     <header role="banner">
         <div class="container nav-top">
             <a href="#" class="logo" aria-label="Gruppo Gizzi - Torna alla home">GRUPPO GIZZI</a>
+            <div class="nav-center">
+                <div class="header-actions">
+                    <select id="lang-sel" onchange="updateLang(this.value)" aria-label="Seleziona lingua">
+                        <option value="it">IT</option>
+                        <option value="en">EN</option>
+                        <option value="de">DE</option>
+                        <option value="hu">HU</option>
+                    </select>
+                    <button onclick="toggleDarkMode()" class="theme-toggle" aria-label="Attiva/Disattiva modalità scura">
+                        <img src="assets/img/theme-icon.svg" alt="Theme toggle" class="theme-icon">
+                    </button>
+                </div>
+            </div>
             <div class="header-actions">
-                <select id="lang-sel" onchange="updateLang(this.value)" aria-label="Seleziona lingua">
-                    <option value="it">IT</option>
-                    <option value="en">EN</option>
-                    <option value="de">DE</option>
-                    <option value="hu">HU</option>
-                </select>
-                <button onclick="toggleDarkMode()" class="theme-toggle" aria-label="Attiva/Disattiva modalità scura">
-                    <img src="assets/img/theme-icon.svg" alt="Theme toggle" class="theme-icon">
-                </button>
                 <button onclick="toggleCart()" class="cart-btn" aria-label="Apri carrello">
                     <img src="assets/img/cart-icon.svg" alt="Cart" class="cart-icon">
                     <span id="cart-count" class="cart-count" aria-live="polite">0</span>
@@ -111,19 +115,9 @@
             </div>
         </section>
 
-        <section class="container carousel-section" aria-labelledby="featured-title">
+        <section class="container featured-section" aria-labelledby="featured-title">
             <h2 id="featured-title" class="section-title">I Prodotti del Momento</h2>
-            <div class="carousel-wrapper">
-                <button class="carousel-nav prev" onclick="moveCarousel(-1)" aria-label="Prodotti precedenti">
-                    <img src="assets/img/prev-icon.svg" alt="Previous">
-                </button>
-                <div class="carousel-viewport">
-                    <div id="carousel-track" class="carousel-track"></div>
-                </div>
-                <button class="carousel-nav next" onclick="moveCarousel(1)" aria-label="Prodotti successivi">
-                    <img src="assets/img/next-icon.svg" alt="Next">
-                </button>
-            </div>
+            <div id="featured-grid" class="featured-grid"></div>
         </section>
 
         <section class="container search-section" aria-label="Ricerca prodotti">
