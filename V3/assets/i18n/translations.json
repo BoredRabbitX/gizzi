@@ -1,0 +1,322 @@
+{
+  "it": {
+    "meta": {
+      "title": "Gruppo Gizzi | Cilento Authentic Experience",
+      "description": "Eccellenza gastronomica dal cuore del Parco Nazionale del Cilento. Scopri i nostri prodotti autentici e porta a casa l'oro del Cilento.",
+      "keywords": "Gruppo Gizzi, Cilento, prodotti tipici, gastronomia, Parco Nazionale, eccellenza italiana"
+    },
+    "header": {
+      "logo": "GRUPPO GIZZI",
+      "cart": "Carrello",
+      "theme": "Tema"
+    },
+    "hero": {
+      "title": "L'Oro del Cilento, a casa tua.",
+      "subtitle": "Eccellenza gastronomica dal cuore del Parco Nazionale.",
+      "cta": "Scopri i Prodotti"
+    },
+    "products": {
+      "featured": "I Prodotti del Momento",
+      "all": "Tutti i Prodotti",
+      "byCategory": "Per Categoria",
+      "add": "AGGIUNGI",
+      "outOfStock": "Esaurito",
+      "lastPieces": "Ultimi pezzi",
+      "available": "Disponibile",
+      "maxQty": "Max disponibili",
+      "unit": "pezzo",
+      "grams": "gr",
+      "ml": "ml"
+    },
+    "cart": {
+      "title": "Il Tuo Carrello",
+      "empty": "Il carrello è vuoto!",
+      "total": "Totale",
+      "shipping": "Spedizione",
+      "emptyCart": "SVUOTA CARRELLO",
+      "checkout": "PROSEGUI ALL'ORDINE",
+      "continue": "CONTINUA GLI ACQUISTI",
+      "itemAdded": "Prodotto aggiunto al carrello",
+      "itemRemoved": "Prodotto rimosso dal carrello"
+    },
+    "checkout": {
+      "title": "Dati Spedizione",
+      "name": "Nome e Cognome",
+      "email": "Email",
+      "phone": "Telefono",
+      "address": "Indirizzo Completo (Via, Civico, Città, CAP)",
+      "country": "Paese",
+      "confirm": "CONFERMA E ORDINA",
+      "processing": "Elaborazione in corso...",
+      "italy": "Italia",
+      "europe": "Europa (UE)"
+    },
+    "order": {
+      "thanks": "Grazie!",
+      "message": "L'ordine è stato inviato correttamente.",
+      "back": "TORNA AL SITO",
+      "id": "Ordine",
+      "customer": "CLIENTE",
+      "details": "DETTAGLI ORDINE"
+    },
+    "footer": {
+      "copyright": "© 2026 Gruppo Gizzi. Cilento Authentic Experience.",
+      "rights": "Tutti i diritti riservati."
+    },
+    "gdpr": {
+      "title": "🍪 Privacy & Cookie Policy",
+      "message": "Utilizziamo cookie e dati per migliorare l'esperienza di navigazione, personalizzare contenuti e analizzare il traffico. Proseguendo, accetti la nostra Cookie Policy e le condizioni di privacy.",
+      "accept": "Accetta Tutto",
+      "decline": "Rifiuta",
+      "customize": "Personalizza"
+    },
+    "alerts": {
+      "stockReached": "Hai raggiunto la disponibilità massima.",
+      "cartEmpty": "Il carrello è vuoto!",
+      "orderSuccess": "Ordine inviato con successo!",
+      "orderError": "Errore durante l'invio dell'ordine. Riprova.",
+      "invalidEmail": "Email non valida",
+      "requiredField": "Campo obbligatorio"
+    }
+  },
+  "en": {
+    "meta": {
+      "title": "Gruppo Gizzi | Cilento Authentic Experience",
+      "description": "Gastronomic excellence from the heart of Cilento National Park. Discover our authentic products and bring Cilento's gold to your home.",
+      "keywords": "Gruppo Gizzi, Cilento, typical products, gastronomy, National Park, Italian excellence"
+    },
+    "header": {
+      "logo": "GRUPPO GIZZI",
+      "cart": "Cart",
+      "theme": "Theme"
+    },
+    "hero": {
+      "title": "Cilento's Gold at home.",
+      "subtitle": "Gastronomic excellence from the heart of the National Park.",
+      "cta": "Discover Products"
+    },
+    "products": {
+      "featured": "Best Sellers",
+      "all": "All Products",
+      "byCategory": "By Category",
+      "add": "ADD",
+      "outOfStock": "Out of Stock",
+      "lastPieces": "Last pieces",
+      "available": "Available",
+      "maxQty": "Max available",
+      "unit": "piece",
+      "grams": "gr",
+      "ml": "ml"
+    },
+    "cart": {
+      "title": "Your Cart",
+      "empty": "Cart is empty!",
+      "total": "Total",
+      "shipping": "Shipping",
+      "emptyCart": "EMPTY CART",
+      "checkout": "CHECKOUT",
+      "continue": "CONTINUE SHOPPING",
+      "itemAdded": "Product added to cart",
+      "itemRemoved": "Product removed from cart"
+    },
+    "checkout": {
+      "title": "Shipping Details",
+      "name": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Complete Address (Street, Number, City, ZIP)",
+      "country": "Country",
+      "confirm": "CONFIRM ORDER",
+      "processing": "Processing...",
+      "italy": "Italy",
+      "europe": "Europe (EU)"
+    },
+    "order": {
+      "thanks": "Thank you!",
+      "message": "Order sent successfully.",
+      "back": "BACK TO SITE",
+      "id": "Order",
+      "customer": "CUSTOMER",
+      "details": "ORDER DETAILS"
+    },
+    "footer": {
+      "copyright": "© 2026 Gruppo Gizzi. Cilento Authentic Experience.",
+      "rights": "All rights reserved."
+    },
+    "gdpr": {
+      "title": "🍪 Privacy & Cookie Policy",
+      "message": "We use cookies and data to improve browsing experience, personalize content and analyze traffic. By continuing, you accept our Cookie Policy and privacy terms.",
+      "accept": "Accept All",
+      "decline": "Decline",
+      "customize": "Customize"
+    },
+    "alerts": {
+      "stockReached": "You've reached maximum availability.",
+      "cartEmpty": "Cart is empty!",
+      "orderSuccess": "Order sent successfully!",
+      "orderError": "Error sending order. Please try again.",
+      "invalidEmail": "Invalid email",
+      "requiredField": "Required field"
+    }
+  },
+  "de": {
+    "meta": {
+      "title": "Gruppo Gizzi | Cilento Authentic Experience",
+      "description": "Kulinarische Exzellenz aus dem Herzen des Nationalparks Cilento. Entdecken Sie unsere authentischen Produkte und bringen Sie Cilento Gold nach Hause.",
+      "keywords": "Gruppo Gizzi, Cilento, typische Produkte, Gastronomie, Nationalpark, italienische Exzellenz"
+    },
+    "header": {
+      "logo": "GRUPPO GIZZI",
+      "cart": "Warenkorb",
+      "theme": "Theme"
+    },
+    "hero": {
+      "title": "Cilento Gold für Sie.",
+      "subtitle": "Kulinarische Exzellenz aus dem Nationalpark.",
+      "cta": "Produkte Entdecken"
+    },
+    "products": {
+      "featured": "Highlights",
+      "all": "Alle Produkte",
+      "byCategory": "Nach Kategorie",
+      "add": "ZUFÜGEN",
+      "outOfStock": "Ausverkauft",
+      "lastPieces": "Letzte Stück",
+      "available": "Verfügbar",
+      "maxQty": "Maximal",
+      "unit": "Stück",
+      "grams": "gr",
+      "ml": "ml"
+    },
+    "cart": {
+      "title": "Warenkorb",
+      "empty": "Warenkorb ist leer!",
+      "total": "Gesamt",
+      "shipping": "Versand",
+      "emptyCart": "LEEREN",
+      "checkout": "JETZT BESTELLEN",
+      "continue": "EINKAUF FORTSETZEN",
+      "itemAdded": "Produkt zum Warenkorb hinzugefügt",
+      "itemRemoved": "Produkt aus Warenkorb entfernt"
+    },
+    "checkout": {
+      "title": "Versanddetails",
+      "name": "Vollständiger Name",
+      "email": "Email",
+      "phone": "Telefon",
+      "address": "Vollständige Adresse (Straße, Hausnummer, Stadt, PLZ)",
+      "country": "Land",
+      "confirm": "BESTÄTIGEN",
+      "processing": "Verarbeitung...",
+      "italy": "Italien",
+      "europe": "Europa (EU)"
+    },
+    "order": {
+      "thanks": "Danke!",
+      "message": "Bestellung erfolgreich gesendet.",
+      "back": "ZURÜCK",
+      "id": "Bestellung",
+      "customer": "KUNDE",
+      "details": "BESTELLDETAILS"
+    },
+    "footer": {
+      "copyright": "© 2026 Gruppo Gizzi. Cilento Authentic Experience.",
+      "rights": "Alle Rechte vorbehalten."
+    },
+    "gdpr": {
+      "title": "🍪 Privacy & Cookie Policy",
+      "message": "Wir verwenden Cookies und Daten zur Verbesserung des Browserlebnisses, zur Personalisierung von Inhalten und zur Analyse des Traffics. Mit der Fortsetzung erklären Sie sich mit unserer Cookie Policy und den Datenschutzbedingungen einverstanden.",
+      "accept": "Alle Akzeptieren",
+      "decline": "Ablehnen",
+      "customize": "Anpassen"
+    },
+    "alerts": {
+      "stockReached": "Maximale Menge erreicht.",
+      "cartEmpty": "Warenkorb ist leer!",
+      "orderSuccess": "Bestellung erfolgreich gesendet!",
+      "orderError": "Fehler beim Senden der Bestellung. Bitte versuchen Sie es erneut.",
+      "invalidEmail": "Ungültige Email",
+      "requiredField": "Pflichtfeld"
+    }
+  },
+  "hu": {
+    "meta": {
+      "title": "Gruppo Gizzi | Cilento Authentic Experience",
+      "description": "Gasztronómiai élmény a Nemzeti Park szívéből. Fedezze fel autentikus termékeinket és vigye haza Cilento aranyát.",
+      "keywords": "Gruppo Gizzi, Cilento, tipikus termékek, gasztronómia, Nemzeti Park, olasz kiválóság"
+    },
+    "header": {
+      "logo": "GRUPPO GIZZI",
+      "cart": "Kosár",
+      "theme": "Téma"
+    },
+    "hero": {
+      "title": "Cilento Aranya otthonában.",
+      "subtitle": "Gasztronómiai élmény a Nemzeti Park szívéből.",
+      "cta": "Termékek Felfedezése"
+    },
+    "products": {
+      "featured": "Kiemelt termékek",
+      "all": "Összes termék",
+      "byCategory": "Kategóriák",
+      "add": "HOZZÁAD",
+      "outOfStock": "Elfogyott",
+      "lastPieces": "Utolsó darabok",
+      "available": "Elérhető",
+      "maxQty": "Max. mennyiség",
+      "unit": "darab",
+      "grams": "gr",
+      "ml": "ml"
+    },
+    "cart": {
+      "title": "Kosár",
+      "empty": "A kosár üres!",
+      "total": "Összesen",
+      "shipping": "Szállítás",
+      "emptyCart": "ÜRÍTÉS",
+      "checkout": "RENDELÉS",
+      "continue": "VÁSÁRLÁS FOLYTATÁSA",
+      "itemAdded": "Termék a kosárhoz adva",
+      "itemRemoved": "Termék eltávolítva a kosárból"
+    },
+    "checkout": {
+      "title": "Szállítási adatok",
+      "name": "Teljes Név",
+      "email": "Email",
+      "phone": "Telefon",
+      "address": "Teljes Cím (Utca, Házszám, Város, IRányítószám)",
+      "country": "Ország",
+      "confirm": "RENDELÉS MEGERŐSÍTÉSE",
+      "processing": "Feldolgozás...",
+      "italy": "Olaszország",
+      "europe": "Európa (EU)"
+    },
+    "order": {
+      "thanks": "Köszönjük!",
+      "message": "Rendelés sikeresen elküldve.",
+      "back": "VISSZA",
+      "id": "Rendelés",
+      "customer": "ÜGYFÉL",
+      "details": "RENDELÉSI ADATOK"
+    },
+    "footer": {
+      "copyright": "© 2026 Gruppo Gizzi. Cilento Authentic Experience.",
+      "rights": "Minden jog fenntartva."
+    },
+    "gdpr": {
+      "title": "🍪 Privacy & Cookie Policy",
+      "message": "Cookie-ket és adatokat használunk a böngészési élmény javítására, a tartalom személyre szabására és a forgalom elemzésére. A folytatással elfogadja Cookie Policy-nkat és adatvédelmi feltételeinket.",
+      "accept": "Összes Elfogadása",
+      "decline": "Elutasítás",
+      "customize": "Testreszabás"
+    },
+    "alerts": {
+      "stockReached": "Elérte a maximális mennyiséget.",
+      "cartEmpty": "A kosár üres!",
+      "orderSuccess": "Rendelés sikeresen elküldve!",
+      "orderError": "Hiba a rendelés küldése közben. Próbálja újra.",
+      "invalidEmail": "Érvénytelen email",
+      "requiredField": "Kötelező mező"
+    }
+  }
+}
