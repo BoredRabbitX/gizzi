@@ -319,6 +319,13 @@ async function load() {
             document.querySelectorAll('.card').forEach(el => el.classList.add('visible'));
         }, 200);
         
+        // Attivazione GDPR automatica dopo 2 secondi
+        setTimeout(() => checkGDPR(), 2000);
+        
+        setTimeout(() => {
+            document.querySelectorAll('.card').forEach(el => el.classList.add('visible'));
+        }, 200);
+        
         // Check for GDPR compliance
         checkGDPR();
         
@@ -401,6 +408,91 @@ function toggleDarkMode() {
     savePreferences();
 }
 
+function createProductListItem(product, nameKey) {
+    const isOut = product.StockNum <= 0;
+    const isLow = product.StockNum > 0 && product.StockNum < 5;
+    const stockLabel = isOut ? UI[lang].out : (isLow ? UI[lang].low : UI[lang].ok);
+    const stockClass = isLow || isOut ? 'stock-low' : 'stock-ok';
+    const productName = product[nameKey] || product.Nome;
+    const isInWishlist = wishlist.includes(product.ID);
+    const cartItem = cart.find(item => item.ID === product.ID);
+    const qty = cartItem ? cartItem.qty : 1;
+    
+    return `
+        <div class="product-item" role="article">
+            <div class="product-image">
+                <img 
+                    src="${product.Immagine}" 
+                    alt="${productName}"
+                    loading="lazy"
+                    style="${isOut ? 'filter: grayscale(1); opacity: 0.6;' : ''}"
+                >
+            </div>
+            <div class="product-details">
+                <div class="product-top">
+                    <div class="product-badges">
+                        <span class="stock-badge ${stockClass}" role="status">${stockLabel}</span>
+                        ${product.Rating ? `
+                            <div class="review-stars">
+                                ${generateStars(product.Rating)}
+                                <span class="review-text">(${product.Views || 0} recensioni)</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                    <h3>${productName}</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.4;">${product.Descrizione || 'Prodotto di eccellenza del Cilento con caratteristiche uniche e sapore autentico.'}</p>
+                </div>
+                <div class="product-price">€ ${product.Prezzo} <small>/ ${product.Unità}</small></div>
+                <div class="product-actions">
+                    <button 
+                        class="product-wishlist ${isInWishlist ? 'active' : ''}" 
+                        onclick="toggleWishlist('${product.ID}')"
+                        aria-label="${isInWishlist ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}"
+                    >
+                        ${isInWishlist ? '❤️' : '🤍'}
+                    </button>
+                    <div class="product-qty">
+                        <button onclick="updateProductQty('${product.ID}', -1)" aria-label="Diminuisci quantità">-</button>
+                        <span>${qty}</span>
+                        <button onclick="updateProductQty('${product.ID}', 1)" aria-label="Aumenta quantità">+</button>
+                    </div>
+                    <button 
+                        class="btn-add" 
+                        onclick="addToCart('${product.ID}')"
+                        ${isOut ? `disabled aria-label="${UI[lang].out} - ${productName}"` : `aria-label="${UI[lang].ariaAdd} - ${productName}"`}
+                    >
+                        ${isOut ? UI[lang].out : UI[lang].add}
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function updateProductQty(productId, delta) {
+    const cartItem = cart.find(item => item.ID === productId);
+    const product = products.find(p => p.ID === productId);
+    
+    if (!cartItem) {
+        addToCart(productId);
+        return;
+    }
+    
+    if (delta > 0 && cartItem.qty >= product.StockNum) {
+        ToastManager.show(UI[lang].alertStock, 'warning');
+        return;
+    }
+    
+    cartItem.qty += delta;
+    
+    if (cartItem.qty <= 0) {
+        cart = cart.filter(item => item.ID !== productId);
+        ToastManager.show(UI[lang].removeFromCart, 'info');
+    }
+    
+    saveCartUI();
+}
+
 function createCard(product, nameKey) {
     const isOut = product.StockNum <= 0;
     const isLow = product.StockNum > 0 && product.StockNum < 5;
@@ -433,7 +525,7 @@ function createCard(product, nameKey) {
                 ${product.Rating ? `
                     <div class="review-stars">
                         ${generateStars(product.Rating)}
-                        <span class="review-text">(${product.Reviews || 0} recensioni)</span>
+                        <span class="review-text">(${product.Views || 0} recensioni)</span>
                     </div>
                 ` : ''}
                 <button 
@@ -492,7 +584,24 @@ function applyFilters() {
     const rating4 = document.getElementById('rating-4').checked;
     
     // Applica filtri e renderizza prodotti
-    console.log('Applying filters:', { minPrice, maxPrice, inStock, inSale, rating4 });
+        const filtered = products.filter(p => {
+            const price = parseFloat(p.Prezzo.replace(',', '.'));
+            const inPriceRange = (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice);
+            const stockMatch = !inStock || p.StockNum > 0;
+            const saleMatch = !inSale || p.Disconto !== "NO";
+            const ratingMatch = !rating4 || (p.Rating && p.Rating >= 4);
+            
+            return inPriceRange && stockMatch && saleMatch && ratingMatch;
+        });
+        
+        document.getElementById('negozio').innerHTML = filtered.length === 0 ? `
+            <div style="text-align: center; padding: 60px 20px;">
+                <h3 style="color: var(--text-primary); font-size: 1.5rem;">${UI[lang].noResults}</h3>
+                <p style="color: var(--text-secondary);">Prova ad ampliare i criteri di ricerca o resettare i filtri.</p>
+            </div>
+        ` : `<div class="products-list">${filtered.map(p => createProductListItem(p, nameKey)).join('')}</div>`;
+        
+        ToastManager.show(`Trovati ${filtered.length} prodotti`, 'success');
     ToastManager.show('Filtri applicati', 'success');
 }
 
@@ -566,7 +675,7 @@ function render() {
     
     if (currentView === 'all') {
         const shuffledProducts = shuffleArray(filteredProducts);
-        html = `<div class="products-grid">${shuffledProducts.map(p => createCard(p, nameKey)).join('')}</div>`;
+        html = `<div class="products-list">${shuffledProducts.map(p => createProductListItem(p, nameKey)).join('')}</div>`;
     } else {
         html = shuffledCategories.map(cat => {
             const categoryProducts = filteredProducts.filter(p => 
@@ -575,13 +684,13 @@ function render() {
             if (categoryProducts.length === 0) return '';
             
             return `
-                <div id="cat-${cat.replace(/\s+/g, '')}" style="margin-top: 40px; width: 100%;">
-                    <h2 style="color: var(--color-primary); border-bottom: 2px solid var(--color-secondary); 
-                                display: inline-block; font-size: 1.6rem; margin-bottom: 20px; padding-bottom: 10px;">
+                <div id="cat-${cat.replace(/\s+/g, '')}" style="margin-top: 60px; padding-bottom: 40px; width: 100%;">
+                    <h2 style="color: var(--color-primary); border-bottom: 3px solid var(--color-secondary); 
+                                display: inline-block; font-size: 2rem; margin-bottom: 40px; padding-bottom: 15px; font-weight: 700;">
                         ${cat}
                     </h2>
-                    <div class="category-products-grid">
-                        ${categoryProducts.map(p => createCard(p, nameKey)).join('')}
+                    <div class="products-list">
+                        ${categoryProducts.map(p => createProductListItem(p, nameKey)).join('')}
                     </div>
                 </div>
             `;
@@ -776,12 +885,12 @@ function updateCarouselButtons() {
     
     if (!track || !prevBtn || !nextBtn) return;
     
-    const itemWidth = track.children[0].offsetWidth + 32;
-    const visibleItems = Math.floor(track.parentElement.offsetWidth / itemWidth);
-    const maxIndex = track.children.length - visibleItems;
+    const itemWidth = 300; // Fixed width for consistency
+    const totalItems = track.children.length;
+    const maxScroll = (totalItems - Math.ceil(track.parentElement.offsetWidth / itemWidth)) * itemWidth;
     
-    prevBtn.classList.toggle('disabled', carouselIndex === 0);
-    nextBtn.classList.toggle('disabled', carouselIndex >= maxIndex);
+    prevBtn.classList.toggle('disabled', carouselIndex <= 0);
+    nextBtn.classList.toggle('disabled', carouselIndex >= maxScroll);
 }
 
 function startCarousel() {
@@ -789,16 +898,19 @@ function startCarousel() {
         const track = document.getElementById('carousel-track');
         if (!track || track.children.length <= 1) return;
         
-        const itemWidth = track.children[0].offsetWidth + 32;
+        const itemWidth = 300; // Fixed width
         const visibleItems = Math.floor(track.parentElement.offsetWidth / itemWidth);
-        const maxIndex = track.children.length - visibleItems;
+        const totalItems = track.children.length;
+        const maxScroll = (totalItems - visibleItems) * itemWidth;
         
-        carouselIndex++;
-        if (carouselIndex > maxIndex) carouselIndex = 0;
+        carouselIndex += itemWidth;
+        if (carouselIndex > maxScroll) {
+            carouselIndex = 0;
+        }
         
-        track.style.transform = `translateX(-${carouselIndex * itemWidth}px)`;
+        track.style.transform = `translateX(-${carouselIndex}px)`;
         updateCarouselButtons();
-    }, 4000);
+    }, 3000); // Slower for better UX
 }
 
 function openCheckout() {
@@ -877,13 +989,19 @@ async function processOrder() {
         
         closeCheckout();
         
-        const thanksPopup = document.getElementById('thanks-popup');
-        thanksPopup.style.display = 'flex';
-        thanksPopup.classList.add('active');
+        // Mostra un'animazione di caricamento durante l'invio
+        ToastManager.show('Invio ordine in corso...', 'success');
         
-        const whatsappMessage = `*ORDINE ${orderId}*\n\n*CLIENTE:* ${name}\n*EMAIL:* ${email}\n*TEL:* ${phone}\n*INDIRIZZO:* ${address}\n\n${detailRows.join("\n")}\n\n*TOTALE:* € ${totalDisplay}`;
-        
-        window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
+        setTimeout(() => {
+            const thanksPopup = document.getElementById('thanks-popup');
+            thanksPopup.style.display = 'flex';
+            thanksPopup.classList.add('active');
+            
+            // Template WhatsApp migliorato e più professionale
+            const whatsappMessage = `🛒 *GRUPPO GIZZI - NUOVO ORDINE*\n\n📦 *Dettagli Cliente*\n\nNome: ${name}\nEmail: ${email}\nTelefono: ${phone}\nIndirizzo: ${address}\n\n📋 *Riepilogo Ordine*\n\n${detailRows.join("\n")}\n\n💰 *Totale Ordine*: € ${totalDisplay}\n\n✅ *Stato*: Confermato e in preparazione\n\n🚚 *Grazie per aver scelto i nostri prodotti del Cilento!*`;
+            
+            window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
+        }, 1500);
         
     } catch (error) {
         console.error('Error processing order:', error);

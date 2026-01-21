@@ -38,20 +38,20 @@
     --font-primary: 'Inter', 'Arial', sans-serif;
     --font-display: 'Inter', 'Arial', sans-serif;
     
-    --transition-fast: 0.15s ease;
-    --transition-smooth: 0.2s ease;
-    --transition-slow: 0.3s ease;
+    --transition-fast: 0.2s ease;
+    --transition-smooth: 0.3s ease;
+    --transition-slow: 0.4s ease;
     
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 16px;
+    --spacing-xs: 6px;
+    --spacing-sm: 12px;
+    --target: --spacing-md;
     --spacing-lg: 24px;
     --spacing-xl: 32px;
     --spacing-2xl: 48px;
     --spacing-3xl: 64px;
     
-    --header-height: 64px;
-    --header-nav-height: 44px;
+    --header-height: 70px;
+    --header-nav-height: 48px;
 }
 
 .dark-mode {
@@ -310,6 +310,9 @@ header {
     border-bottom: 1px solid var(--border-subtle);
     display: flex;
     justify-content: center;
+    position: sticky;
+    top: var(--header-height);
+    z-index: 999;
 }
 
 .category-menu::-webkit-scrollbar {
@@ -326,14 +329,42 @@ header {
 }
 
 .category-scroll a {
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-md);
     border: 1px solid transparent;
     border-radius: var(--radius-sm);
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     color: var(--text-light);
     transition: all var(--transition-fast);
-    white-space: nowrap;
+    position: relative;
+}
+
+.category-scroll a:hover,
+.category-scroll a.active {
+    border-color: var(--color-secondary);
+    background: var(--color-secondary);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-md);
+    z-index: 10;
+}
+
+.category-scroll a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--color-secondary);
+    transition: all var(--transition-fast);
+    transform: translateX(-50%);
+}
+
+.category-scroll a.active::after {
+    width: 100%;
+    background: var(--color-secondary);
 }
 
 .category-scroll a:hover,
@@ -345,18 +376,19 @@ header {
 }
 
 .hero {
-    height: 70vh;
-    min-height: 500px;
-    margin-top: var(--header-height);
-    background: linear-gradient(rgba(46, 64, 47, 0.7), rgba(46, 64, 47, 0.7)), 
-                url('https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1240&hei=700&fit=constrain,1&fmt=webp');
+    height: 85vh;
+    min-height: 600px;
+    margin-top: calc(var(--header-height) + var(--header-nav-height));
+    background: linear-gradient(rgba(46, 64, 47, 0.8), rgba(46, 64, 47, 0.8)), 
+                url('https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=1600&hei=900&fit=constrain,1&fmt=webp');
     background-size: cover;
     background-position: center;
+    background-attachment: fixed;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 0 var(--spacing-md);
+    padding: 0 var(--spacing-lg);
 }
 
 .hero-content {
@@ -429,19 +461,22 @@ header {
     flex: 1;
     overflow: hidden;
     border-radius: var(--radius-lg);
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .carousel-track {
     display: flex;
-    gap: var(--spacing-xl);
+    gap: 32px;
     transition: transform var(--transition-smooth);
+    width: max-content;
 }
 
 .carousel-nav {
     background: var(--color-secondary);
     border: none;
-    width: 48px;
-    height: 48px;
+    width: 50px;
+    height: 50px;
     border-radius: var(--radius-full);
     display: flex;
     align-items: center;
@@ -452,6 +487,23 @@ header {
     box-shadow: var(--shadow-lg);
     font-size: 1.5rem;
     font-weight: 700;
+}
+
+.carousel-nav:hover {
+    background: var(--color-secondary-dark);
+    transform: scale(1.05);
+    box-shadow: var(--shadow-xl);
+}
+
+.carousel-nav.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: var(--text-muted);
+}
+
+.carousel-nav.disabled:hover {
+    transform: none;
+    background: var(--text-muted);
 }
 
 .carousel-nav:hover {
@@ -525,8 +577,16 @@ header {
 .search-section {
     padding: var(--spacing-xl) 0;
     background: var(--bg-primary);
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: 2px solid var(--color-secondary);
     margin-bottom: var(--spacing-xl);
+    position: sticky;
+    top: calc(var(--header-height) + var(--header-nav-height));
+    z-index: 100;
+}
+
+.search-box {
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .search-box {
@@ -589,6 +649,132 @@ header {
     border-color: var(--color-secondary);
     background: var(--color-secondary);
     color: var(--text-primary);
+}
+
+.products-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.product-item {
+    display: flex;
+    background: var(--bg-primary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    overflow: hidden;
+    transition: all var(--transition-smooth);
+    box-shadow: var(--shadow-sm);
+}
+
+.product-item:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-secondary);
+    transform: translateY(-2px);
+}
+
+.product-image {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-details {
+    flex: 1;
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-top {
+    flex-grow: 1;
+}
+
+.product-info h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.3;
+}
+
+.product-badges {
+    margin-bottom: var(--spacing-sm);
+}
+
+.product-price {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-md);
+}
+
+.product-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: flex-end;
+}
+
+.product-qty {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.product-qty button {
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-weight: 700;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.product-qty button:hover {
+    color: var(--color-primary);
+}
+
+.product-qty span {
+    min-width: 30px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+.product-wishlist {
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    padding: var(--spacing-xs);
+}
+
+.product-wishlist:hover {
+    transform: scale(1.2);
+}
+
+.product-wishlist.active {
+    color: var(--color-danger);
 }
 
 .products-grid {
@@ -885,6 +1071,7 @@ header {
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-sm);
     padding: var(--spacing-xs);
+    min-width: 80px;
 }
 
 .qty-controls button {
@@ -911,20 +1098,35 @@ header {
 }
 
 .cart-item-total {
-    font-size: 1rem;
-    font-weight: 700;
-    min-width: 60px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    min-width: 80px;
     text-align: right;
-    color: var(--text-primary);
 }
 
 .remove-btn {
     margin-left: var(--spacing-sm);
     color: var(--text-muted);
-    transition: color var(--transition-fast);
+    transition: all var(--transition-fast);
     padding: var(--spacing-xs);
-    background: transparent;
-    border: none;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-btn:hover {
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+    transform: scale(1.1);
+    background: rgba(220, 38, 38, 0.1);
+}
+
+.remove-btn img {
+    width: 16px;
+    height: 16px;
 }
 
 .remove-btn img {

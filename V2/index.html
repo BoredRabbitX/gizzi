@@ -84,10 +84,10 @@
             <a href="#" class="logo" aria-label="Gruppo Gizzi - Torna alla home">GRUPPO GIZZI</a>
             <div class="header-actions">
                 <select id="lang-sel" onchange="updateLang(this.value)" aria-label="Seleziona lingua">
-                    <option value="it">🇮🇹</option>
-                    <option value="en">🇬🇧</option>
-                    <option value="de">🇩🇪</option>
-                    <option value="hu">🇭🇺</option>
+                    <option value="it">🇮🇹 IT</option>
+                    <option value="en">🇬🇧 EN</option>
+                    <option value="de">🇩🇪 DE</option>
+                    <option value="hu">🇭🇺 HU</option>
                 </select>
                 <button onclick="toggleDarkMode()" class="theme-toggle" aria-label="Attiva/Disattiva modalità scura">
                     <img src="assets/img/theme-icon.svg" alt="Theme toggle" class="theme-icon">
@@ -123,66 +123,21 @@
                 </div>
                 <button class="carousel-nav next" onclick="moveCarousel(1)" aria-label="Prodotti successivi" id="nextBtn">›</button>
             </div>
-        </section>
+    </section>
 
-        <section class="container search-section" aria-label="Ricerca prodotti">
-            <div class="search-box">
-                <input type="search" id="search-input" placeholder="Cerca prodotti..." oninput="handleSearch(this.value)" aria-label="Cerca prodotti nel catalogo">
-                <img src="assets/img/search-icon.svg" alt="Search" class="search-icon">
-            </div>
-        </section>
-
-        <!-- Advanced Filters Section -->
-        <section class="filters-section">
-            <div class="filters-container">
-                <h3>Filtri Avanzati</h3>
-                <div class="filters-grid">
-                    <div class="filter-group">
-                        <h4>Prezzo</h4>
-                        <div class="filter-options">
-                            <div class="price-range">
-                                <input type="number" id="min-price" placeholder="Min" step="10">
-                                <span>-</span>
-                                <input type="number" id="max-price" placeholder="Max" step="10">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="filter-group">
-                        <h4>Disponibilità</h4>
-                        <div class="filter-options">
-                            <div class="filter-option">
-                                <input type="checkbox" id="in-stock" checked>
-                                <label for="in-stock">Solo Disponibili</label>
-                            </div>
-                            <div class="filter-option">
-                                <input type="checkbox" id="in-sale">
-                                <label for="in-sale">In Sconto</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="filter-group">
-                        <h4>Recensioni</h4>
-                        <div class="filter-options">
-                            <div class="filter-option">
-                                <input type="checkbox" id="rating-4">
-                                <label for="rating-4">⭐⭐⭐⭐+</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: var(--spacing-lg);">
-                    <button class="btn-gdpr" onclick="applyFilters()">Applica Filtri</button>
-                    <button class="btn-gdpr-secondary" onclick="resetFilters()">Reset</button>
-                </div>
-            </div>
-        </section>
+    <section class="container search-section" aria-label="Ricerca prodotti">
+        <div class="search-box">
+            <input type="search" id="search-input" placeholder="Cerca prodotti..." oninput="handleSearch(this.value)" aria-label="Cerca prodotti nel catalogo">
+            <img src="assets/img/search-icon.svg" alt="Search" class="search-icon">
+        </div>
+    </section>
 
         <section class="container">
             <div class="view-controls">
                 <button id="btn-view-all" class="btn-toggle-view active" onclick="switchView('all')">Tutti i Prodotti</button>
                 <button id="btn-view-cats" class="btn-toggle-view" onclick="switchView('cats')">Per Categoria</button>
             </div>
-            <div id="negozio" class="products-grid"></div>
+            <div id="negozio" class="products-list"></div>
         </section>
     </main>
 
@@ -249,50 +204,7 @@
         </div>
     </div>
 
-    <!-- Product Reviews Section -->
-    <section class="reviews-section">
-        <div class="container">
-            <h2>Recensioni dei Nostri Clienti</h2>
-            <div class="reviews-grid">
-                <div class="review-card">
-                    <div class="review-stars">
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                    </div>
-                    <h4>Olio Extra Vergine</h4>
-                    <p class="review-text">"Qualità eccezionale, sapore unico del Cilento. Altamente raccomandato!"</p>
-                    <p class="review-author">- Marco Rossi</p>
-                </div>
-                <div class="review-card">
-                    <div class="review-stars">
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                        <span class="star">★</span>
-                    </div>
-                    <h4>Vini del Cilento</h4>
-                    <p class="review-text">"Ottima selezione di vini locali. Packaging curato e spedizione veloce."</p>
-                    <p class="review-author">- Laura Bianchi</p>
-                </div>
-                <div class="review-card">
-                    <div class="review-stars">
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                    </div>
-                    <h4>Salumi Tipici</h4>
-                    <p class="review-text">"Sapori autentici della tradizione cilentana. Freschezza garantita!"</p>
-                    <p class="review-author">- Antonio Verdi</p>
-                </div>
-            </div>
-        </div>
-    </section>
+
 
     <!-- Newsletter Section -->
     <section class="newsletter-section">
