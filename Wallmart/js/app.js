@@ -13,13 +13,15 @@ class App {
     }
 
     init() {
+        console.log('🔧 Initializing app...');
         this.applyTheme();
-        this.loadProducts();
         this.loadCart();
         this.loadWishlist();
-        this.setupEventListeners();
         this.checkGDPR();
+        this.setupEventListeners();
+        this.loadProducts();
         this.updateUI();
+        console.log('✅ App initialization complete');
     }
 
     applyTheme() {
@@ -46,18 +48,24 @@ class App {
     }
 
     changeLang(newLang) {
+        console.log(`🌐 Changing language to: ${newLang}`);
         this.lang = newLang;
         localStorage.setItem('gizzi_lang', this.lang);
         this.updateUI();
         this.updateProductUI();
         this.updateCartUI();
+        console.log('✅ Language changed successfully');
     }
 
 
 
     async loadProducts() {
+        console.log('📦 Loading products...');
         try {
             const response = await fetch(CONFIG.catalog);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             const text = await response.text();
             const rows = text.split('\n').filter(r => r.trim() !== '');
             const headers = rows[0].split(',').map(h => h.trim());
@@ -75,13 +83,26 @@ class App {
                 return product;
             });
 
-            this.renderProducts();
-            this.renderCategories();
-            this.renderFeaturedProducts();
+            console.log(`✅ Loaded ${this.products.length} products`);
             
-            if (window.featuredCarousel) {
-                setTimeout(() => window.featuredCarousel.refresh(), 100);
+            // Wait for DOM to be ready
+            setTimeout(() => {
+                this.renderProducts();
+                this.renderCategories();
+                this.renderFeaturedProducts();
+                
+                if (window.featuredCarousel) {
+                    setTimeout(() => window.featuredCarousel.refresh(), 100);
+                }
+            }, 100);
+            
+        } catch (error) {
+            console.error('❌ Error loading products:', error);
+            if (typeof showToast !== 'undefined') {
+                showToast(TEXT[this.lang]?.orderError || 'Errore caricamento prodotti', 'error');
             }
+        }
+    }
         } catch (error) {
             console.error('Error loading products:', error);
             if (typeof showToast !== 'undefined') {
@@ -91,36 +112,42 @@ class App {
     }
 
     updateCartUI() {
+        console.log('🛒 Updating cart UI');
+        
         const cartItems = document.getElementById('cart-items');
         const cartEmpty = document.getElementById('cart-empty');
         const cartFooter = document.getElementById('cart-footer');
         const cartLabel = document.getElementById('cart-title');
 
-        if (!cartItems || !cartEmpty || !cartFooter) return;
+        if (!cartItems || !cartEmpty || !cartFooter) {
+            console.warn('❌ Cart UI elements not found');
+            return;
+        }
 
         if (this.cart.length === 0) {
             cartItems.style.display = 'none';
             cartEmpty.style.display = 'block';
             cartFooter.style.display = 'none';
-            if (cartLabel) cartLabel.innerHTML = `Il Tuo Carrello <span class="cart-count">0</span>`;
+            if (cartLabel) cartLabel.innerHTML = `${TEXT[this.lang]?.cart || 'Carrello'} <span class="cart-count">0</span>`;
         } else {
             cartItems.innerHTML = this.cart.map(item => this.renderCartItem(item)).join('');
             cartItems.style.display = 'block';
             cartEmpty.style.display = 'none';
             cartFooter.style.display = 'flex';
-            if (cartLabel) cartLabel.innerHTML = `Il Tuo Carrello <span class="cart-count">${this.cart.reduce((a, b) => a + b.qty, 0)}</span>`;
+            if (cartLabel) cartLabel.innerHTML = `${TEXT[this.lang]?.cart || 'Carrello'} <span class="cart-count">${this.cart.reduce((a, b) => a + b.qty, 0)}</span>`;
         }
 
         const { subtotal, shipping, total } = this.getCartTotal();
         
-        document.getElementById('cart-subtotal') && (document.getElementById('cart-subtotal').textContent = `€ ${subtotal.toFixed(2)}`);
-        document.getElementById('cart-shipping') && (document.getElementById('cart-shipping').textContent = `€ ${shipping.toFixed(2)}`);
-        document.getElementById('cart-total') && (document.getElementById('cart-total').textContent = `€ ${total.toFixed(2)}`);
-
+        const subtotalEl = document.getElementById('cart-subtotal');
+        const shippingEl = document.getElementById('cart-shipping');
+        const totalEl = document.getElementById('cart-total');
         const cartCount = document.getElementById('cart-count');
-        if (cartCount) {
-            cartCount.textContent = this.cart.reduce((a, b) => a + b.qty, 0);
-        }
+        
+        if (subtotalEl) subtotalEl.textContent = `€ ${subtotal.toFixed(2)}`;
+        if (shippingEl) shippingEl.textContent = `€ ${shipping.toFixed(2)}`;
+        if (totalEl) totalEl.textContent = `€ ${total.toFixed(2)}`;
+        if (cartCount) cartCount.textContent = this.cart.reduce((a, b) => a + b.qty, 0);
 
         const freeShippingInfo = document.getElementById('free-shipping-info');
         if (freeShippingInfo && shipping === 0 && subtotal < CONFIG.freeShippingThreshold) {
@@ -131,6 +158,8 @@ class App {
         } else if (freeShippingInfo) {
             freeShippingInfo.innerHTML = '';
         }
+        
+        console.log('✅ Cart UI updated');
     }
 }
 
@@ -172,8 +201,12 @@ class App {
     }
 
     addToCart(productId) {
+        console.log(`🛒 Adding product to cart: ${productId}`);
         const product = this.products.find(p => p.ID == productId);
-        if (!product) return;
+        if (!product) {
+            console.warn('❌ Product not found:', productId);
+            return;
+        }
 
         const existingItem = this.cart.find(item => item.ID == productId);
         const cartItem = existingItem || { ...product, qty: 0 };
@@ -184,13 +217,16 @@ class App {
                 this.cart.push(cartItem);
             }
             this.saveCart();
-                const productName = product.Nome || product.Nome_EN || product.Nome_DE || product.Nome_HU || 'Prodotto';
-                if (typeof showToast !== 'undefined') {
-                    showToast(`${productName} ${TEXT[this.lang].addToCart.toLowerCase()}`, 'success');
-                }
+            const productName = product.Nome || product.Nome_EN || product.Nome_DE || product.Nome_HU || 'Prodotto';
+            if (typeof showToast !== 'undefined') {
+                showToast(`${productName} ${TEXT[this.lang]?.addToCart?.toLowerCase() || 'aggiunto'}`, 'success');
+            }
             this.openCart();
+            console.log('✅ Product added to cart');
         } else {
-            showToast(TEXT[this.lang].stockAlert, 'warning');
+            if (typeof showToast !== 'undefined') {
+                showToast(TEXT[this.lang]?.stockAlert || 'Disponibilità massima raggiunta', 'warning');
+            }
         }
     }
 
@@ -305,12 +341,23 @@ class App {
 
     updateText() {
         const text = TEXT[this.lang];
-        if (!text) return;
+        if (!text) {
+            console.warn(`❌ No text found for language: ${this.lang}`);
+            return;
+        }
+
+        console.log(`🌐 Updating text for language: ${this.lang}`);
 
         // Safety check for missing elements
-        const safeUpdate = (id, key) => {
+        const safeUpdate = (id, key, isHtml = false) => {
             const el = document.getElementById(id);
-            if (el && text[key]) el.textContent = text[key];
+            if (el && text[key]) {
+                if (isHtml) {
+                    el.innerHTML = text[key];
+                } else {
+                    el.textContent = text[key];
+                }
+            }
         };
 
         // Hero section
@@ -318,88 +365,75 @@ class App {
         safeUpdate('hero-subtitle', 'heroSubtitle');
         safeUpdate('hero-tag', 'heroTag');
         safeUpdate('hero-cta', 'heroCta');
-        const heroFeature1 = document.getElementById('hero-feature-1');
-        if (heroFeature1) heroFeature1.textContent = text.heroFeature1;
-        const heroFeature2 = document.getElementById('hero-feature-2');
-        if (heroFeature2) heroFeature2.textContent = text.heroFeature2;
-        const heroFeature3 = document.getElementById('hero-feature-3');
-        if (heroFeature3) heroFeature3.textContent = text.heroFeature3;
-        const heroBadge = document.getElementById('hero-badge');
-        if (heroBadge && text.heroBadge) heroBadge.innerHTML = `<span class="hero-badge-icon">🚚</span><span>${text.heroBadge}</span>`;
+        safeUpdate('hero-feature-1', 'heroFeature1');
+        safeUpdate('hero-feature-2', 'heroFeature2');
+        safeUpdate('hero-feature-3', 'heroFeature3');
+        if (document.getElementById('hero-badge') && text.heroBadge) {
+            document.getElementById('hero-badge').innerHTML = `<span class="hero-badge-icon">🚚</span><span>${text.heroBadge}</span>`;
+        }
 
 
         // Featured section
-        const featuredTitle = document.getElementById('featured-title');
-        if (featuredTitle) featuredTitle.textContent = text.featured;
-        const featuredSubtitle = document.getElementById('featured-subtitle');
-        if (featuredSubtitle) featuredSubtitle.textContent = text.featuredSubtitle;
+        safeUpdate('featured-title', 'featured');
+        safeUpdate('featured-subtitle', 'featuredSubtitle');
         const viewAllFeatured = document.getElementById('view-all-featured');
         if (viewAllFeatured) viewAllFeatured.innerHTML = `${text.viewAll}<span>→</span>`;
 
         // Products section
-        const allProductsTitle = document.getElementById('all-products-title');
-        if (allProductsTitle) allProductsTitle.textContent = text.allProducts;
-        document.getElementById('all-products-subtitle') && (document.getElementById('all-products-subtitle').textContent = text.allProductsSubtitle);
-        document.getElementById('btn-all-categories') && (document.getElementById('btn-all-categories').textContent = text.categoryAll);
+        safeUpdate('all-products-title', 'allProducts');
+        safeUpdate('all-products-subtitle', 'allProductsSubtitle');
+        safeUpdate('btn-all-categories', 'categoryAll');
 
         // Search
-        document.getElementById('search-input') && (document.getElementById('search-input').placeholder = text.searchPlaceholder);
+        safeUpdate('search-input', 'searchPlaceholder', true);
 
         // Cart
-        document.getElementById('cart-label') && (document.getElementById('cart-label').textContent = text.cart);
-        document.getElementById('cart-empty-title') && (document.getElementById('cart-empty-title').textContent = text.cartEmpty);
-        document.getElementById('cart-empty-msg') && (document.getElementById('cart-empty-msg').textContent = text.cartEmptyMsg);
-        document.getElementById('start-shopping') && (document.getElementById('start-shopping').textContent = text.startShopping);
-        document.getElementById('cart-subtotal-label') && (document.getElementById('cart-subtotal-label').textContent = text.subtotal);
-        document.getElementById('cart-shipping-label') && (document.getElementById('cart-shipping-label').textContent = text.shipping);
-        document.getElementById('cart-total-label') && (document.getElementById('cart-total-label').textContent = text.total);
+        safeUpdate('cart-label', 'cart');
+        safeUpdate('cart-empty-title', 'cartEmpty');
+        safeUpdate('cart-empty-msg', 'cartEmptyMsg');
+        safeUpdate('start-shopping', 'startShopping');
+        safeUpdate('cart-subtotal-label', 'subtotal');
+        safeUpdate('cart-shipping-label', 'shipping');
+        safeUpdate('cart-total-label', 'total');
 
         // Checkout form
-        document.getElementById('f-name') && (document.getElementById('f-name').placeholder = text.fullName);
-        document.getElementById('f-email') && (document.getElementById('f-email').placeholder = text.email);
-        document.getElementById('f-phone') && (document.getElementById('f-phone').placeholder = text.phone);
-        document.getElementById('f-addr') && (document.getElementById('f-addr').placeholder = text.addressPlaceholder);
-        document.getElementById('f-notes') && (document.getElementById('f-notes').placeholder = text.notesPlaceholder);
-        document.getElementById('checkout-title') && (document.getElementById('checkout-title').textContent = text.checkoutTitle);
-        document.getElementById('modal-cancel') && (document.getElementById('modal-cancel').textContent = text.cancel);
+        safeUpdate('f-name', 'fullName', true);
+        safeUpdate('f-email', 'email', true);
+        safeUpdate('f-phone', 'phone', true);
+        safeUpdate('f-addr', 'addressPlaceholder', true);
+        safeUpdate('f-notes', 'notesPlaceholder', true);
+        safeUpdate('checkout-title', 'checkoutTitle');
+        safeUpdate('modal-cancel', 'cancel');
 
         // Footer
-        document.getElementById('footer-tagline') && (document.getElementById('footer-tagline').textContent = text.footerTagline);
-        document.getElementById('footer-shop') && (document.getElementById('footer-shop').textContent = text.footerShop);
-        document.getElementById('footer-company') && (document.getElementById('footer-company').textContent = text.footerCompany);
-        document.getElementById('footer-support') && (document.getElementById('footer-support').textContent = text.footerSupport);
-        document.getElementById('footer-about') && (document.getElementById('footer-about').textContent = text.footerAbout);
-        document.getElementById('footer-contact') && (document.getElementById('footer-contact').textContent = text.footerContact);
-        document.getElementById('footer-shipping') && (document.getElementById('footer-shipping').textContent = text.footerShipping);
-        document.getElementById('footer-returns') && (document.getElementById('footer-returns').textContent = text.footerReturns);
-        document.getElementById('footer-phone') && (document.getElementById('footer-phone').textContent = text.footerPhone);
-        document.getElementById('footer-email') && (document.getElementById('footer-email').textContent = text.footerEmail);
-        document.getElementById('footer-address') && (document.getElementById('footer-address').textContent = text.footerAddress);
-        document.getElementById('footer-copyright') && (document.getElementById('footer-copyright').textContent = text.footerCopyright);
+        safeUpdate('footer-tagline', 'footerTagline');
+        safeUpdate('footer-shop', 'footerShop');
+        safeUpdate('footer-company', 'footerCompany');
+        safeUpdate('footer-support', 'footerSupport');
+        safeUpdate('footer-about', 'footerAbout');
+        safeUpdate('footer-contact', 'footerContact');
+        safeUpdate('footer-shipping', 'footerShipping');
+        safeUpdate('footer-returns', 'footerReturns');
+        safeUpdate('footer-phone', 'footerPhone');
+        safeUpdate('footer-email', 'footerEmail');
+        safeUpdate('footer-address', 'footerAddress');
+        safeUpdate('footer-copyright', 'footerCopyright');
 
         // Section features
-        const sectionFeature1Title = document.getElementById('section-feature1-title');
-        if (sectionFeature1Title) sectionFeature1Title.textContent = text.sectionFeature1Title;
-        const sectionFeature1Desc = document.getElementById('section-feature1-desc');
-        if (sectionFeature1Desc) sectionFeature1Desc.textContent = text.sectionFeature1Desc;
-        const sectionFeature2Title = document.getElementById('section-feature2-title');
-        if (sectionFeature2Title) sectionFeature2Title.textContent = text.sectionFeature2Title;
-        const sectionFeature2Desc = document.getElementById('section-feature2-desc');
-        if (sectionFeature2Desc) sectionFeature2Desc.textContent = text.sectionFeature2Desc;
-        const sectionFeature3Title = document.getElementById('section-feature3-title');
-        if (sectionFeature3Title) sectionFeature3Title.textContent = text.sectionFeature3Title;
-        const sectionFeature3Desc = document.getElementById('section-feature3-desc');
-        if (sectionFeature3Desc) sectionFeature3Desc.textContent = text.sectionFeature3Desc;
+        safeUpdate('section-feature1-title', 'sectionFeature1Title');
+        safeUpdate('section-feature1-desc', 'sectionFeature1Desc');
+        safeUpdate('section-feature2-title', 'sectionFeature2Title');
+        safeUpdate('section-feature2-desc', 'sectionFeature2Desc');
+        safeUpdate('section-feature3-title', 'sectionFeature3Title');
+        safeUpdate('section-feature3-desc', 'sectionFeature3Desc');
 
         // GDPR
-        const gdprTitle = document.getElementById('gdpr-title');
-        if (gdprTitle) gdprTitle.textContent = text.gdprTitle;
-        const gdprText = document.getElementById('gdpr-text');
-        if (gdprText) gdprText.textContent = text.gdprText;
-        const gdprAccept = document.getElementById('gdpr-accept');
-        if (gdprAccept) gdprAccept.textContent = text.accept;
-        const gdprReject = document.getElementById('gdpr-reject');
-        if (gdprReject) gdprReject.textContent = text.reject;
+        safeUpdate('gdpr-title', 'gdprTitle');
+        safeUpdate('gdpr-text', 'gdprText');
+        safeUpdate('gdpr-accept', 'accept');
+        safeUpdate('gdpr-reject', 'reject');
+        
+        console.log('✅ Text update complete');
     }
 
     updateCartUI() {
@@ -767,14 +801,20 @@ function hideToast() {
     if (toast) toast.classList.remove('active');
 }
 
+// Initialize app globally
 let app;
+
+// Make app global for HTML onclick handlers
+window.app = null;
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         app = new App();
+        window.app = app;
         console.log('🚀 App initialized successfully');
     });
 } else {
     app = new App();
+    window.app = app;
     console.log('🚀 App initialized immediately');
 }

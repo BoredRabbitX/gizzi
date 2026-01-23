@@ -96,20 +96,27 @@ router.addRoute('featured', () => {
 // Handle category navigation
 document.addEventListener('DOMContentLoaded', () => {
     window.router = router;
+    console.log('🧭 Router initialized');
     
-    // Add category routes dynamically when products are loaded
-    if (window.app) {
-        setTimeout(() => {
-            if (window.app.products && window.app.products.length > 0) {
-                const categories = [...new Set(window.app.products.map(p => p.Categoria))];
-                categories.forEach(category => {
-                    const categoryId = category.replace(/\s+/g, '-').toLowerCase();
-                    router.addRoute(categoryId, () => {
-                        router.showPage('products');
-                        window.app.filterByCategory(category);
-                    });
+    // Wait for app and products to be loaded
+    const checkAndAddRoutes = () => {
+        if (window.app && window.app.products && window.app.products.length > 0) {
+            console.log('📂 Adding category routes...');
+            const categories = [...new Set(window.app.products.map(p => p.Categoria))];
+            categories.forEach(category => {
+                const categoryId = category.replace(/\s+/g, '-').toLowerCase();
+                router.addRoute(categoryId, () => {
+                    router.showPage('products');
+                    window.app.filterByCategory(category);
                 });
-            }
-        }, 2000);
-    }
+            });
+            console.log(`✅ Added ${categories.length} category routes`);
+        } else {
+            // Try again after a short delay
+            setTimeout(checkAndAddRoutes, 500);
+        }
+    };
+    
+    // Start checking after a short delay to allow app to initialize
+    setTimeout(checkAndAddRoutes, 1000);
 });

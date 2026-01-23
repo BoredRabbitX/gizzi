@@ -25,11 +25,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const toastMessage = toast.querySelector('.toast-message');
             const toastIcon = toast.querySelector('.toast-icon');
 
-            if (toastTitle) toastTitle.textContent = type === 'success' ? 'Successo' : type === 'error' ? 'Errore' : 'Attenzione';
+            const lang = window.app?.lang || 'it';
+            const text = TEXT[lang];
+            const titles = {
+                success: text?.toastSuccess || 'Successo',
+                error: text?.toastError || 'Errore',
+                warning: text?.toastWarning || 'Attenzione'
+            };
+
+            if (toastTitle) toastTitle.textContent = titles[type] || titles.success;
             if (toastMessage) toastMessage.textContent = message;
             if (toastIcon) toastIcon.textContent = type === 'success' ? '✓' : type === 'error' ? '✕' : '⚠️';
 
             toast.classList.add('active');
+            console.log(`🔔 Toast shown: ${type} - ${message}`);
         }
     };
 
@@ -54,12 +63,13 @@ window.hideToast = function() {
         if (btn) {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-            if (window.app) {
-                window.app.toggleTheme();
-            } else {
-                console.warn('Theme toggle not available');
-            }
-        });
+                console.log('🎨 Theme toggle clicked');
+                if (window.app) {
+                    window.app.toggleTheme();
+                } else {
+                    console.warn('App not available for theme toggle');
+                }
+            });
         }
     });
 
@@ -67,8 +77,11 @@ window.hideToast = function() {
     if (cartBtn) {
         cartBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            if (app) {
+            console.log('🛒 Cart button clicked');
+            if (window.app) {
                 window.app.openCart();
+            } else {
+                console.warn('App not available for cart toggle');
             }
         });
     }
@@ -76,8 +89,9 @@ window.hideToast = function() {
     // Language Selector
     if (langSelect) {
         langSelect.addEventListener('change', (e) => {
-        if (window.app) {
-            window.app.changeLang(e.target.value);
+            console.log('🌐 Language changed to:', e.target.value);
+            if (window.app) {
+                window.app.changeLang(e.target.value);
             } else {
                 console.warn('App not available for language change');
                 // Fallback to reload page with new language
@@ -91,8 +105,11 @@ window.hideToast = function() {
     // Checkout Modal
     if (modalCancel) {
         modalCancel.addEventListener('click', () => {
-            if (app) {
+            console.log('❌ Checkout cancel clicked');
+            if (window.app) {
                 window.app.closeCheckout();
+            } else {
+                console.warn('App not available for checkout');
             }
         });
     }
@@ -100,6 +117,7 @@ window.hideToast = function() {
     if (checkoutForm) {
         checkoutForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            console.log('📝 Checkout form submitted');
             if (window.app) {
                 window.app.processOrder();
             } else {
@@ -107,7 +125,18 @@ window.hideToast = function() {
             }
         });
     }
-}
+
+    // Contact Form
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (typeof showToast !== 'undefined') {
+                window.showToast('Messaggio inviato con successo!', 'success');
+            }
+            contactForm.reset();
+        });
+    }
 
     // Contact Form
     const contactForm = document.getElementById('contact-form');
@@ -123,7 +152,8 @@ window.hideToast = function() {
 
     if (backToSiteBtn) {
         backToSiteBtn.addEventListener('click', () => {
-            if (app) {
+            console.log('🏠 Back to site clicked');
+            if (window.app) {
                 window.app.hideSuccess();
             }
         });
@@ -131,7 +161,8 @@ window.hideToast = function() {
 
     if (clearCartBtn) {
         clearCartBtn.addEventListener('click', () => {
-            if (app) {
+            console.log('🗑️ Clear cart clicked');
+            if (window.app) {
                 window.app.clearCart();
             }
         });
@@ -139,7 +170,8 @@ window.hideToast = function() {
 
     if (continueShoppingBtn) {
         continueShoppingBtn.addEventListener('click', () => {
-            if (app) {
+            console.log('🛍️ Continue shopping clicked');
+            if (window.app) {
                 window.app.closeCart();
             }
         });
@@ -148,7 +180,8 @@ window.hideToast = function() {
     // GDPR Banner
     if (gdprAccept) {
         gdprAccept.addEventListener('click', () => {
-            if (app) {
+            console.log('✅ GDPR accept clicked');
+            if (window.app) {
                 window.app.acceptGDPR();
             }
         });
@@ -156,7 +189,8 @@ window.hideToast = function() {
 
     if (gdprReject) {
         gdprReject.addEventListener('click', () => {
-            if (app) {
+            console.log('❌ GDPR reject clicked');
+            if (window.app) {
                 window.app.rejectGDPR();
             }
         });
@@ -218,27 +252,21 @@ window.hideToast = function() {
 
             if (code === 'GIZZI10' || code === 'CILENTO20') {
                 if (typeof showToast !== 'undefined') {
-                    showToast(TEXT[window.app?.lang || 'it'].orderSuccess, 'success');
-                }
-                promoInput.disabled = true;
-                promoApplyBtn.disabled = true;
-                promoApplyBtn.textContent = TEXT[window.app?.lang || 'it'].promoApplied;
-                if (typeof showToast !== 'undefined') {
                     showToast(TEXT[window.app?.lang || 'it'].promoApplied, 'success');
                 }
                 promoInput.disabled = true;
                 promoApplyBtn.disabled = true;
                 promoApplyBtn.textContent = TEXT[window.app?.lang || 'it'].promoApplied;
+                console.log('🎉 Promo code applied:', code);
             } else {
                 if (typeof showToast !== 'undefined') {
                     showToast(TEXT[window.app?.lang || 'it'].promoInvalid, 'error');
                 }
+                console.log('❌ Invalid promo code:', code);
             }
         });
     }
             }
-        });
-    }
         });
     }
 
@@ -250,6 +278,7 @@ window.hideToast = function() {
             if (headerBottom && headerBottom.classList.contains('mobile-open')) {
                 headerBottom.classList.remove('mobile-open');
                 document.body.style.overflow = '';
+                console.log('☰ Mobile menu closed via link click');
             }
         }
     });
@@ -257,6 +286,7 @@ window.hideToast = function() {
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
+            console.log('⌨️ Escape key pressed');
             // Close mobile menu
             const headerBottom = document.querySelector('.header-bottom');
             if (headerBottom && headerBottom.classList.contains('mobile-open')) {
@@ -279,6 +309,7 @@ window.hideToast = function() {
             if (e.target === modal) {
                 modal.classList.remove('active');
                 document.body.style.overflow = '';
+                console.log('🚪 Modal closed via outside click');
             }
         });
     });

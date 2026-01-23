@@ -233,5 +233,7 @@ class PageRenderer {
 
 let pageRenderer;
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('📄 Initializing page renderer...');
     pageRenderer = new PageRenderer();
+    console.log('✅ Page renderer initialized');
 });

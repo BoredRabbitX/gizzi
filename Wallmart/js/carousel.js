@@ -151,6 +151,7 @@ class Carousel {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('🎠 Initializing carousel...');
     const featuredCarousel = document.getElementById('featured-carousel');
     if (featuredCarousel) {
         const track = document.getElementById('featured-track');
@@ -169,5 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
             autoPlay: true,
             autoPlayInterval: 5000
         });
+        console.log('✅ Carousel initialized');
+    } else {
+        console.warn('❌ Featured carousel element not found');
     }
 });
