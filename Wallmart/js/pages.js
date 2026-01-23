@@ -8,18 +8,14 @@ class PageRenderer {
         const pathname = window.location.pathname;
         const filename = pathname.split('/').pop().toLowerCase();
         
-        if (window.app) {
-            if (filename.includes('about')) {
-                this.renderAboutPage();
-            } else if (filename.includes('contact')) {
-                this.renderContactPage();
-            } else if (filename.includes('shipping')) {
-                this.renderShippingPage();
-            } else if (filename.includes('returns')) {
-                this.renderReturnsPage();
-            }
-        } else {
-            setTimeout(() => this.init(), 100);
+        if (filename.includes('about')) {
+            this.renderAboutPage();
+        } else if (filename.includes('contact')) {
+            this.renderContactPage();
+        } else if (filename.includes('shipping')) {
+            this.renderShippingPage();
+        } else if (filename.includes('returns')) {
+            this.renderReturnsPage();
         }
     }
 

@@ -88,7 +88,48 @@ class App {
                 showToast(TEXT[this.lang].orderError, 'error');
             } else {
                 console.warn('Toast not available');
-            }
+    }
+
+    updateCartUI() {
+        const cartItems = document.getElementById('cart-items');
+        const cartEmpty = document.getElementById('cart-empty');
+        const cartFooter = document.getElementById('cart-footer');
+        const cartLabel = document.getElementById('cart-title');
+
+        if (!cartItems || !cartEmpty || !cartFooter) return;
+
+        if (this.cart.length === 0) {
+            cartItems.style.display = 'none';
+            cartEmpty.style.display = 'block';
+            cartFooter.style.display = 'none';
+            if (cartLabel) cartLabel.innerHTML = `Il Tuo Carrello <span class="cart-count">0</span>`;
+        } else {
+            cartItems.innerHTML = this.cart.map(item => this.renderCartItem(item)).join('');
+            cartItems.style.display = 'block';
+            cartEmpty.style.display = 'none';
+            cartFooter.style.display = 'flex';
+            if (cartLabel) cartLabel.innerHTML = `Il Tuo Carrello <span class="cart-count">${this.cart.reduce((a, b) => a + b.qty, 0)}</span>`;
+        }
+
+        const { subtotal, shipping, total } = this.getCartTotal();
+        
+        document.getElementById('cart-subtotal') && (document.getElementById('cart-subtotal').textContent = `€ ${subtotal.toFixed(2)}`);
+        document.getElementById('cart-shipping') && (document.getElementById('cart-shipping').textContent = `€ ${shipping.toFixed(2)}`);
+        document.getElementById('cart-total') && (document.getElementById('cart-total').textContent = `€ ${total.toFixed(2)}`);
+
+        const cartCount = document.getElementById('cart-count');
+        if (cartCount) {
+            cartCount.textContent = this.cart.reduce((a, b) => a + b.qty, 0);
+        }
+
+        const freeShippingInfo = document.getElementById('free-shipping-info');
+        if (freeShippingInfo && shipping === 0 && subtotal < CONFIG.freeShippingThreshold) {
+            const remaining = CONFIG.freeShippingThreshold - subtotal;
+            freeShippingInfo.innerHTML = `<span class="cart-shipping-info-icon">🚚</span> Aggiungi ancora € ${remaining.toFixed(2)} per la spedizione gratuita`;
+        } else if (freeShippingInfo && shipping === 0) {
+            freeShippingInfo.innerHTML = `<span class="cart-shipping-info-icon">✅</span> Spedizione gratuita`;
+        } else if (freeShippingInfo) {
+            freeShippingInfo.innerHTML = '';
         }
     }
 }
@@ -180,9 +221,9 @@ class App {
     }
 
     clearCart() {
-        if (window.app && confirm(TEXT[window.app.lang].clearCartConfirm)) {
-            window.app.cart = [];
-            window.app.saveCart();
+        if (confirm(TEXT[this.lang].clearCartConfirm)) {
+            this.cart = [];
+            this.saveCart();
         }
     }
     }
@@ -225,8 +266,9 @@ class App {
     checkGDPR() {
         if (!this.gdprAccepted) {
             setTimeout(() => {
-                toast.classList.remove('active');
-            }, 3000);
+                const banner = document.getElementById('gdpr-banner');
+                if (banner) banner.classList.add('active');
+            }, 1500);
         }
     }
 
@@ -265,10 +307,6 @@ class App {
         const text = TEXT[this.lang];
         if (!text) return;
 
-    updateText() {
-        const text = TEXT[this.lang];
-        if (!text) return;
-
         // Safety check for missing elements
         const safeUpdate = (id, key) => {
             const el = document.getElementById(id);
@@ -288,22 +326,7 @@ class App {
         if (heroFeature3) heroFeature3.textContent = text.heroFeature3;
         const heroBadge = document.getElementById('hero-badge');
         if (heroBadge && text.heroBadge) heroBadge.innerHTML = `<span class="hero-badge-icon">🚚</span><span>${text.heroBadge}</span>`;
-        const heroSubtitle = document.getElementById('hero-subtitle');
-        if (heroSubtitle) heroSubtitle.textContent = text.heroSubtitle;
-        const heroCta = document.getElementById('hero-cta');
-        if (heroCta) heroCta.textContent = text.heroCta;
-        const heroSecondary = document.getElementById('hero-secondary');
-        if (heroSecondary) heroSecondary.textContent = text.heroSecondary;
-        const heroTag = document.getElementById('hero-tag');
-        if (heroTag) heroTag.textContent = text.heroTag;
-        const heroFeature1 = document.getElementById('hero-feature-1');
-        if (heroFeature1) heroFeature1.textContent = text.heroFeature1;
-        const heroFeature2 = document.getElementById('hero-feature-2');
-        if (heroFeature2) heroFeature2.textContent = text.heroFeature2;
-        const heroFeature3 = document.getElementById('hero-feature-3');
-        if (heroFeature3) heroFeature3.textContent = text.heroFeature3;
-        const heroBadge = document.getElementById('hero-badge');
-        if (heroBadge) heroBadge.innerHTML = `<span class="hero-badge-icon">🚚</span><span>${text.heroBadge}</span>`;
+
 
         // Featured section
         const featuredTitle = document.getElementById('featured-title');
@@ -493,9 +516,6 @@ class App {
         }
     }
 
-        container.innerHTML = filteredProducts.map(p => this.renderProductCard(p, nameKey)).join('');
-    }
-
     renderProductCard(product, nameKey) {
         const text = TEXT[this.lang];
         const name = product[nameKey] || product.Nome;
@@ -565,6 +585,13 @@ class App {
             .slice(0, 8);
 
         container.innerHTML = featuredProducts.map(p => this.renderProductCard(p, nameKey)).join('');
+        
+        // Initialize carousel after rendering
+        setTimeout(() => {
+            if (window.featuredCarousel) {
+                window.featuredCarousel.refresh();
+            }
+        }, 100);
     }
 
     filterByCategory(category) {
@@ -612,9 +639,7 @@ class App {
     openCheckout() {
         if (this.cart.length === 0) {
             if (typeof showToast !== 'undefined') {
-                if (typeof showToast !== 'undefined') {
                 showToast(TEXT[this.lang].cartEmptyAlert, 'warning');
-            }
             }
             return;
         }
@@ -693,13 +718,9 @@ class App {
             modal.style.display = 'none';
         }
         // Reload to remove from cart
-        if (window.app) {
-                window.app.clearCart();
-            } else {
-                console.warn('Cart clearing not available');
-            }
-        }
-        }
+        this.cart = [];
+        this.saveCart();
+    }
     }
 
     showQuickView(productId) {
