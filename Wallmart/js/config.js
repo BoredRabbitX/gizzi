@@ -4,7 +4,8 @@ const CONFIG = {
     wa: "393667540018",
     freeShippingThreshold: 120,
     shippingCostIT: 13,
-    shippingCostEU: 50
+    shippingCostEU: 50,
+    searchTerm: ''
 };
 
 const TEXT = {

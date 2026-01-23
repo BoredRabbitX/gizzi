@@ -225,9 +225,8 @@ class App {
     checkGDPR() {
         if (!this.gdprAccepted) {
             setTimeout(() => {
-                const banner = document.getElementById('gdpr-banner');
-                if (banner) banner.classList.add('active');
-            }, 2000);
+                toast.classList.remove('active');
+            }, 3000);
         }
     }
 
@@ -384,18 +383,36 @@ class App {
         const cartItems = document.getElementById('cart-items');
         const cartEmpty = document.getElementById('cart-empty');
         const cartFooter = document.getElementById('cart-footer');
+        const totalElement = document.getElementById('total-amount');
+        const subtotalElement = document.getElementById('subtotal-amount');
+        const shippingElement = document.getElementById('shipping-amount');
+        const cartLabel = document.getElementById('cart-label');
 
-        if (this.cart.length === 0) {
-            cartItems.classList.add('hidden');
-            cartEmpty.classList.remove('hidden');
-            cartFooter.classList.add('hidden');
-        } else {
-            cartItems.classList.remove('hidden');
-            cartEmpty.classList.add('hidden');
-            cartFooter.classList.remove('hidden');
-
-            cartItems.innerHTML = this.cart.map(item => this.renderCartItem(item)).join('');
+        if (this.cart && cartItems && cartEmpty && cartFooter && cartLabel) {
+            if (this.cart.length === 0) {
+                cartItems.style.display = 'none';
+                cartEmpty.style.display = 'block';
+                cartFooter.style.display = 'none';
+                if (cartLabel) cartLabel.textContent = TEXT[this.lang]?.cart || TEXT.it.cart;
+            } else {
+                cartItems.style.display = 'block';
+                cartEmpty.style.display = 'none';
+                cartFooter.style.display = 'flex';
+                if (cartLabel) cartLabel.textContent = TEXT[this.lang]?.cart || TEXT.it.cart;
+            }
         }
+
+        const totalElement = document.getElementById('total-amount');
+        const subtotalElement = document.getElementById('subtotal-amount');
+        const shippingElement = document.getElementById('shipping-amount');
+
+        if (totalElement && subtotalElement && shippingElement && TEXT[this.lang]) {
+            const { total, subtotal, shipping } = this.getCartTotal();
+            totalElement.textContent = `€${total.toFixed(2)}`;
+            subtotalElement.textContent = `€${subtotal.toFixed(2)}`;
+            shippingElement.textContent = shipping === 0 ? TEXT[this.lang].freeShipping : `€${shipping.toFixed(2)}`;
+        }
+    }
 
         const { subtotal, shipping, total } = this.getCartTotal();
         
@@ -461,14 +478,20 @@ class App {
         if (!container) return;
 
         const nameKey = this.lang === 'it' ? 'Nome' : `Nome_${this.lang.toUpperCase()}`;
-        const catKey = this.lang === 'it' ? 'Categoria' : `Categoria_${this.lang.toUpperCase()}`;
+        const text = TEXT[this.lang];
+        
         const activeProducts = this.products.filter(p => p.Disponibile === 'SI');
-
-        let filteredProducts = activeProducts;
-
+        
         if (this.currentCategory) {
-            filteredProducts = activeProducts.filter(p => (p[catKey] === this.currentCategory || p.Categoria === this.currentCategory));
+            const filteredProducts = activeProducts.filter(p => {
+                const category = p[nameKey] || p.Categoria;
+                return category === this.currentCategory;
+            });
+            container.innerHTML = filteredProducts.map(p => this.renderProductCard(p, nameKey)).join('');
+        } else {
+            container.innerHTML = activeProducts.map(p => this.renderProductCard(p, nameKey)).join('');
         }
+    }
 
         container.innerHTML = filteredProducts.map(p => this.renderProductCard(p, nameKey)).join('');
     }
@@ -728,7 +751,9 @@ let app;
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         app = new App();
+        console.log('🚀 App initialized successfully');
     });
 } else {
     app = new App();
+    console.log('🚀 App initialized immediately');
 }

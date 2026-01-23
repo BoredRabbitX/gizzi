@@ -38,7 +38,7 @@
 }
 
 .page-section {
-    margin-bottom: 24px;
+    margin-bottom: var(--space-2xl);
 }
 
 .page-section h3 {

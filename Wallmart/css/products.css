@@ -1,14 +1,14 @@
 /* Section Styles */
 .section {
-    padding: 60px 0;
+    padding: var(--space-3xl) 0;
 }
 
 .section-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 32px;
-    gap: 16px;
+    margin-bottom: var(--space-xl);
+    gap: var(--space-lg);
     flex-wrap: wrap;
 }
 

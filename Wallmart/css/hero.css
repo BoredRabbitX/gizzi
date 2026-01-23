@@ -3,7 +3,7 @@
     margin-top: 128px;
     position: relative;
     background: var(--gradient-hero);
-    padding: 60px 0;
+    padding: var(--space-3xl) 0;
     overflow: hidden;
 }
 
@@ -46,17 +46,17 @@
 }
 
 .hero-subtitle {
-    font-size: 1.2rem;
+    font-size: var(--font-lg);
     color: var(--text-secondary);
-    margin-bottom: 32px;
+    margin-bottom: var(--space-xl);
     line-height: 1.7;
     max-width: 500px;
 }
 
 .hero-features {
     display: flex;
-    gap: 24px;
-    margin-bottom: 32px;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
     flex-wrap: wrap;
 }
 
@@ -75,7 +75,7 @@
 
 .hero-cta-group {
     display: flex;
-    gap: 16px;
+    gap: var(--space-lg);
     flex-wrap: wrap;
 }
 

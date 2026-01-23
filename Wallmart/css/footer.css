@@ -2,15 +2,15 @@
 .site-footer {
     background: linear-gradient(180deg, var(--nature-green-dark), var(--nature-green-darker));
     color: var(--text-white);
-    padding: 60px 0 20px;
-    margin-top: 80px;
+    padding: var(--space-3xl) 0 var(--space-lg);
+    margin-top: var(--space-3xl);
 }
 
 .footer-content {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 40px;
-    margin-bottom: 40px;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
 }
 
 /* Footer Brand */
