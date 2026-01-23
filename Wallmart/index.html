@@ -143,13 +143,15 @@
                             <p id="all-products-subtitle" class="section-subtitle">Esplora la nostra selezione di eccellenze cilentane</p>
                         </div>
                         <div class="view-controls">
-                            <button id="btn-all-categories" class="btn btn-sm btn-primary active" onclick="app.currentCategory = null; app.renderProducts(); app.updateCategoryUI();">Tutti</button>
+                            <button id="btn-all-categories" class="btn btn-sm btn-primary active" onclick="if(window.app){window.app.currentCategory = null; window.app.renderProducts(); window.app.updateCategoryUI();}">Tutti</button>
                         </div>
                     </div>
-                    <div id="products-grid" class="products-grid">
-                        <div class="skeleton-image"></div>
-                        <div class="skeleton-text" style="width: 80%"></div>
-                        <div class="skeleton-text" style="width: 60%"></div>
+                     <div id="products-grid" class="products-grid">
+                        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text);">
+                            <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.3;">🛒</div>
+                            <h3 style="font-size: 1.3rem; margin-bottom: 8px;">Caricamento prodotti...</h3>
+                            <p style="color: var(--text-secondary);">Stiamo caricando i prodotti del catalogo</p>
+                        </div>
                     </div>
                 </div>
              </section>

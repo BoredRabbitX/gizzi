@@ -87,13 +87,16 @@ class App {
             
             // Wait for DOM to be ready
             setTimeout(() => {
-                this.renderProducts();
                 this.renderCategories();
                 this.renderFeaturedProducts();
+                this.renderProducts();
                 
-                if (window.featuredCarousel) {
-                    setTimeout(() => window.featuredCarousel.refresh(), 100);
-                }
+                setTimeout(() => {
+                    if (window.featuredCarousel) {
+                        window.featuredCarousel.refresh();
+                        console.log('🎠 Carousel refreshed after products load');
+                    }
+                }, 100);
             }, 100);
             
         } catch (error) {
@@ -113,6 +116,7 @@ class App {
 
     updateCartUI() {
         console.log('🛒 Updating cart UI');
+        console.log('Current cart items:', this.cart.length);
         
         const cartItems = document.getElementById('cart-items');
         const cartEmpty = document.getElementById('cart-empty');
@@ -124,17 +128,25 @@ class App {
             return;
         }
 
+        const totalItems = this.cart.reduce((a, b) => a + b.qty, 0);
+        
         if (this.cart.length === 0) {
             cartItems.style.display = 'none';
             cartEmpty.style.display = 'block';
             cartFooter.style.display = 'none';
-            if (cartLabel) cartLabel.innerHTML = `${TEXT[this.lang]?.cart || 'Carrello'} <span class="cart-count">0</span>`;
+            if (cartLabel) cartLabel.innerHTML = `${TEXT[this.lang]?.cartTitle || 'Il Tuo Carrello'} <span class="cart-count">0</span>`;
+            // Update header cart count
+            const headerCartCount = document.getElementById('cart-count');
+            if (headerCartCount) headerCartCount.textContent = '0';
         } else {
             cartItems.innerHTML = this.cart.map(item => this.renderCartItem(item)).join('');
             cartItems.style.display = 'block';
             cartEmpty.style.display = 'none';
             cartFooter.style.display = 'flex';
-            if (cartLabel) cartLabel.innerHTML = `${TEXT[this.lang]?.cart || 'Carrello'} <span class="cart-count">${this.cart.reduce((a, b) => a + b.qty, 0)}</span>`;
+            if (cartLabel) cartLabel.innerHTML = `${TEXT[this.lang]?.cartTitle || 'Il Tuo Carrello'} <span class="cart-count">${totalItems}</span>`;
+            // Update header cart count
+            const headerCartCount = document.getElementById('cart-count');
+            if (headerCartCount) headerCartCount.textContent = totalItems;
         }
 
         const { subtotal, shipping, total } = this.getCartTotal();
@@ -142,12 +154,10 @@ class App {
         const subtotalEl = document.getElementById('cart-subtotal');
         const shippingEl = document.getElementById('cart-shipping');
         const totalEl = document.getElementById('cart-total');
-        const cartCount = document.getElementById('cart-count');
         
         if (subtotalEl) subtotalEl.textContent = `€ ${subtotal.toFixed(2)}`;
         if (shippingEl) shippingEl.textContent = `€ ${shipping.toFixed(2)}`;
         if (totalEl) totalEl.textContent = `€ ${total.toFixed(2)}`;
-        if (cartCount) cartCount.textContent = this.cart.reduce((a, b) => a + b.qty, 0);
 
         const freeShippingInfo = document.getElementById('free-shipping-info');
         if (freeShippingInfo && shipping === 0 && subtotal < CONFIG.freeShippingThreshold) {
@@ -159,7 +169,7 @@ class App {
             freeShippingInfo.innerHTML = '';
         }
         
-        console.log('✅ Cart UI updated');
+        console.log(`✅ Cart UI updated - Items: ${this.cart.length}, Total: €${total.toFixed(2)}`);
     }
 }
 
@@ -260,7 +270,10 @@ class App {
         if (confirm(TEXT[this.lang].clearCartConfirm)) {
             this.cart = [];
             this.saveCart();
+            this.updateCartUI();
+            console.log('🗑️ Cart cleared');
         }
+    }
     }
     }
 
@@ -385,10 +398,13 @@ class App {
         safeUpdate('btn-all-categories', 'categoryAll');
 
         // Search
-        safeUpdate('search-input', 'searchPlaceholder', true);
+        const searchInput = document.getElementById('search-input');
+        if (searchInput && text.searchPlaceholder) {
+            searchInput.placeholder = text.searchPlaceholder;
+        }
 
         // Cart
-        safeUpdate('cart-label', 'cart');
+        safeUpdate('cart-label', 'cartTitle');
         safeUpdate('cart-empty-title', 'cartEmpty');
         safeUpdate('cart-empty-msg', 'cartEmptyMsg');
         safeUpdate('start-shopping', 'startShopping');
@@ -397,35 +413,57 @@ class App {
         safeUpdate('cart-total-label', 'total');
 
         // Checkout form
-        safeUpdate('f-name', 'fullName', true);
-        safeUpdate('f-email', 'email', true);
-        safeUpdate('f-phone', 'phone', true);
-        safeUpdate('f-addr', 'addressPlaceholder', true);
-        safeUpdate('f-notes', 'notesPlaceholder', true);
+        const fName = document.getElementById('f-name');
+        if (fName && text.fullName) fName.placeholder = text.fullName;
+        const fEmail = document.getElementById('f-email');
+        if (fEmail && text.email) fEmail.placeholder = text.email;
+        const fPhone = document.getElementById('f-phone');
+        if (fPhone && text.phone) fPhone.placeholder = text.phone;
+        const fAddr = document.getElementById('f-addr');
+        if (fAddr && text.addressPlaceholder) fAddr.placeholder = text.addressPlaceholder;
+        const fNotes = document.getElementById('f-notes');
+        if (fNotes && text.notesPlaceholder) fNotes.placeholder = text.notesPlaceholder;
         safeUpdate('checkout-title', 'checkoutTitle');
         safeUpdate('modal-cancel', 'cancel');
 
         // Footer
         safeUpdate('footer-tagline', 'footerTagline');
-        safeUpdate('footer-shop', 'footerShop');
-        safeUpdate('footer-company', 'footerCompany');
-        safeUpdate('footer-support', 'footerSupport');
-        safeUpdate('footer-about', 'footerAbout');
-        safeUpdate('footer-contact', 'footerContact');
-        safeUpdate('footer-shipping', 'footerShipping');
-        safeUpdate('footer-returns', 'footerReturns');
-        safeUpdate('footer-phone', 'footerPhone');
-        safeUpdate('footer-email', 'footerEmail');
-        safeUpdate('footer-address', 'footerAddress');
-        safeUpdate('footer-copyright', 'footerCopyright');
+        const footerShop = document.getElementById('footer-shop');
+        if (footerShop) footerShop.textContent = text.footerShop;
+        const footerCompany = document.getElementById('footer-company');
+        if (footerCompany) footerCompany.textContent = text.footerCompany;
+        const footerSupport = document.getElementById('footer-support');
+        if (footerSupport) footerSupport.textContent = text.footerSupport;
+        const footerAbout = document.getElementById('footer-about');
+        if (footerAbout) footerAbout.textContent = text.footerAbout;
+        const footerContact = document.getElementById('footer-contact');
+        if (footerContact) footerContact.textContent = text.footerContact;
+        const footerShipping = document.getElementById('footer-shipping');
+        if (footerShipping) footerShipping.textContent = text.footerShipping;
+        const footerReturns = document.getElementById('footer-returns');
+        if (footerReturns) footerReturns.textContent = text.footerReturns;
+        const footerPhone = document.getElementById('footer-phone');
+        if (footerPhone) footerPhone.textContent = text.footerPhone;
+        const footerEmail = document.getElementById('footer-email');
+        if (footerEmail) footerEmail.textContent = text.footerEmail;
+        const footerAddress = document.getElementById('footer-address');
+        if (footerAddress) footerAddress.textContent = text.footerAddress;
+        const footerCopyright = document.getElementById('footer-copyright');
+        if (footerCopyright) footerCopyright.textContent = text.footerCopyright;
 
         // Section features
-        safeUpdate('section-feature1-title', 'sectionFeature1Title');
-        safeUpdate('section-feature1-desc', 'sectionFeature1Desc');
-        safeUpdate('section-feature2-title', 'sectionFeature2Title');
-        safeUpdate('section-feature2-desc', 'sectionFeature2Desc');
-        safeUpdate('section-feature3-title', 'sectionFeature3Title');
-        safeUpdate('section-feature3-desc', 'sectionFeature3Desc');
+        const sectionFeature1Title = document.getElementById('section-feature1-title');
+        if (sectionFeature1Title) sectionFeature1Title.textContent = text.sectionFeature1Title;
+        const sectionFeature1Desc = document.getElementById('section-feature1-desc');
+        if (sectionFeature1Desc) sectionFeature1Desc.textContent = text.sectionFeature1Desc;
+        const sectionFeature2Title = document.getElementById('section-feature2-title');
+        if (sectionFeature2Title) sectionFeature2Title.textContent = text.sectionFeature2Title;
+        const sectionFeature2Desc = document.getElementById('section-feature2-desc');
+        if (sectionFeature2Desc) sectionFeature2Desc.textContent = text.sectionFeature2Desc;
+        const sectionFeature3Title = document.getElementById('section-feature3-title');
+        if (sectionFeature3Title) sectionFeature3Title.textContent = text.sectionFeature3Title;
+        const sectionFeature3Desc = document.getElementById('section-feature3-desc');
+        if (sectionFeature3Desc) sectionFeature3Desc.textContent = text.sectionFeature3Desc;
 
         // GDPR
         safeUpdate('gdpr-title', 'gdprTitle');
@@ -496,13 +534,17 @@ class App {
     }
 
     renderCartItem(item) {
+        console.log('🛒 Rendering cart item:', item.ID);
         const product = this.products.find(p => p.ID == item.ID);
-        if (!product) return '';
+        if (!product) {
+            console.warn('❌ Product not found for cart item:', item.ID);
+            return '';
+        }
 
         const text = TEXT[this.lang];
         const itemTotal = parseFloat(product.Prezzo.replace(',', '.')) * item.qty;
         const nameKey = this.lang === 'it' ? 'Nome' : `Nome_${this.lang.toUpperCase()}`;
-        const name = item[nameKey] || item.Nome || product.Nome;
+        const name = item[nameKey] || item.Nome || product.Nome || 'Prodotto';
 
         return `
             <div class="cart-item">
@@ -513,17 +555,17 @@ class App {
                     <div>
                         <div class="cart-item-header">
                             <span class="cart-item-name">${name}</span>
-                            <button class="cart-item-remove" onclick="app.removeFromCart('${item.ID}')">✕</button>
+                            <button class="cart-item-remove" onclick="window.app.removeFromCart('${item.ID}')">✕</button>
                         </div>
                         <span class="cart-item-price">€ ${itemTotal.toFixed(2)}</span>
                     </div>
                     <div>
                         <div class="cart-item-qty">
-                            <button class="qty-btn" onclick="app.updateCartQty('${item.ID}', -1)">−</button>
+                            <button class="qty-btn" onclick="window.app.updateCartQty('${item.ID}', -1)">−</button>
                             <span class="qty-value">${item.qty}</span>
-                            <button class="qty-btn" onclick="app.updateCartQty('${item.ID}', 1)">+</button>
+                            <button class="qty-btn" onclick="window.app.updateCartQty('${item.ID}', 1)">+</button>
                         </div>
-                        <span class="cart-item-stock ${product.StockNum < 5 ? 'warning' : ''}">${text.maxQty}: ${product.StockNum}</span>
+                        <span class="cart-item-stock ${product.StockNum < 5 ? 'warning' : ''}">${text?.maxQty || 'Max'}: ${product.StockNum}</span>
                     </div>
                 </div>
             </div>
@@ -531,23 +573,37 @@ class App {
     }
 
     renderProducts() {
+        console.log('🛍 Rendering products...');
         const container = document.getElementById('products-grid');
-        if (!container) return;
+        if (!container) {
+            console.warn('❌ Products grid container not found');
+            return;
+        }
 
         const nameKey = this.lang === 'it' ? 'Nome' : `Nome_${this.lang.toUpperCase()}`;
         const text = TEXT[this.lang];
         
+        if (!this.products || this.products.length === 0) {
+            console.warn('❌ No products available');
+            container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;">Nessun prodotto disponibile</div>';
+            return;
+        }
+
         const activeProducts = this.products.filter(p => p.Disponibile === 'SI');
+        console.log(`📊 Found ${activeProducts.length} active products`);
         
         if (this.currentCategory) {
             const filteredProducts = activeProducts.filter(p => {
-                const category = p[nameKey] || p.Categoria;
+                const category = p.Categoria || p[`Categoria_${this.lang.toUpperCase()}`];
                 return category === this.currentCategory;
             });
+            console.log(`🔍 Filtered ${filteredProducts.length} products for category: ${this.currentCategory}`);
             container.innerHTML = filteredProducts.map(p => this.renderProductCard(p, nameKey)).join('');
         } else {
             container.innerHTML = activeProducts.map(p => this.renderProductCard(p, nameKey)).join('');
         }
+        
+        console.log('✅ Products rendered successfully');
     }
 
     renderProductCard(product, nameKey) {
@@ -559,20 +615,20 @@ class App {
 
         let badge = '';
         if (isOutOfStock) {
-            badge = `<span class="product-badge out-of-stock">${text.outOfStock}</span>`;
+            badge = `<span class="product-badge out-of-stock">${text?.outOfStock || 'Esaurito'}</span>`;
         } else if (isLowStock) {
-            badge = `<span class="product-badge low-stock">${text.lowStock}</span>`;
+            badge = `<span class="product-badge low-stock">${text?.lowStock || 'Ultimi pezzi'}</span>`;
         } else if (product.Nuovo === 'SI') {
-            badge = `<span class="product-badge product-badge-new">${text.newBadge}</span>`;
+            badge = `<span class="product-badge product-badge-new">${text?.newBadge || 'Nuovo'}</span>`;
         }
 
         return `
             <div class="product-card" data-product-id="${product.ID}">
                 ${badge}
-                <button class="product-wishlist ${isWishlisted ? 'active' : ''}" onclick="app.toggleWishlist('${product.ID}')">♡</button>
+                <button class="product-wishlist ${isWishlisted ? 'active' : ''}" onclick="window.app.toggleWishlist('${product.ID}')">♡</button>
                 <div class="product-image-wrapper">
                     <img class="product-image" src="${product.Immagine}" alt="${name}" loading="lazy">
-                    <button class="product-quick-view" onclick="app.showQuickView('${product.ID}')">${text.quickView}</button>
+                    <button class="product-quick-view" onclick="window.app.showQuickView('${product.ID}')">${text?.quickView || 'Veloce'}</button>
                 </div>
                 <div class="product-content">
                     <span class="product-brand">${product.Categoria}</span>
@@ -583,13 +639,13 @@ class App {
                     </div>
                     <div class="product-price-row">
                         <span class="product-price">€ ${product.Prezzo}</span>
-                        <span class="product-price-unit">${text.pricePer} ${product.Unità || 'pz'}</span>
+                        <span class="product-price-unit">${text?.pricePer || 'al'} ${product.Unità || 'pz'}</span>
                     </div>
                     <span class="product-availability ${isOutOfStock ? 'out' : isLowStock ? 'limited' : ''}">
-                        ${isOutOfStock ? text.outOfStock : isLowStock ? text.lowStock : text.inStock}
+                        ${isOutOfStock ? (text?.outOfStock || 'Esaurito') : isLowStock ? (text?.lowStock || 'Ultimi pezzi') : (text?.inStock || 'Disponibile')}
                     </span>
-                    <button class="product-add-btn" ${isOutOfStock ? 'disabled' : ''} onclick="app.addToCart('${product.ID}')">
-                        ${isOutOfStock ? text.outOfStock : `<span>🛒</span> ${text.addToCart}`}
+                    <button class="product-add-btn" ${isOutOfStock ? 'disabled' : ''} onclick="window.app.addToCart('${product.ID}')">
+                        ${isOutOfStock ? (text?.outOfStock || 'Esaurito') : `<span>🛒</span> ${text?.addToCart || 'Aggiungi'}`}
                     </button>
                 </div>
             </div>
@@ -597,27 +653,42 @@ class App {
     }
 
     renderCategories() {
+        console.log('📂 Rendering categories...');
         const container = document.getElementById('category-menu');
-        if (!container) return;
+        if (!container) {
+            console.warn('❌ Category menu container not found');
+            return;
+        }
 
         const catKey = this.lang === 'it' ? 'Categoria' : `Categoria_${this.lang.toUpperCase()}`;
         const activeProducts = this.products.filter(p => p.Disponibile === 'SI');
         const categories = [...new Set(activeProducts.map(p => p[catKey] || p.Categoria))];
+        
+        console.log(`📊 Found ${categories.length} categories`);
 
-        container.innerHTML = categories.map(cat => `
-            <li><a href="#" data-category="${cat}" onclick="window.app.filterByCategory('${cat}'); return false;">${cat}</a></li>
-        `).join('');
+        const categoryLinks = categories.map(cat => 
+            `<li><a href="#products" data-category="${cat}" onclick="window.app.filterByCategory('${cat}'); return false;">${cat}</a></li>`
+        ).join('');
+        
+        container.innerHTML = categoryLinks;
+        console.log('✅ Categories rendered successfully');
     }
 
     renderFeaturedProducts() {
+        console.log('⭐ Rendering featured products...');
         const container = document.getElementById('featured-track');
-        if (!container) return;
+        if (!container) {
+            console.warn('❌ Featured track container not found');
+            return;
+        }
 
         const nameKey = this.lang === 'it' ? 'Nome' : `Nome_${this.lang.toUpperCase()}`;
         const featuredProducts = this.products
             .filter(p => p.Evidenza === 'SI' && p.Disponibile === 'SI' && p.StockNum > 0)
             .slice(0, 8);
 
+        console.log(`⭐ Found ${featuredProducts.length} featured products`);
+        
         container.innerHTML = featuredProducts.map(p => this.renderProductCard(p, nameKey)).join('');
         
         // Initialize carousel after rendering
@@ -626,20 +697,28 @@ class App {
                 window.featuredCarousel.refresh();
             }
         }, 100);
+        
+        console.log('✅ Featured products rendered successfully');
     }
 
     filterByCategory(category) {
+        console.log(`🏷️ Filtering by category: ${category}`);
         this.currentCategory = this.currentCategory === category ? null : category;
         this.renderProducts();
         this.updateCategoryUI();
+        console.log(`✅ Category filter applied: ${this.currentCategory}`);
     }
 
     updateCategoryUI() {
-        if (this.currentCategory && document.querySelectorAll('#category-menu a')) {
-            document.querySelectorAll('#category-menu a').forEach(link => {
-                const isActive = this.currentCategory === link.dataset.category;
-                link.classList.toggle('active', isActive);
-            });
+        if (this.currentCategory) {
+            const links = document.querySelectorAll('#category-menu a');
+            if (links.length > 0) {
+                links.forEach(link => {
+                    const isActive = this.currentCategory === link.dataset.category;
+                    link.classList.toggle('active', isActive);
+                });
+                console.log(`🏷️ Updated category UI for: ${this.currentCategory}`);
+            }
         }
     }
 
@@ -739,21 +818,26 @@ class App {
     }
 
     showSuccess(orderId) {
+        console.log('🎉 Showing success popup:', orderId);
         const popup = document.getElementById('success-popup');
         if (popup) {
-            document.getElementById('success-order-id').textContent = orderId;
+            const orderIdEl = document.getElementById('success-order-id');
+            if (orderIdEl) orderIdEl.textContent = orderId;
             popup.classList.add('active');
         }
     }
 
     hideSuccess() {
-        const modal = document.getElementById('success-popup');
-        if (modal) {
-            modal.style.display = 'none';
+        console.log('🚪 Hiding success popup');
+        const popup = document.getElementById('success-popup');
+        if (popup) {
+            popup.classList.remove('active');
+            popup.style.display = '';
         }
-        // Reload to remove from cart
+        // Clear cart
         this.cart = [];
         this.saveCart();
+        console.log('✅ Cart cleared after order');
     }
     }
 

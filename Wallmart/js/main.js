@@ -43,8 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 window.hideToast = function() {
+    console.log('🔇 Hiding toast');
     const toast = document.getElementById('toast');
-    if (toast) toast.classList.remove('active');
+    if (toast) {
+        toast.classList.remove('active');
+        console.log('✅ Toast hidden');
+    }
 };
 
     // Mobile Menu Toggle
