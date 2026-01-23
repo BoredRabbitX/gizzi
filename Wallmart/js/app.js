@@ -75,16 +75,21 @@ class App {
                 return product;
             });
 
-        this.renderProducts();
-        this.renderCategories();
-        this.renderFeaturedProducts();
-        
-        if (window.featuredCarousel) {
-            setTimeout(() => window.featuredCarousel.refresh(), 100);
+            this.renderProducts();
+            this.renderCategories();
+            this.renderFeaturedProducts();
+            
+            if (window.featuredCarousel) {
+                setTimeout(() => window.featuredCarousel.refresh(), 100);
+            }
+        } catch (error) {
+            console.error('Error loading products:', error);
+            if (typeof showToast !== 'undefined') {
+                showToast(TEXT[this.lang].orderError, 'error');
+            } else {
+                console.warn('Toast not available');
+            }
         }
-    } catch (error) {
-        console.error('Error loading products:', error);
-        showToast(TEXT[this.lang].orderError, 'error');
     }
 }
 
@@ -94,8 +99,11 @@ class App {
             try {
                 this.cart = JSON.parse(saved);
             } catch (e) {
+                console.warn('Error loading cart:', e);
                 this.cart = [];
             }
+        } else {
+            this.cart = [];
         }
     }
 
@@ -110,8 +118,11 @@ class App {
             try {
                 this.wishlist = JSON.parse(saved);
             } catch (e) {
+                console.warn('Error loading wishlist:', e);
                 this.wishlist = [];
             }
+        } else {
+            this.wishlist = [];
         }
     }
 
@@ -132,7 +143,10 @@ class App {
                 this.cart.push(cartItem);
             }
             this.saveCart();
-            showToast(`${product.Nome} ${TEXT[this.lang].addToCart.toLowerCase()}`, 'success');
+                const productName = product.Nome || product.Nome_EN || product.Nome_DE || product.Nome_HU || 'Prodotto';
+                if (typeof showToast !== 'undefined') {
+                    showToast(`${productName} ${TEXT[this.lang].addToCart.toLowerCase()}`, 'success');
+                }
             this.openCart();
         } else {
             showToast(TEXT[this.lang].stockAlert, 'warning');
@@ -156,7 +170,9 @@ class App {
                 this.removeFromCart(productId);
                 return;
             } else {
-                showToast(TEXT[this.lang].stockAlert, 'warning');
+                if (typeof showToast !== 'undefined') {
+                    showToast(TEXT[this.lang].stockAlert, 'warning');
+                }
                 return;
             }
             this.saveCart();
@@ -164,10 +180,11 @@ class App {
     }
 
     clearCart() {
-        if (confirm(TEXT[this.lang].clearCartConfirm)) {
-            this.cart = [];
-            this.saveCart();
+        if (window.app && confirm(TEXT[window.app.lang].clearCartConfirm)) {
+            window.app.cart = [];
+            window.app.saveCart();
         }
+    }
     }
 
     toggleWishlist(productId) {
@@ -247,25 +264,59 @@ class App {
 
     updateText() {
         const text = TEXT[this.lang];
+        if (!text) return;
+
+    updateText() {
+        const text = TEXT[this.lang];
+        if (!text) return;
+
+        // Safety check for missing elements
+        const safeUpdate = (id, key) => {
+            const el = document.getElementById(id);
+            if (el && text[key]) el.textContent = text[key];
+        };
 
         // Hero section
-        document.getElementById('hero-title') && (document.getElementById('hero-title').textContent = text.heroTitle);
-        document.getElementById('hero-subtitle') && (document.getElementById('hero-subtitle').textContent = text.heroSubtitle);
-        document.getElementById('hero-cta') && (document.getElementById('hero-cta').textContent = text.heroCta);
-        document.getElementById('hero-secondary') && (document.getElementById('hero-secondary').textContent = text.heroSecondary);
-        document.getElementById('hero-tag') && (document.getElementById('hero-tag').textContent = text.heroTag);
-        document.getElementById('hero-feature-1') && (document.getElementById('hero-feature-1').textContent = text.heroFeature1);
-        document.getElementById('hero-feature-2') && (document.getElementById('hero-feature-2').textContent = text.heroFeature2);
-        document.getElementById('hero-feature-3') && (document.getElementById('hero-feature-3').textContent = text.heroFeature3);
-        document.getElementById('hero-badge') && (document.getElementById('hero-badge').innerHTML = `<span class="hero-badge-icon">🚚</span><span>${text.heroBadge}</span>`);
+        safeUpdate('hero-title', 'heroTitle');
+        safeUpdate('hero-subtitle', 'heroSubtitle');
+        safeUpdate('hero-tag', 'heroTag');
+        safeUpdate('hero-cta', 'heroCta');
+        const heroFeature1 = document.getElementById('hero-feature-1');
+        if (heroFeature1) heroFeature1.textContent = text.heroFeature1;
+        const heroFeature2 = document.getElementById('hero-feature-2');
+        if (heroFeature2) heroFeature2.textContent = text.heroFeature2;
+        const heroFeature3 = document.getElementById('hero-feature-3');
+        if (heroFeature3) heroFeature3.textContent = text.heroFeature3;
+        const heroBadge = document.getElementById('hero-badge');
+        if (heroBadge && text.heroBadge) heroBadge.innerHTML = `<span class="hero-badge-icon">🚚</span><span>${text.heroBadge}</span>`;
+        const heroSubtitle = document.getElementById('hero-subtitle');
+        if (heroSubtitle) heroSubtitle.textContent = text.heroSubtitle;
+        const heroCta = document.getElementById('hero-cta');
+        if (heroCta) heroCta.textContent = text.heroCta;
+        const heroSecondary = document.getElementById('hero-secondary');
+        if (heroSecondary) heroSecondary.textContent = text.heroSecondary;
+        const heroTag = document.getElementById('hero-tag');
+        if (heroTag) heroTag.textContent = text.heroTag;
+        const heroFeature1 = document.getElementById('hero-feature-1');
+        if (heroFeature1) heroFeature1.textContent = text.heroFeature1;
+        const heroFeature2 = document.getElementById('hero-feature-2');
+        if (heroFeature2) heroFeature2.textContent = text.heroFeature2;
+        const heroFeature3 = document.getElementById('hero-feature-3');
+        if (heroFeature3) heroFeature3.textContent = text.heroFeature3;
+        const heroBadge = document.getElementById('hero-badge');
+        if (heroBadge) heroBadge.innerHTML = `<span class="hero-badge-icon">🚚</span><span>${text.heroBadge}</span>`;
 
         // Featured section
-        document.getElementById('featured-title') && (document.getElementById('featured-title').textContent = text.featured);
-        document.getElementById('featured-subtitle') && (document.getElementById('featured-subtitle').textContent = text.featuredSubtitle);
-        document.getElementById('view-all-featured') && (document.getElementById('view-all-featured').innerHTML = `${text.viewAll}<span>→</span>`);
+        const featuredTitle = document.getElementById('featured-title');
+        if (featuredTitle) featuredTitle.textContent = text.featured;
+        const featuredSubtitle = document.getElementById('featured-subtitle');
+        if (featuredSubtitle) featuredSubtitle.textContent = text.featuredSubtitle;
+        const viewAllFeatured = document.getElementById('view-all-featured');
+        if (viewAllFeatured) viewAllFeatured.innerHTML = `${text.viewAll}<span>→</span>`;
 
         // Products section
-        document.getElementById('all-products-title') && (document.getElementById('all-products-title').textContent = text.allProducts);
+        const allProductsTitle = document.getElementById('all-products-title');
+        if (allProductsTitle) allProductsTitle.textContent = text.allProducts;
         document.getElementById('all-products-subtitle') && (document.getElementById('all-products-subtitle').textContent = text.allProductsSubtitle);
         document.getElementById('btn-all-categories') && (document.getElementById('btn-all-categories').textContent = text.categoryAll);
 
@@ -305,26 +356,28 @@ class App {
         document.getElementById('footer-copyright') && (document.getElementById('footer-copyright').textContent = text.footerCopyright);
 
         // Section features
-        document.getElementById('section-feature1-title') && (document.getElementById('section-feature1-title').textContent = text.sectionFeature1Title);
-        document.getElementById('section-feature1-desc') && (document.getElementById('section-feature1-desc').textContent = text.sectionFeature1Desc);
-        document.getElementById('section-feature2-title') && (document.getElementById('section-feature2-title').textContent = text.sectionFeature2Title);
-        document.getElementById('section-feature2-desc') && (document.getElementById('section-feature2-desc').textContent = text.sectionFeature2Desc);
-        document.getElementById('section-feature3-title') && (document.getElementById('section-feature3-title').textContent = text.sectionFeature3Title);
-        document.getElementById('section-feature3-desc') && (document.getElementById('section-feature3-desc').textContent = text.sectionFeature3Desc);
+        const sectionFeature1Title = document.getElementById('section-feature1-title');
+        if (sectionFeature1Title) sectionFeature1Title.textContent = text.sectionFeature1Title;
+        const sectionFeature1Desc = document.getElementById('section-feature1-desc');
+        if (sectionFeature1Desc) sectionFeature1Desc.textContent = text.sectionFeature1Desc;
+        const sectionFeature2Title = document.getElementById('section-feature2-title');
+        if (sectionFeature2Title) sectionFeature2Title.textContent = text.sectionFeature2Title;
+        const sectionFeature2Desc = document.getElementById('section-feature2-desc');
+        if (sectionFeature2Desc) sectionFeature2Desc.textContent = text.sectionFeature2Desc;
+        const sectionFeature3Title = document.getElementById('section-feature3-title');
+        if (sectionFeature3Title) sectionFeature3Title.textContent = text.sectionFeature3Title;
+        const sectionFeature3Desc = document.getElementById('section-feature3-desc');
+        if (sectionFeature3Desc) sectionFeature3Desc.textContent = text.sectionFeature3Desc;
 
         // GDPR
-        document.getElementById('gdpr-title') && (document.getElementById('gdpr-title').textContent = text.gdprTitle);
-        document.getElementById('gdpr-text') && (document.getElementById('gdpr-text').textContent = text.gdprText);
-        document.getElementById('gdpr-accept') && (document.getElementById('gdpr-accept').textContent = text.accept);
-        document.getElementById('gdpr-reject') && (document.getElementById('gdpr-reject').textContent = text.reject);
-
-        // Features section
-        document.getElementById('section-feature1-title') && (document.getElementById('section-feature1-title').textContent = text.sectionFeature1Title);
-        document.getElementById('section-feature1-desc') && (document.getElementById('section-feature1-desc').textContent = text.sectionFeature1Desc);
-        document.getElementById('section-feature2-title') && (document.getElementById('section-feature2-title').textContent = text.sectionFeature2Title);
-        document.getElementById('section-feature2-desc') && (document.getElementById('section-feature2-desc').textContent = text.sectionFeature2Desc);
-        document.getElementById('section-feature3-title') && (document.getElementById('section-feature3-title').textContent = text.sectionFeature3Title);
-        document.getElementById('section-feature3-desc') && (document.getElementById('section-feature3-desc').textContent = text.sectionFeature3Desc);
+        const gdprTitle = document.getElementById('gdpr-title');
+        if (gdprTitle) gdprTitle.textContent = text.gdprTitle;
+        const gdprText = document.getElementById('gdpr-text');
+        if (gdprText) gdprText.textContent = text.gdprText;
+        const gdprAccept = document.getElementById('gdpr-accept');
+        if (gdprAccept) gdprAccept.textContent = text.accept;
+        const gdprReject = document.getElementById('gdpr-reject');
+        if (gdprReject) gdprReject.textContent = text.reject;
     }
 
     updateCartUI() {
@@ -475,7 +528,7 @@ class App {
         const categories = [...new Set(activeProducts.map(p => p[catKey] || p.Categoria))];
 
         container.innerHTML = categories.map(cat => `
-            <li><a href="#" data-category="${cat}" onclick="app.filterByCategory('${cat}'); return false;">${cat}</a></li>
+            <li><a href="#" data-category="${cat}" onclick="window.app.filterByCategory('${cat}'); return false;">${cat}</a></li>
         `).join('');
     }
 
@@ -498,10 +551,12 @@ class App {
     }
 
     updateCategoryUI() {
-        document.querySelectorAll('#category-menu a').forEach(link => {
-            const isActive = this.currentCategory === link.dataset.category;
-            link.classList.toggle('active', isActive);
-        });
+        if (this.currentCategory && document.querySelectorAll('#category-menu a')) {
+            document.querySelectorAll('#category-menu a').forEach(link => {
+                const isActive = this.currentCategory === link.dataset.category;
+                link.classList.toggle('active', isActive);
+            });
+        }
     }
 
     updateProductUI() {
@@ -533,7 +588,11 @@ class App {
 
     openCheckout() {
         if (this.cart.length === 0) {
-            showToast(TEXT[this.lang].cartEmptyAlert, 'warning');
+            if (typeof showToast !== 'undefined') {
+                if (typeof showToast !== 'undefined') {
+                showToast(TEXT[this.lang].cartEmptyAlert, 'warning');
+            }
+            }
             return;
         }
         this.closeCart();
@@ -606,9 +665,18 @@ class App {
     }
 
     hideSuccess() {
-        const popup = document.getElementById('success-popup');
-        if (popup) popup.classList.remove('active');
-        location.reload();
+        const modal = document.getElementById('success-popup');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+        // Reload to remove from cart
+        if (window.app) {
+                window.app.clearCart();
+            } else {
+                console.warn('Cart clearing not available');
+            }
+        }
+        }
     }
 
     showQuickView(productId) {

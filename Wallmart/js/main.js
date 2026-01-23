@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Toast notification functions
     window.showToast = function(message, type = 'success') {
+        if (!message && message.trim() === '') return;
         const toast = document.getElementById('toast');
         if (toast) {
             const toastTitle = toast.querySelector('.toast-title');
@@ -59,10 +60,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btn) {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (window.app) {
-                    window.app.toggleTheme();
-                }
-            });
+            if (window.app) {
+                window.app.toggleTheme();
+            } else {
+                console.warn('Theme toggle not available');
+            }
+        });
         }
     });
 
@@ -79,14 +82,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Language Selector
     if (langSelect) {
         langSelect.addEventListener('change', (e) => {
-            if (window.app) {
-                window.app.changeLang(e.target.value);
+        if (window.app) {
+            window.app.changeLang(e.target.value);
             } else {
-                setTimeout(() => {
-                    if (window.app) {
-                        window.app.changeLang(e.target.value);
-                    }
-                }, 100);
+                console.warn('App not available for language change');
+                // Fallback to reload page with new language
+                const newLang = e.target.value;
+                localStorage.setItem('gizzi_lang', newLang);
+                console.log('Language changed, please refresh page');
             }
         });
     }
@@ -104,8 +107,13 @@ document.addEventListener('DOMContentLoaded', () => {
         checkoutForm.addEventListener('submit', (e) => {
             e.preventDefault();
             if (window.app) {
-                window.app.processOrder();
+                window.app.updateUI();
+                window.app.updateProductUI();
+                window.app.updateCartUI();
+            } else {
+                console.warn('App UI update not available');
             }
+        }
         });
     }
 
@@ -213,16 +221,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (promoApplyBtn && promoInput) {
         promoApplyBtn.addEventListener('click', () => {
             const code = promoInput.value.trim().toUpperCase();
-            const text = window.app?.lang ? TEXT[window.app.lang] : TEXT['it'];
+            const text = window.app?.lang ? TEXT[window.app.lang] : TEXT['it']; 
 
             if (code === 'GIZZI10' || code === 'CILENTO20') {
-                window.showToast(TEXT[window.app?.lang || 'it'].orderSuccess, 'success');
+                if (typeof showToast !== 'undefined') {
+                    showToast(TEXT[window.app?.lang || 'it'].orderSuccess, 'success');
+                }
                 promoInput.disabled = true;
                 promoApplyBtn.disabled = true;
                 promoApplyBtn.textContent = TEXT[window.app?.lang || 'it'].promoApplied;
             } else {
-                window.showToast(TEXT[window.app?.lang || 'it'].promoInvalid, 'error');
+                if (typeof showToast !== 'undefined') {
+                    showToast(TEXT[window.app?.lang || 'it'].promoInvalid, 'error');
+                }
             }
+        });
+    }
         });
     }
 
