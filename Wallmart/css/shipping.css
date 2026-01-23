@@ -1,0 +1,115 @@
+/* Shipping Page Styles */
+.shipping-section {
+    padding: var(--space-xl) 0;
+}
+
+.shipping-info {
+    background: var(--bg-secondary);
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-2xl);
+    text-align: center;
+}
+
+.shipping-info h3 {
+    font-size: var(--font-2xl);
+    font-weight: 700;
+    color: var(--nature-green);
+    margin-bottom: var(--space-md);
+}
+
+.shipping-options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-xl);
+    margin: var(--space-2xl) 0;
+}
+
+.shipping-option-card {
+    background: var(--bg-primary);
+    padding: var(--space-2xl);
+    border-radius: var(--radius-xl);
+    border: 2px solid var(--border-primary);
+    transition: var(--transition-base);
+}
+
+.shipping-option-card:hover {
+    border-color: var(--nature-green);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+}
+
+.shipping-option-card h4 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--font-lg);
+    font-weight: 700;
+    color: var(--nature-green);
+    margin-bottom: var(--space-md);
+}
+
+.shipping-price {
+    font-size: var(--font-xl);
+    font-weight: 800;
+    color: var(--organic-orange);
+    margin: var(--space-lg) 0;
+    display: block;
+}
+
+.shipping-details {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.shipping-details p {
+    margin-bottom: var(--space-sm);
+}
+
+.shipping-timeline {
+    background: var(--bg-primary);
+    padding: var(--space-2xl);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-primary);
+}
+
+.shipping-timeline h3 {
+    font-size: var(--font-2xl);
+    font-weight: 700;
+    color: var(--nature-green);
+    margin-bottom: var(--space-xl);
+    text-align: center;
+    padding-bottom: var(--space-sm);
+    border-bottom: 2px solid var(--natural-gold);
+}
+
+.shipping-timeline ul {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-xl) 0;
+}
+
+.shipping-timeline ul li {
+    padding: var(--space-md) var(--space-lg);
+    margin-bottom: var(--space-md);
+    background: var(--bg-secondary);
+    border-left: 4px solid var(--nature-green);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+}
+
+.shipping-timeline ul li::before {
+    content: '🚚';
+    margin-right: var(--space-sm);
+}
+
+@media (max-width: 768px) {
+    .shipping-options-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .shipping-timeline ul {
+        padding-left: 0;
+        margin-left: 0;
+    }
+}
