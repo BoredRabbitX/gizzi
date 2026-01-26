@@ -897,12 +897,12 @@ const Cart = {
                             <div class="cart-item-meta">€${item.Prezzo} × ${item.qty}</div>
                         </div>
                         <div class="qty-controls">
-                            <button class="qty-btn" onclick="Cart.updateQty('${item.ID}', -1)">−</button>
+                            <button class="qty-btn qty-minus" data-id="${item.ID}">−</button>
                             <span class="qty-value">${item.qty}</span>
-                            <button class="qty-btn" onclick="Cart.updateQty('${item.ID}', 1)" ${item.qty >= product?.StockNum ? 'disabled' : ''}>+</button>
+                            <button class="qty-btn qty-plus" data-id="${item.ID}" ${item.qty >= product?.StockNum ? 'disabled' : ''}>+</button>
                         </div>
                         <div class="cart-item-price">€${Utils.formatPrice(itemTotal)}</div>
-                        <button class="cart-item-remove" onclick="Cart.confirmRemove('${item.ID}')" title="${t('confirm.delete')}">
+                        <button class="cart-item-remove" data-id="${item.ID}" title="${t('confirm.delete')}">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
@@ -1438,12 +1438,24 @@ const Language = {
         if (aboutP[1]) aboutP[1].textContent = t('footer.tradition');
         
         const catH4 = footerCols[1].querySelector('h4');
-        const catLinks = footerCols[1].querySelectorAll('a');
         if (catH4) catH4.textContent = t('footer.categories');
-        if (catLinks[0]) catLinks[0].textContent = t('footer.catOil');
-        if (catLinks[1]) catLinks[1].textContent = t('footer.catConserves');
-        if (catLinks[2]) catLinks[2].textContent = t('footer.catPasta');
-        if (catLinks[3]) catLinks[3].textContent = t('footer.catWine');
+        
+        // Genera categorie dinamiche come nell'header
+        const catCol = footerCols[1];
+        const oldCatLinks = catCol.querySelectorAll('a');
+        oldCatLinks.forEach(link => link.remove());
+        
+        const categories = Products.getCategories();
+        categories.forEach(cat => {
+            const link = document.createElement('a');
+            link.href = '#';
+            link.textContent = cat;
+            link.onclick = (e) => {
+                e.preventDefault();
+                App.goToCategory(cat.replace(/\s+/g, ''));
+            };
+            catCol.appendChild(link);
+        });
         
         const supportH4 = footerCols[2].querySelector('h4');
         const supportLinks = footerCols[2].querySelectorAll('a');
@@ -1533,6 +1545,26 @@ const App = {
         }, 10));
         
         document.getElementById('cart-overlay')?.addEventListener('click', () => Cart.toggle());
+        
+        // Event delegation per pulsanti carrello
+        document.getElementById('cart-items')?.addEventListener('click', (e) => {
+            const target = e.target.closest('button');
+            if (!target) return;
+            
+            const id = target.dataset.id;
+            if (!id) return;
+            
+            if (target.classList.contains('qty-minus')) {
+                Cart.updateQty(id, -1);
+            } else if (target.classList.contains('qty-plus')) {
+                Cart.updateQty(id, 1);
+            } else if (target.classList.contains('cart-item-remove')) {
+                Cart.confirmRemove(id);
+            }
+        });
+        
+        // Event delegation per pulsante svuota carrello
+        document.getElementById('btn-clear')?.addEventListener('click', () => Cart.confirmEmpty());
         
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
