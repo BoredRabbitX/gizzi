@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "code": "hu",
+    "name": "Magyar",
+    "flag": "🇭🇺"
+  },
+  "hero": {
+    "h1": "Cilento Aranya,<br>az otthonába.",
+    "p": "Gasztronómiai kiválóság a Nemzeti Parkból. Autentikus termékek, hagyomány és íz.",
+    "badge": "✨ Cilento Minőség",
+    "cta": "Vásárlás Most"
+  },
+  "nav": {
+    "shipping": "INGYENES szállítás €120 felett",
+    "theme": "🌙 Sötét mód",
+    "themeLight": "☀️ Világos mód",
+    "searchPlaceholder": "Keresés olívaolaj, tészta, bor..."
+  },
+  "products": {
+    "deals": "Mai Akciók",
+    "all": "Összes Termék",
+    "byCat": "Kategóriák",
+    "viewAll": "Összes megtekintése",
+    "add": "Kosárba",
+    "added": "Hozzáadva!",
+    "out": "Elfogyott",
+    "low": "Utolsó darabok!",
+    "ok": "Raktáron",
+    "maxQty": "Max elérhető",
+    "noResults": "Nincs találat",
+    "tryAgain": "Próbáljon más kulcsszavakat"
+  },
+  "cart": {
+    "title": "🛒 Az Ön Kosara",
+    "empty": "A kosár üres",
+    "emptyDesc": "Fedezze fel termékeinket és találjon valami különlegeset!",
+    "clear": "Kosár ürítése",
+    "shipping": "Szállítás",
+    "freeShipping": "INGYENES",
+    "total": "Összesen",
+    "checkout": "Tovább a fizetéshez"
+  },
+  "checkout": {
+    "title": "Szállítási adatok",
+    "subtitle": "Adja meg adatait a rendelés befejezéséhez",
+    "name": "Teljes név",
+    "namePlaceholder": "Kovács János",
+    "email": "E-mail",
+    "emailPlaceholder": "janos@email.com",
+    "phone": "Telefon",
+    "phonePlaceholder": "+36 30 123 4567",
+    "address": "Teljes cím",
+    "addressPlaceholder": "Fő utca 1, 1000 Budapest",
+    "addressHint": "Utca, házszám, irányítószám és város",
+    "destination": "Cél",
+    "italy": "🇮🇹 Olaszország",
+    "europe": "🇪🇺 Európa (EU)",
+    "confirm": "Rendelés megerősítése"
+  },
+  "thanks": {
+    "title": "Köszönjük!",
+    "message": "Rendelését sikeresen elküldtük.",
+    "contact": "Hamarosan felvesszük Önnel a kapcsolatot WhatsApp-on.",
+    "back": "Vissza a boltba"
+  },
+  "toast": {
+    "cartAdd": "Kosárba helyezve",
+    "cartRemove": "Eltávolítva a kosárból",
+    "cartEmpty": "Kosár kiürítve",
+    "maxStock": "Maximális mennyiség elérve",
+    "maxStockDesc": "Nem adható hozzá több ebből a termékből",
+    "error": "Hiba",
+    "success": "Kész!",
+    "orderSent": "Rendelés elküldve!",
+    "searchResults": "találat"
+  },
+  "confirm": {
+    "emptyTitle": "Kosár ürítése?",
+    "emptyMsg": "Minden termék törlésre kerül a kosárból.",
+    "removeTitle": "Termék eltávolítása?",
+    "cancel": "Mégse",
+    "ok": "Megerősítés",
+    "delete": "Eltávolítás"
+  },
+  "errors": {
+    "empty": "Üres kosár",
+    "emptyDesc": "Adjon hozzá termékeket a folytatás előtt",
+    "form": "Töltse ki az összes mezőt",
+    "formDesc": "Néhány kötelező mező üres",
+    "email": "Érvénytelen e-mail",
+    "emailDesc": "Ellenőrizze az e-mail formátumot",
+    "load": "Betöltési hiba",
+    "loadDesc": "Nem sikerült betölteni a termékeket. Töltse újra az oldalt."
+  },
+  "loading": {
+    "text": "Betöltés...",
+    "products": "A legjobb Cilento termékek előkészítése..."
+  },
+  "gdpr": {
+    "title": "Adatvédelem és Cookie szabályzat",
+    "message": "Cookie-kat használunk a legjobb élmény biztosításához. A folytatással elfogadja Cookie szabályzatunkat.",
+    "accept": "Összes elfogadása",
+    "decline": "Elutasítás"
+  },
+  "footer": {
+    "about": "Gasztronómiai kiválóság a Cilento Nemzeti Parkból.",
+    "tradition": "Hagyomány 1980 óta",
+    "categories": "Kategóriák",
+    "catOil": "Olívaolaj",
+    "catConserves": "Konzervek",
+    "catPasta": "Kézműves tészta",
+    "catWine": "Helyi borok",
+    "support": "Támogatás",
+    "contact": "Kapcsolat",
+    "shippingInfo": "Szállítás",
+    "returns": "Visszaküldés és visszatérítés",
+    "faq": "GYIK",
+    "contactTitle": "Elérhetőség",
+    "copyright": "Minden jog fenntartva."
+  }
+}

@@ -5,266 +5,454 @@ const CONFIG = {
     catalog: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIumwZulbMAuesmG69DB8Y1bx2Y-NQXfyG7_m1-rdpZ-SoOxM0JyZtnj0_eV_K4t4drULTwV44nE5Y/pub?gid=0&single=true&output=csv",
     formURL: "https://docs.google.com/forms/d/e/1FAIpQLSend7KPNCjTNP1d-B3zd-wvhZAVXLS3P7341yN88fm3d7D4Jw/formResponse",
     wa: "393667540018",
-    loadingTimeout: 8000 // Max loading time in ms
+    loadingTimeout: 8000,
+    supportedLanguages: ['it', 'en', 'de', 'hu'],
+    defaultLanguage: 'it'
 };
 
 /* ========================================
-   TRADUZIONI UI
+   TRADUZIONI INCORPORATE (Fallback)
    ======================================== */
-const UI = {
+const TRANSLATIONS = {
     it: {
-        h1: "L'Oro del Cilento,<br>a casa tua.",
-        p: "Eccellenza gastronomica dal cuore del Parco Nazionale. Prodotti autentici, tradizione e sapore.",
-        badge: "✨ Qualità Cilentana",
-        cta: "Scopri i Prodotti",
-        add: "Aggiungi",
-        added: "Aggiunto!",
-        total: "Totale",
-        cart: "🛒 Il Tuo Carrello",
-        ship: "Spedizione",
-        clear: "Svuota Carrello",
-        deals: "Offerte del Momento",
-        all: "Tutti i Prodotti",
-        byCat: "Per Categoria",
-        viewAll: "Vedi tutti",
-        maxQty: "Max disponibili",
-        out: "Esaurito",
-        low: "Ultimi pezzi!",
-        ok: "Disponibile",
-        shipping: "Spedizione GRATUITA per ordini oltre €120",
-        theme: "🌙 Tema Scuro",
-        themeLight: "☀️ Tema Chiaro",
-        loading: "Caricamento...",
-        loadingProducts: "Preparando i migliori prodotti del Cilento...",
-        // Toast
-        toastCartAdd: "Aggiunto al carrello",
-        toastCartRemove: "Rimosso dal carrello",
-        toastCartEmpty: "Carrello svuotato",
-        toastMaxStock: "Quantità massima raggiunta",
-        toastMaxStockDesc: "Non puoi aggiungere altri pezzi di questo prodotto",
-        toastError: "Errore",
-        toastSuccess: "Fatto!",
-        toastOrderSent: "Ordine inviato!",
-        toastSearchResults: "risultati trovati",
-        // Confirm
-        confirmEmptyTitle: "Svuotare il carrello?",
-        confirmEmptyMsg: "Tutti i prodotti verranno rimossi dal carrello.",
-        confirmRemoveTitle: "Rimuovere prodotto?",
-        confirmCancel: "Annulla",
-        confirmOk: "Conferma",
-        confirmDelete: "Rimuovi",
-        // Checkout
-        checkoutTitle: "Completa l'ordine",
-        checkoutSubtitle: "Inserisci i tuoi dati per la spedizione",
-        checkoutBtn: "Vai al Checkout",
-        confirmBtn: "Invia Ordine",
-        // Thanks
-        thanksH: "Ordine Ricevuto!",
-        thanksP: "Grazie per il tuo ordine.",
-        thanksP2: "Ti contatteremo presto via WhatsApp per confermare.",
-        thanksBack: "Continua lo Shopping",
-        // Errors
-        errorEmpty: "Carrello vuoto",
-        errorEmptyDesc: "Aggiungi qualche prodotto prima di procedere",
-        errorForm: "Compila tutti i campi",
-        errorFormDesc: "Alcuni campi obbligatori sono vuoti",
-        errorEmail: "Email non valida",
-        errorEmailDesc: "Controlla il formato dell'email",
-        errorLoad: "Errore di caricamento",
-        errorLoadDesc: "Impossibile caricare i prodotti. Ricarica la pagina.",
-        cartEmpty: "Il tuo carrello è vuoto",
-        cartEmptyDesc: "Esplora i nostri prodotti e trova qualcosa di speciale!",
-        freeShipping: "GRATIS",
-        // Misc
-        searchPlaceholder: "Cerca olio, pasta, vino...",
-        noResults: "Nessun prodotto trovato",
-        tryAgain: "Prova con altre parole chiave"
+        meta: { code: "it", name: "Italiano", flag: "🇮🇹" },
+        hero: {
+            h1: "L'Oro del Cilento,<br>a casa tua.",
+            p: "Eccellenza gastronomica dal cuore del Parco Nazionale. Prodotti autentici, tradizione e sapore.",
+            badge: "✨ Qualità Cilentana",
+            cta: "Scopri i Prodotti"
+        },
+        nav: {
+            shipping: "Spedizione GRATUITA per ordini oltre €120",
+            searchPlaceholder: "Cerca olio, pasta, vino..."
+        },
+        products: {
+            deals: "Offerte del Momento",
+            all: "Tutti i Prodotti",
+            byCat: "Per Categoria",
+            viewAll: "Vedi tutti",
+            add: "Aggiungi",
+            added: "Aggiunto!",
+            out: "Esaurito",
+            low: "Ultimi pezzi!",
+            ok: "Disponibile",
+            noResults: "Nessun prodotto trovato",
+            tryAgain: "Prova con altre parole chiave"
+        },
+        cart: {
+            title: "🛒 Il Tuo Carrello",
+            empty: "Il tuo carrello è vuoto",
+            emptyDesc: "Esplora i nostri prodotti e trova qualcosa di speciale!",
+            clear: "Svuota Carrello",
+            shipping: "Spedizione",
+            freeShipping: "GRATIS",
+            total: "Totale",
+            checkout: "Prosegui all'Ordine"
+        },
+        checkout: {
+            title: "Dati di Spedizione",
+            subtitle: "Inserisci i tuoi dati per completare l'ordine",
+            name: "Nome e Cognome",
+            namePlaceholder: "Mario Rossi",
+            email: "Email",
+            emailPlaceholder: "mario@email.com",
+            phone: "Telefono",
+            phonePlaceholder: "+39 333 1234567",
+            address: "Indirizzo completo",
+            addressPlaceholder: "Via Roma 1, 00100 Roma",
+            addressHint: "Via, numero civico, CAP e città",
+            destination: "Destinazione",
+            italy: "🇮🇹 Italia",
+            europe: "🇪🇺 Europa (UE)",
+            confirm: "Conferma Ordine"
+        },
+        thanks: {
+            title: "Grazie!",
+            message: "Il tuo ordine è stato inviato con successo.",
+            contact: "Ti contatteremo presto via WhatsApp.",
+            back: "Torna al Sito"
+        },
+        toast: {
+            cartAdd: "Aggiunto al carrello",
+            cartRemove: "Rimosso dal carrello",
+            cartEmpty: "Carrello svuotato",
+            maxStock: "Quantità massima raggiunta",
+            maxStockDesc: "Non puoi aggiungere altri pezzi di questo prodotto",
+            searchResults: "risultati trovati"
+        },
+        confirm: {
+            emptyTitle: "Svuotare il carrello?",
+            emptyMsg: "Tutti i prodotti verranno rimossi dal carrello.",
+            removeTitle: "Rimuovere prodotto?",
+            cancel: "Annulla",
+            ok: "Conferma",
+            delete: "Rimuovi"
+        },
+        errors: {
+            empty: "Carrello vuoto",
+            emptyDesc: "Aggiungi qualche prodotto prima di procedere",
+            form: "Compila tutti i campi",
+            formDesc: "Alcuni campi obbligatori sono vuoti",
+            email: "Email non valida",
+            emailDesc: "Controlla il formato dell'email",
+            load: "Errore di caricamento",
+            loadDesc: "Impossibile caricare i prodotti. Ricarica la pagina."
+        },
+        loading: {
+            text: "Caricamento...",
+            products: "Preparando i migliori prodotti del Cilento..."
+        },
+        gdpr: {
+            title: "Privacy & Cookie Policy",
+            message: "Utilizziamo cookie per offrirti la migliore esperienza.",
+            accept: "Accetta Tutto",
+            decline: "Rifiuta"
+        },
+        footer: {
+            about: "Eccellenze gastronomiche dal Parco Nazionale del Cilento.",
+            tradition: "Tradizione dal 1980",
+            categories: "Categorie",
+            catOil: "Olio d'Oliva",
+            catConserves: "Conserve",
+            catPasta: "Pasta Artigianale",
+            catWine: "Vini Locali",
+            support: "Assistenza",
+            contact: "Contattaci",
+            shippingInfo: "Spedizioni",
+            returns: "Resi e Rimborsi",
+            faq: "FAQ",
+            contactTitle: "Contatti"
+        }
     },
     en: {
-        h1: "Cilento's Gold,<br>at your home.",
-        p: "Gastronomic excellence from the National Park. Authentic products, tradition and flavor.",
-        badge: "✨ Cilento Quality",
-        cta: "Shop Now",
-        add: "Add to Cart",
-        added: "Added!",
-        total: "Total",
-        cart: "🛒 Your Cart",
-        ship: "Shipping",
-        clear: "Empty Cart",
-        deals: "Today's Deals",
-        all: "All Products",
-        byCat: "By Category",
-        viewAll: "View all",
-        maxQty: "Max available",
-        out: "Out of Stock",
-        low: "Last pieces!",
-        ok: "In Stock",
-        shipping: "FREE Shipping on orders over €120",
-        theme: "🌙 Dark Mode",
-        themeLight: "☀️ Light Mode",
-        loading: "Loading...",
-        loadingProducts: "Preparing the best products from Cilento...",
-        toastCartAdd: "Added to cart",
-        toastCartRemove: "Removed from cart",
-        toastCartEmpty: "Cart emptied",
-        toastMaxStock: "Maximum quantity reached",
-        toastMaxStockDesc: "Cannot add more of this product",
-        toastError: "Error",
-        toastSuccess: "Done!",
-        toastOrderSent: "Order sent!",
-        toastSearchResults: "results found",
-        confirmEmptyTitle: "Empty cart?",
-        confirmEmptyMsg: "All products will be removed from the cart.",
-        confirmRemoveTitle: "Remove product?",
-        confirmCancel: "Cancel",
-        confirmOk: "Confirm",
-        confirmDelete: "Remove",
-        checkoutTitle: "Complete your order",
-        checkoutSubtitle: "Enter your shipping details",
-        checkoutBtn: "Go to Checkout",
-        confirmBtn: "Send Order",
-        thanksH: "Order Received!",
-        thanksP: "Thank you for your order.",
-        thanksP2: "We'll contact you soon via WhatsApp to confirm.",
-        thanksBack: "Continue Shopping",
-        errorEmpty: "Empty cart",
-        errorEmptyDesc: "Add some products before proceeding",
-        errorForm: "Fill all fields",
-        errorFormDesc: "Some required fields are empty",
-        errorEmail: "Invalid email",
-        errorEmailDesc: "Check the email format",
-        errorLoad: "Loading error",
-        errorLoadDesc: "Unable to load products. Reload the page.",
-        cartEmpty: "Your cart is empty",
-        cartEmptyDesc: "Explore our products and find something special!",
-        freeShipping: "FREE",
-        searchPlaceholder: "Search olive oil, pasta, wine...",
-        noResults: "No products found",
-        tryAgain: "Try different keywords"
+        meta: { code: "en", name: "English", flag: "🇬🇧" },
+        hero: {
+            h1: "Cilento's Gold,<br>at your home.",
+            p: "Gastronomic excellence from the National Park. Authentic products, tradition and flavor.",
+            badge: "✨ Cilento Quality",
+            cta: "Shop Now"
+        },
+        nav: {
+            shipping: "FREE Shipping on orders over €120",
+            searchPlaceholder: "Search olive oil, pasta, wine..."
+        },
+        products: {
+            deals: "Today's Deals",
+            all: "All Products",
+            byCat: "By Category",
+            viewAll: "View all",
+            add: "Add to Cart",
+            added: "Added!",
+            out: "Out of Stock",
+            low: "Last pieces!",
+            ok: "In Stock",
+            noResults: "No products found",
+            tryAgain: "Try different keywords"
+        },
+        cart: {
+            title: "🛒 Your Cart",
+            empty: "Your cart is empty",
+            emptyDesc: "Explore our products and find something special!",
+            clear: "Empty Cart",
+            shipping: "Shipping",
+            freeShipping: "FREE",
+            total: "Total",
+            checkout: "Proceed to Checkout"
+        },
+        checkout: {
+            title: "Shipping Details",
+            subtitle: "Enter your details to complete the order",
+            name: "Full Name",
+            namePlaceholder: "John Doe",
+            email: "Email",
+            emailPlaceholder: "john@email.com",
+            phone: "Phone",
+            phonePlaceholder: "+39 333 1234567",
+            address: "Full Address",
+            addressPlaceholder: "123 Main St, 00100 Rome",
+            addressHint: "Street, number, ZIP and city",
+            destination: "Destination",
+            italy: "🇮🇹 Italy",
+            europe: "🇪🇺 Europe (EU)",
+            confirm: "Confirm Order"
+        },
+        thanks: {
+            title: "Thank You!",
+            message: "Your order has been sent successfully.",
+            contact: "We'll contact you soon via WhatsApp.",
+            back: "Back to Shop"
+        },
+        toast: {
+            cartAdd: "Added to cart",
+            cartRemove: "Removed from cart",
+            cartEmpty: "Cart emptied",
+            maxStock: "Maximum quantity reached",
+            maxStockDesc: "Cannot add more of this product",
+            searchResults: "results found"
+        },
+        confirm: {
+            emptyTitle: "Empty cart?",
+            emptyMsg: "All products will be removed from the cart.",
+            removeTitle: "Remove product?",
+            cancel: "Cancel",
+            ok: "Confirm",
+            delete: "Remove"
+        },
+        errors: {
+            empty: "Empty cart",
+            emptyDesc: "Add some products before proceeding",
+            form: "Fill all fields",
+            formDesc: "Some required fields are empty",
+            email: "Invalid email",
+            emailDesc: "Check the email format",
+            load: "Loading error",
+            loadDesc: "Unable to load products. Reload the page."
+        },
+        loading: {
+            text: "Loading...",
+            products: "Preparing the best products from Cilento..."
+        },
+        gdpr: {
+            title: "Privacy & Cookie Policy",
+            message: "We use cookies to offer you the best experience.",
+            accept: "Accept All",
+            decline: "Decline"
+        },
+        footer: {
+            about: "Gastronomic excellence from Cilento National Park.",
+            tradition: "Tradition since 1980",
+            categories: "Categories",
+            catOil: "Olive Oil",
+            catConserves: "Preserves",
+            catPasta: "Artisan Pasta",
+            catWine: "Local Wines",
+            support: "Support",
+            contact: "Contact Us",
+            shippingInfo: "Shipping",
+            returns: "Returns & Refunds",
+            faq: "FAQ",
+            contactTitle: "Contact"
+        }
     },
     de: {
-        h1: "Cilento Gold,<br>zu Ihnen nach Hause.",
-        p: "Kulinarische Exzellenz aus dem Nationalpark. Authentische Produkte, Tradition und Geschmack.",
-        badge: "✨ Cilento Qualität",
-        cta: "Jetzt Kaufen",
-        add: "Hinzufügen",
-        added: "Hinzugefügt!",
-        total: "Gesamt",
-        cart: "🛒 Warenkorb",
-        ship: "Versand",
-        clear: "Leeren",
-        deals: "Aktuelle Angebote",
-        all: "Alle Produkte",
-        byCat: "Nach Kategorie",
-        viewAll: "Alle anzeigen",
-        maxQty: "Max verfügbar",
-        out: "Ausverkauft",
-        low: "Letzte Stück!",
-        ok: "Verfügbar",
-        shipping: "KOSTENLOSER Versand ab €120",
-        theme: "🌙 Dunkel",
-        themeLight: "☀️ Hell",
-        loading: "Laden...",
-        loadingProducts: "Die besten Produkte aus Cilento werden vorbereitet...",
-        toastCartAdd: "Zum Warenkorb hinzugefügt",
-        toastCartRemove: "Aus Warenkorb entfernt",
-        toastCartEmpty: "Warenkorb geleert",
-        toastMaxStock: "Maximale Menge erreicht",
-        toastMaxStockDesc: "Keine weiteren Stücke verfügbar",
-        toastError: "Fehler",
-        toastSuccess: "Fertig!",
-        toastOrderSent: "Bestellung gesendet!",
-        toastSearchResults: "Ergebnisse gefunden",
-        confirmEmptyTitle: "Warenkorb leeren?",
-        confirmEmptyMsg: "Alle Produkte werden entfernt.",
-        confirmRemoveTitle: "Produkt entfernen?",
-        confirmCancel: "Abbrechen",
-        confirmOk: "Bestätigen",
-        confirmDelete: "Entfernen",
-        checkoutTitle: "Bestellung abschließen",
-        checkoutSubtitle: "Geben Sie Ihre Versanddetails ein",
-        checkoutBtn: "Zur Kasse",
-        confirmBtn: "Bestellung senden",
-        thanksH: "Bestellung erhalten!",
-        thanksP: "Vielen Dank für Ihre Bestellung.",
-        thanksP2: "Wir kontaktieren Sie bald per WhatsApp.",
-        thanksBack: "Weiter einkaufen",
-        errorEmpty: "Warenkorb leer",
-        errorEmptyDesc: "Fügen Sie Produkte hinzu",
-        errorForm: "Alle Felder ausfüllen",
-        errorFormDesc: "Einige Pflichtfelder sind leer",
-        errorEmail: "Ungültige E-Mail",
-        errorEmailDesc: "Überprüfen Sie das E-Mail-Format",
-        errorLoad: "Ladefehler",
-        errorLoadDesc: "Produkte konnten nicht geladen werden.",
-        cartEmpty: "Ihr Warenkorb ist leer",
-        cartEmptyDesc: "Entdecken Sie unsere Produkte!",
-        freeShipping: "KOSTENLOS",
-        searchPlaceholder: "Suche...",
-        noResults: "Keine Produkte gefunden",
-        tryAgain: "Versuchen Sie andere Suchbegriffe"
+        meta: { code: "de", name: "Deutsch", flag: "🇩🇪" },
+        hero: {
+            h1: "Cilento Gold,<br>zu Ihnen nach Hause.",
+            p: "Kulinarische Exzellenz aus dem Nationalpark. Authentische Produkte, Tradition und Geschmack.",
+            badge: "✨ Cilento Qualität",
+            cta: "Jetzt Kaufen"
+        },
+        nav: {
+            shipping: "KOSTENLOSER Versand ab €120",
+            searchPlaceholder: "Suche Olivenöl, Pasta, Wein..."
+        },
+        products: {
+            deals: "Aktuelle Angebote",
+            all: "Alle Produkte",
+            byCat: "Nach Kategorie",
+            viewAll: "Alle anzeigen",
+            add: "In den Warenkorb",
+            added: "Hinzugefügt!",
+            out: "Ausverkauft",
+            low: "Letzte Stücke!",
+            ok: "Verfügbar",
+            noResults: "Keine Produkte gefunden",
+            tryAgain: "Versuchen Sie andere Suchbegriffe"
+        },
+        cart: {
+            title: "🛒 Ihr Warenkorb",
+            empty: "Ihr Warenkorb ist leer",
+            emptyDesc: "Entdecken Sie unsere Produkte!",
+            clear: "Warenkorb leeren",
+            shipping: "Versand",
+            freeShipping: "KOSTENLOS",
+            total: "Gesamt",
+            checkout: "Zur Kasse"
+        },
+        checkout: {
+            title: "Versanddetails",
+            subtitle: "Geben Sie Ihre Daten ein",
+            name: "Vollständiger Name",
+            namePlaceholder: "Max Mustermann",
+            email: "E-Mail",
+            emailPlaceholder: "max@email.com",
+            phone: "Telefon",
+            phonePlaceholder: "+49 123 4567890",
+            address: "Vollständige Adresse",
+            addressPlaceholder: "Hauptstraße 1, 10115 Berlin",
+            addressHint: "Straße, Hausnummer, PLZ und Stadt",
+            destination: "Ziel",
+            italy: "🇮🇹 Italien",
+            europe: "🇪🇺 Europa (EU)",
+            confirm: "Bestellung bestätigen"
+        },
+        thanks: {
+            title: "Vielen Dank!",
+            message: "Ihre Bestellung wurde erfolgreich gesendet.",
+            contact: "Wir kontaktieren Sie bald per WhatsApp.",
+            back: "Zurück zum Shop"
+        },
+        toast: {
+            cartAdd: "Zum Warenkorb hinzugefügt",
+            cartRemove: "Aus Warenkorb entfernt",
+            cartEmpty: "Warenkorb geleert",
+            maxStock: "Maximale Menge erreicht",
+            maxStockDesc: "Keine weiteren Stücke verfügbar",
+            searchResults: "Ergebnisse gefunden"
+        },
+        confirm: {
+            emptyTitle: "Warenkorb leeren?",
+            emptyMsg: "Alle Produkte werden entfernt.",
+            removeTitle: "Produkt entfernen?",
+            cancel: "Abbrechen",
+            ok: "Bestätigen",
+            delete: "Entfernen"
+        },
+        errors: {
+            empty: "Warenkorb leer",
+            emptyDesc: "Fügen Sie Produkte hinzu",
+            form: "Alle Felder ausfüllen",
+            formDesc: "Einige Pflichtfelder sind leer",
+            email: "Ungültige E-Mail",
+            emailDesc: "Überprüfen Sie das E-Mail-Format",
+            load: "Ladefehler",
+            loadDesc: "Produkte konnten nicht geladen werden."
+        },
+        loading: {
+            text: "Laden...",
+            products: "Die besten Produkte werden vorbereitet..."
+        },
+        gdpr: {
+            title: "Datenschutz & Cookie-Richtlinie",
+            message: "Wir verwenden Cookies für die beste Erfahrung.",
+            accept: "Alle akzeptieren",
+            decline: "Ablehnen"
+        },
+        footer: {
+            about: "Kulinarische Exzellenz aus dem Nationalpark Cilento.",
+            tradition: "Tradition seit 1980",
+            categories: "Kategorien",
+            catOil: "Olivenöl",
+            catConserves: "Konserven",
+            catPasta: "Handgemachte Pasta",
+            catWine: "Lokale Weine",
+            support: "Hilfe",
+            contact: "Kontakt",
+            shippingInfo: "Versand",
+            returns: "Rückgabe",
+            faq: "FAQ",
+            contactTitle: "Kontakt"
+        }
     },
     hu: {
-        h1: "Cilento Aranya,<br>az otthonába.",
-        p: "Gasztronómiai élmény a Nemzeti Parkból. Autentikus termékek, hagyomány és íz.",
-        badge: "✨ Cilento Minőség",
-        cta: "Vásárlás",
-        add: "Kosárba",
-        added: "Hozzáadva!",
-        total: "Összesen",
-        cart: "🛒 Kosár",
-        ship: "Szállítás",
-        clear: "Ürítés",
-        deals: "Akciók",
-        all: "Összes termék",
-        byCat: "Kategóriák",
-        viewAll: "Mind",
-        maxQty: "Max elérhető",
-        out: "Elfogyott",
-        low: "Utolsó darabok!",
-        ok: "Raktáron",
-        shipping: "INGYENES szállítás €120 felett",
-        theme: "🌙 Sötét",
-        themeLight: "☀️ Világos",
-        loading: "Betöltés...",
-        loadingProducts: "A legjobb Cilento termékek előkészítése...",
-        toastCartAdd: "Kosárba helyezve",
-        toastCartRemove: "Eltávolítva a kosárból",
-        toastCartEmpty: "Kosár kiürítve",
-        toastMaxStock: "Maximális mennyiség elérve",
-        toastMaxStockDesc: "Nem adható hozzá több",
-        toastError: "Hiba",
-        toastSuccess: "Kész!",
-        toastOrderSent: "Rendelés elküldve!",
-        toastSearchResults: "találat",
-        confirmEmptyTitle: "Kosár ürítése?",
-        confirmEmptyMsg: "Minden termék törlésre kerül.",
-        confirmRemoveTitle: "Termék eltávolítása?",
-        confirmCancel: "Mégse",
-        confirmOk: "Rendben",
-        confirmDelete: "Törlés",
-        checkoutTitle: "Rendelés befejezése",
-        checkoutSubtitle: "Adja meg szállítási adatait",
-        checkoutBtn: "Pénztárhoz",
-        confirmBtn: "Rendelés küldése",
-        thanksH: "Rendelés megérkezett!",
-        thanksP: "Köszönjük rendelését.",
-        thanksP2: "Hamarosan felvesszük a kapcsolatot WhatsApp-on.",
-        thanksBack: "Tovább vásárolok",
-        errorEmpty: "Üres kosár",
-        errorEmptyDesc: "Adjon hozzá termékeket",
-        errorForm: "Töltse ki az összes mezőt",
-        errorFormDesc: "Néhány kötelező mező üres",
-        errorEmail: "Érvénytelen email",
-        errorEmailDesc: "Ellenőrizze az email formátumot",
-        errorLoad: "Betöltési hiba",
-        errorLoadDesc: "Nem sikerült betölteni a termékeket.",
-        cartEmpty: "A kosár üres",
-        cartEmptyDesc: "Fedezze fel termékeinket!",
-        freeShipping: "INGYENES",
-        searchPlaceholder: "Keresés...",
-        noResults: "Nincs találat",
-        tryAgain: "Próbáljon más kulcsszavakat"
+        meta: { code: "hu", name: "Magyar", flag: "🇭🇺" },
+        hero: {
+            h1: "Cilento Aranya,<br>az otthonába.",
+            p: "Gasztronómiai kiválóság a Nemzeti Parkból. Autentikus termékek, hagyomány és íz.",
+            badge: "✨ Cilento Minőség",
+            cta: "Vásárlás Most"
+        },
+        nav: {
+            shipping: "INGYENES szállítás €120 felett",
+            searchPlaceholder: "Keresés olívaolaj, tészta, bor..."
+        },
+        products: {
+            deals: "Mai Akciók",
+            all: "Összes Termék",
+            byCat: "Kategóriák",
+            viewAll: "Összes",
+            add: "Kosárba",
+            added: "Hozzáadva!",
+            out: "Elfogyott",
+            low: "Utolsó darabok!",
+            ok: "Raktáron",
+            noResults: "Nincs találat",
+            tryAgain: "Próbáljon más kulcsszavakat"
+        },
+        cart: {
+            title: "🛒 Az Ön Kosara",
+            empty: "A kosár üres",
+            emptyDesc: "Fedezze fel termékeinket!",
+            clear: "Kosár ürítése",
+            shipping: "Szállítás",
+            freeShipping: "INGYENES",
+            total: "Összesen",
+            checkout: "Tovább a fizetéshez"
+        },
+        checkout: {
+            title: "Szállítási adatok",
+            subtitle: "Adja meg adatait",
+            name: "Teljes név",
+            namePlaceholder: "Kovács János",
+            email: "E-mail",
+            emailPlaceholder: "janos@email.com",
+            phone: "Telefon",
+            phonePlaceholder: "+36 30 123 4567",
+            address: "Teljes cím",
+            addressPlaceholder: "Fő utca 1, 1000 Budapest",
+            addressHint: "Utca, házszám, irányítószám",
+            destination: "Cél",
+            italy: "��🇹 Olaszország",
+            europe: "🇪🇺 Európa (EU)",
+            confirm: "Rendelés megerősítése"
+        },
+        thanks: {
+            title: "Köszönjük!",
+            message: "Rendelését sikeresen elküldtük.",
+            contact: "Hamarosan felvesszük a kapcsolatot.",
+            back: "Vissza a boltba"
+        },
+        toast: {
+            cartAdd: "Kosárba helyezve",
+            cartRemove: "Eltávolítva",
+            cartEmpty: "Kosár kiürítve",
+            maxStock: "Maximális mennyiség",
+            maxStockDesc: "Nem adható hozzá több",
+            searchResults: "találat"
+        },
+        confirm: {
+            emptyTitle: "Kosár ürítése?",
+            emptyMsg: "Minden termék törlésre kerül.",
+            removeTitle: "Termék eltávolítása?",
+            cancel: "Mégse",
+            ok: "Megerősítés",
+            delete: "Eltávolítás"
+        },
+        errors: {
+            empty: "Üres kosár",
+            emptyDesc: "Adjon hozzá termékeket",
+            form: "Töltse ki az összes mezőt",
+            formDesc: "Néhány mező üres",
+            email: "Érvénytelen e-mail",
+            emailDesc: "Ellenőrizze a formátumot",
+            load: "Betöltési hiba",
+            loadDesc: "Nem sikerült betölteni."
+        },
+        loading: {
+            text: "Betöltés...",
+            products: "A legjobb termékek előkészítése..."
+        },
+        gdpr: {
+            title: "Adatvédelem és Cookie",
+            message: "Cookie-kat használunk a legjobb élményért.",
+            accept: "Elfogadás",
+            decline: "Elutasítás"
+        },
+        footer: {
+            about: "Gasztronómiai kiválóság a Cilento Nemzeti Parkból.",
+            tradition: "Hagyomány 1980 óta",
+            categories: "Kategóriák",
+            catOil: "Olívaolaj",
+            catConserves: "Konzervek",
+            catPasta: "Kézműves tészta",
+            catWine: "Helyi borok",
+            support: "Támogatás",
+            contact: "Kapcsolat",
+            shippingInfo: "Szállítás",
+            returns: "Visszaküldés",
+            faq: "GYIK",
+            contactTitle: "Elérhetőség"
+        }
     }
 };
 
@@ -274,13 +462,46 @@ const UI = {
 const state = {
     products: [],
     cart: [],
-    lang: 'it',
+    lang: CONFIG.defaultLanguage,
     view: 'all',
     carouselIndex: 0,
     searchQuery: '',
     isLoading: true,
     confirmCallback: null
 };
+
+/* ========================================
+   SISTEMA TRADUZIONI
+   ======================================== */
+const i18n = {
+    // Ottieni traduzione con chiave annidata (es: "hero.h1")
+    t(key, fallback = '') {
+        const keys = key.split('.');
+        let value = TRANSLATIONS[state.lang];
+        
+        for (const k of keys) {
+            if (value && typeof value === 'object' && k in value) {
+                value = value[k];
+            } else {
+                // Fallback alla lingua default
+                value = TRANSLATIONS[CONFIG.defaultLanguage];
+                for (const k2 of keys) {
+                    if (value && typeof value === 'object' && k2 in value) {
+                        value = value[k2];
+                    } else {
+                        return fallback || key;
+                    }
+                }
+                break;
+            }
+        }
+        
+        return value || fallback || key;
+    }
+};
+
+// Shortcut per traduzione
+const t = (key, fallback) => i18n.t(key, fallback);
 
 /* ========================================
    UTILITY
@@ -354,11 +575,8 @@ const Toast = {
         `;
         
         this.container.appendChild(toast);
-        
-        // Animate in
         requestAnimationFrame(() => toast.classList.add('show'));
         
-        // Auto remove
         const timer = setTimeout(() => this.remove(toast), duration);
         toast.dataset.timer = timer;
     },
@@ -397,8 +615,8 @@ const Confirm = {
         titleEl.textContent = title;
         msgEl.textContent = message;
         
-        cancelBtn.textContent = cancelText || UI[state.lang].confirmCancel;
-        okBtn.textContent = confirmText || UI[state.lang].confirmOk;
+        cancelBtn.textContent = cancelText || t('confirm.cancel');
+        okBtn.textContent = confirmText || t('confirm.ok');
         okBtn.className = `confirm-btn confirm ${type === 'danger' ? 'danger' : ''}`;
         
         state.confirmCallback = onConfirm;
@@ -410,8 +628,6 @@ const Confirm = {
         
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
-        
-        // Focus trap
         okBtn.focus();
     },
     
@@ -440,8 +656,6 @@ const Loader = {
         if (this.textElement && text) this.textElement.textContent = text;
         this.element.style.display = 'flex';
         this.element.classList.remove('hidden');
-        
-        // Safety timeout - hide loader after max time
         this.timeout = setTimeout(() => this.hide(), CONFIG.loadingTimeout);
     },
     
@@ -453,10 +667,6 @@ const Loader = {
             if (this.element) this.element.style.display = 'none';
         }, 500);
         state.isLoading = false;
-    },
-    
-    setText(text) {
-        if (this.textElement) this.textElement.textContent = text;
     }
 };
 
@@ -467,7 +677,6 @@ const Theme = {
     init() {
         const saved = localStorage.getItem('gizzi_theme') || 'light';
         document.documentElement.setAttribute('data-theme', saved);
-        this.updateUI();
     },
     
     toggle() {
@@ -475,14 +684,7 @@ const Theme = {
         const next = current === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
         localStorage.setItem('gizzi_theme', next);
-        this.updateUI();
         Toast.info(next === 'dark' ? '🌙' : '☀️', next === 'dark' ? 'Tema scuro' : 'Tema chiaro');
-    },
-    
-    updateUI() {
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        const link = document.getElementById('theme-link');
-        if (link) link.textContent = isDark ? UI[state.lang].themeLight : UI[state.lang].theme;
     }
 };
 
@@ -538,15 +740,15 @@ const Cart = {
         if (existing) {
             if (existing.qty < product.StockNum) {
                 existing.qty++;
-                Toast.success(UI[state.lang].toastCartAdd, `${productName} (${existing.qty}x)`);
+                Toast.success(t('toast.cartAdd'), `${productName} (${existing.qty}x)`);
             } else {
-                Toast.warning(UI[state.lang].toastMaxStock, UI[state.lang].toastMaxStockDesc);
+                Toast.warning(t('toast.maxStock'), t('toast.maxStockDesc'));
                 return;
             }
         } else {
             if (product.StockNum > 0) {
                 state.cart.push({ ...product, qty: 1 });
-                Toast.success(UI[state.lang].toastCartAdd, productName);
+                Toast.success(t('toast.cartAdd'), productName);
             }
         }
         
@@ -554,7 +756,6 @@ const Cart = {
         this.save();
         this.updateUI();
         
-        // Open cart if not visible
         const panel = document.getElementById('cart-panel');
         if (!panel.classList.contains('active')) {
             this.toggle();
@@ -567,7 +768,7 @@ const Cart = {
         
         btn.classList.add('added');
         const originalHTML = btn.innerHTML;
-        btn.innerHTML = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>${UI[state.lang].added}</span>`;
+        btn.innerHTML = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>${t('products.added')}</span>`;
         
         setTimeout(() => {
             btn.classList.remove('added');
@@ -586,7 +787,7 @@ const Cart = {
         this.save();
         this.updateUI();
         
-        Toast.info(UI[state.lang].toastCartRemove, productName);
+        Toast.info(t('toast.cartRemove'), productName);
     },
     
     confirmRemove(productId) {
@@ -597,10 +798,10 @@ const Cart = {
         const productName = item[nameKey] || item.Nome;
         
         Confirm.show({
-            title: UI[state.lang].confirmRemoveTitle,
+            title: t('confirm.removeTitle'),
             message: `"${productName}"`,
             type: 'danger',
-            confirmText: UI[state.lang].confirmDelete,
+            confirmText: t('confirm.delete'),
             onConfirm: () => this.remove(productId)
         });
     },
@@ -612,7 +813,7 @@ const Cart = {
         if (!item || !product) return;
         
         if (delta > 0 && item.qty >= product.StockNum) {
-            Toast.warning(UI[state.lang].toastMaxStock, UI[state.lang].toastMaxStockDesc);
+            Toast.warning(t('toast.maxStock'), t('toast.maxStockDesc'));
             return;
         }
         
@@ -630,10 +831,10 @@ const Cart = {
         if (state.cart.length === 0) return;
         
         Confirm.show({
-            title: UI[state.lang].confirmEmptyTitle,
-            message: UI[state.lang].confirmEmptyMsg,
+            title: t('confirm.emptyTitle'),
+            message: t('confirm.emptyMsg'),
             type: 'danger',
-            confirmText: UI[state.lang].clear,
+            confirmText: t('cart.clear'),
             onConfirm: () => this.empty()
         });
     },
@@ -642,7 +843,7 @@ const Cart = {
         state.cart = [];
         this.save();
         this.updateUI();
-        Toast.info(UI[state.lang].toastCartEmpty);
+        Toast.info(t('toast.cartEmpty'));
     },
     
     toggle() {
@@ -676,8 +877,8 @@ const Cart = {
             cartItems.innerHTML = `
                 <div class="cart-empty">
                     <div class="cart-empty-icon">🛒</div>
-                    <p class="cart-empty-title">${UI[state.lang].cartEmpty}</p>
-                    <p class="cart-empty-desc">${UI[state.lang].cartEmptyDesc}</p>
+                    <p class="cart-empty-title">${t('cart.empty')}</p>
+                    <p class="cart-empty-desc">${t('cart.emptyDesc')}</p>
                 </div>
             `;
             checkoutBtn.disabled = true;
@@ -696,36 +897,34 @@ const Cart = {
                             <div class="cart-item-meta">€${item.Prezzo} × ${item.qty}</div>
                         </div>
                         <div class="qty-controls">
-                            <button class="qty-btn" onclick="Cart.updateQty('${item.ID}', -1)" ${item.qty <= 1 ? 'data-warning' : ''}>−</button>
+                            <button class="qty-btn" onclick="Cart.updateQty('${item.ID}', -1)">−</button>
                             <span class="qty-value">${item.qty}</span>
                             <button class="qty-btn" onclick="Cart.updateQty('${item.ID}', 1)" ${item.qty >= product?.StockNum ? 'disabled' : ''}>+</button>
                         </div>
                         <div class="cart-item-price">€${Utils.formatPrice(itemTotal)}</div>
-                        <button class="cart-item-remove" onclick="Cart.confirmRemove('${item.ID}')" title="Rimuovi">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
+                        <button class="cart-item-remove" onclick="Cart.confirmRemove('${item.ID}')" title="${t('confirm.delete')}">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
                         </button>
                     </div>
                 `;
-}).join('');
+            }).join('');
             checkoutBtn.disabled = false;
         }
         
-        // Update totals
         const subtotal = this.getTotal();
         const shipping = this.getShipping(subtotal);
         const isFreeShipping = shipping === 0 && state.cart.length > 0;
         
-        document.getElementById('shipping-label').textContent = UI[state.lang].ship;
+        document.getElementById('shipping-label').textContent = t('cart.shipping');
         const shippingValue = document.getElementById('shipping-value');
-        shippingValue.textContent = isFreeShipping ? UI[state.lang].freeShipping : `€${Utils.formatPrice(shipping)}`;
+        shippingValue.textContent = isFreeShipping ? t('cart.freeShipping') : `€${Utils.formatPrice(shipping)}`;
         shippingValue.className = isFreeShipping ? 'free-shipping' : '';
         
-        document.getElementById('total-label').textContent = UI[state.lang].total;
+        document.getElementById('total-label').textContent = t('cart.total');
         document.getElementById('total-value').textContent = `€${Utils.formatPrice(subtotal + shipping)}`;
         
-        // Update count with animation
         const newCount = state.cart.reduce((a, b) => a + b.qty, 0);
         if (parseInt(countEl.textContent) !== newCount) {
             countEl.textContent = newCount;
@@ -740,7 +939,7 @@ const Cart = {
    ======================================== */
 const Products = {
     async load() {
-        Loader.show(UI[state.lang].loadingProducts);
+        Loader.show(t('loading.products'));
         
         try {
             const controller = new AbortController();
@@ -765,7 +964,7 @@ const Products = {
             return true;
         } catch (error) {
             console.error('Error loading products:', error);
-            Toast.error(UI[state.lang].errorLoad, UI[state.lang].errorLoadDesc);
+            Toast.error(t('errors.load'), t('errors.loadDesc'));
             return false;
         }
     },
@@ -807,7 +1006,7 @@ const Products = {
             if (product.Evidenza === 'SI') {
                 badge = `<div class="product-badge rollback">⭐ Top</div>`;
             } else if (isLow) {
-                badge = `<div class="product-badge danger">🔥 ${UI[state.lang].low}</div>`;
+                badge = `<div class="product-badge danger">🔥 ${t('products.low')}</div>`;
             }
         }
         
@@ -830,13 +1029,13 @@ const Products = {
                 </div>
                 <div class="product-stock ${isOut || isLow ? 'stock-low' : 'stock-ok'}">
                     <span class="stock-dot"></span>
-                    ${isOut ? UI[state.lang].out : (isLow ? UI[state.lang].low : UI[state.lang].ok)}
+                    ${isOut ? t('products.out') : (isLow ? t('products.low') : t('products.ok'))}
                 </div>
                 <button class="btn-add" id="btn-add-${product.ID}" ${isOut ? 'disabled' : ''} onclick="Cart.add('${product.ID}')">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
-                    <span>${isOut ? UI[state.lang].out : UI[state.lang].add}</span>
+                    <span>${isOut ? t('products.out') : t('products.add')}</span>
                 </button>
             </article>
         `;
@@ -878,8 +1077,8 @@ const Render = {
             html = `
                 <div class="no-results">
                     <div class="no-results-icon">🔍</div>
-                    <h3>${UI[state.lang].noResults}</h3>
-                    <p>${UI[state.lang].tryAgain}</p>
+                    <h3>${t('products.noResults')}</h3>
+                    <p>${t('products.tryAgain')}</p>
                 </div>
             `;
         } else if (state.view === 'all') {
@@ -935,10 +1134,6 @@ const Carousel = {
             
             track.style.transform = `translateX(-${state.carouselIndex * cardWidth}px)`;
         }, 5000);
-    },
-    
-    stop() {
-        if (this.interval) clearInterval(this.interval);
     }
 };
 
@@ -951,7 +1146,7 @@ const Search = {
     init() {
         const input = document.getElementById('search-input');
         if (input) {
-            input.placeholder = UI[state.lang].searchPlaceholder;
+            input.placeholder = t('nav.searchPlaceholder');
             this.handler = Utils.debounce(() => this.perform(), 300);
         }
     },
@@ -971,15 +1166,8 @@ const Search = {
         
         if (state.searchQuery) {
             const count = document.querySelectorAll('.product-card').length;
-            Toast.info('🔍', `${count} ${UI[state.lang].toastSearchResults}`);
+            Toast.info('🔍', `${count} ${t('toast.searchResults')}`);
         }
-    },
-    
-    clear() {
-        const input = document.getElementById('search-input');
-        if (input) input.value = '';
-        state.searchQuery = '';
-        Render.products();
     }
 };
 
@@ -989,11 +1177,11 @@ const Search = {
 const Checkout = {
     open() {
         if (state.cart.length === 0) {
-            Toast.error(UI[state.lang].errorEmpty, UI[state.lang].errorEmptyDesc);
+            Toast.error(t('errors.empty'), t('errors.emptyDesc'));
             return;
         }
         
-        Cart.toggle(); // Close cart
+        Cart.toggle();
         setTimeout(() => {
             document.getElementById('modal').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -1014,7 +1202,6 @@ const Checkout = {
             addr: document.getElementById('f-addr')
         };
         
-        // Reset errors
         Object.values(fields).forEach(el => el?.classList.remove('error'));
         
         let hasError = false;
@@ -1027,7 +1214,7 @@ const Checkout = {
         if (!fields.email?.value.trim() || !Utils.isValidEmail(fields.email.value)) {
             fields.email?.classList.add('error');
             if (fields.email?.value.trim() && !Utils.isValidEmail(fields.email.value)) {
-                Toast.error(UI[state.lang].errorEmail, UI[state.lang].errorEmailDesc);
+                Toast.error(t('errors.email'), t('errors.emailDesc'));
             }
             hasError = true;
         }
@@ -1043,7 +1230,7 @@ const Checkout = {
         }
         
         if (hasError) {
-            Toast.error(UI[state.lang].errorForm, UI[state.lang].errorFormDesc);
+            Toast.error(t('errors.form'), t('errors.formDesc'));
             return false;
         }
         
@@ -1068,7 +1255,6 @@ const Checkout = {
             `${item.qty}x ${item.Nome} (€${item.Prezzo}) = €${Utils.formatPrice(parseFloat(item.Prezzo.replace(',', '.')) * item.qty)}`
         );
         
-        // Send to Google Forms
         try {
             await fetch(CONFIG.formURL, {
                 method: 'POST',
@@ -1087,29 +1273,14 @@ const Checkout = {
             console.error('Form submission error:', e);
         }
         
-        // Show thanks
         document.getElementById('thanks-order-id').textContent = `#${orderId}`;
         document.getElementById('modal').classList.remove('active');
         document.getElementById('thanks-popup').classList.add('active');
         
-        // Open WhatsApp
-        const waMsg = `*🛒 ORDINE ${orderId}*
-
-*👤 Cliente:* ${name}
-*📧 Email:* ${email}
-*📱 Tel:* ${phone}
-*📍 Indirizzo:* ${addr}
-*🌍 Destinazione:* ${country}
-
-*📦 Prodotti:*
-${details.join('\n')}
-
-*🚚 Spedizione:* €${Utils.formatPrice(shipping)}
-*💰 TOTALE:* €${total}`;
+        const waMsg = `*🛒 ORDINE ${orderId}*\n\n*👤 Cliente:* ${name}\n*📧 Email:* ${email}\n*📱 Tel:* ${phone}\n*📍 Indirizzo:* ${addr}\n*🌍 Destinazione:* ${country}\n\n*📦 Prodotti:*\n${details.join('\n')}\n\n*🚚 Spedizione:* €${Utils.formatPrice(shipping)}\n*💰 TOTALE:* €${total}`;
         
         window.open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(waMsg)}`);
         
-        // Clear cart
         state.cart = [];
         Cart.save();
     }
@@ -1120,53 +1291,174 @@ ${details.join('\n')}
    ======================================== */
 const Language = {
     update(lang) {
+        if (!CONFIG.supportedLanguages.includes(lang)) {
+            lang = CONFIG.defaultLanguage;
+        }
+        
         state.lang = lang;
-        const u = UI[lang];
+        localStorage.setItem('gizzi_lang', lang);
         
-        // Update all UI elements
-        const updates = {
-            'hero-h1': { prop: 'innerHTML', value: u.h1 },
-            'hero-p': { prop: 'textContent', value: u.p },
-            'hero-badge': { prop: 'textContent', value: u.badge },
-            'deals-title': { prop: 'textContent', value: u.deals },
-            'btn-all': { prop: 'textContent', value: u.all },
-            'btn-cats': { prop: 'textContent', value: u.byCat },
-            'cart-label': { prop: 'textContent', value: u.cart },
-            'btn-clear-text': { prop: 'textContent', value: u.clear },
-            'btn-checkout-text': { prop: 'textContent', value: u.checkoutBtn },
-            'modal-title': { prop: 'textContent', value: u.checkoutTitle },
-            'modal-subtitle': { prop: 'textContent', value: u.checkoutSubtitle },
-            'btn-confirm-text': { prop: 'textContent', value: u.confirmBtn },
-            'thanks-h': { prop: 'textContent', value: u.thanksH },
-            'thanks-p': { prop: 'textContent', value: u.thanksP },
-            'thanks-p2': { prop: 'textContent', value: u.thanksP2 },
-            'btn-back': { prop: 'textContent', value: u.thanksBack },
-            'top-bar-shipping': { prop: 'textContent', value: u.shipping }
-        };
+        // Aggiorna tutti gli elementi dell'UI
+        this.updateAllElements();
         
-        for (const [id, { prop, value }] of Object.entries(updates)) {
-            const el = document.getElementById(id);
-            if (el) el[prop] = value;
-        }
-        
-        // Update CTA button
-        const ctaBtn = document.getElementById('hero-cta');
-        if (ctaBtn) {
-            ctaBtn.innerHTML = `${u.cta} <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>`;
-        }
-        
-        // Update view all link
-        const viewAll = document.getElementById('view-all-link');
-        if (viewAll) {
-            viewAll.innerHTML = `${u.viewAll} <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
-        }
-        
-        Theme.updateUI();
+        // Re-render prodotti
         Search.init();
         Render.all();
         Cart.updateUI();
         
-        Toast.info('🌐', `Lingua: ${lang.toUpperCase()}`);
+        Toast.info(t('meta.flag'), t('meta.name'));
+    },
+    
+    updateAllElements() {
+        // Hero
+        const heroH1 = document.getElementById('hero-h1');
+        if (heroH1) heroH1.innerHTML = t('hero.h1');
+        
+        const heroP = document.getElementById('hero-p');
+        if (heroP) heroP.textContent = t('hero.p');
+        
+        const heroBadge = document.getElementById('hero-badge');
+        if (heroBadge) heroBadge.textContent = t('hero.badge');
+        
+        const heroCta = document.getElementById('hero-cta');
+        if (heroCta) {
+            heroCta.innerHTML = `${t('hero.cta')} <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>`;
+        }
+        
+        // Navigation
+        const topBarShipping = document.getElementById('top-bar-shipping');
+        if (topBarShipping) topBarShipping.textContent = t('nav.shipping');
+        
+        const dealsTitle = document.getElementById('deals-title');
+        if (dealsTitle) dealsTitle.textContent = t('products.deals');
+        
+        const viewAllLink = document.getElementById('view-all-link');
+        if (viewAllLink) {
+            viewAllLink.innerHTML = `${t('products.viewAll')} <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+        }
+        
+        // Buttons
+        const btnAll = document.getElementById('btn-all');
+        if (btnAll) btnAll.textContent = t('products.all');
+        
+        const btnCats = document.getElementById('btn-cats');
+        if (btnCats) btnCats.textContent = t('products.byCat');
+        
+        // Cart
+        const cartLabel = document.getElementById('cart-label');
+        if (cartLabel) cartLabel.textContent = t('cart.title');
+        
+        const btnClearText = document.getElementById('btn-clear-text');
+        if (btnClearText) btnClearText.textContent = t('cart.clear');
+        
+        const btnCheckoutText = document.getElementById('btn-checkout-text');
+        if (btnCheckoutText) btnCheckoutText.textContent = t('cart.checkout');
+        
+        // Checkout Modal
+        const modalTitle = document.getElementById('modal-title');
+        if (modalTitle) modalTitle.textContent = t('checkout.title');
+        
+        const modalSubtitle = document.getElementById('modal-subtitle');
+        if (modalSubtitle) modalSubtitle.textContent = t('checkout.subtitle');
+        
+        const btnConfirmText = document.getElementById('btn-confirm-text');
+        if (btnConfirmText) btnConfirmText.textContent = t('checkout.confirm');
+        
+        // Form
+        this.updateFormLabels();
+        
+        // Thanks
+        const thanksH = document.getElementById('thanks-h');
+        if (thanksH) thanksH.textContent = t('thanks.title');
+        
+        const thanksP = document.getElementById('thanks-p');
+        if (thanksP) thanksP.textContent = t('thanks.message');
+        
+        const thanksP2 = document.getElementById('thanks-p2');
+        if (thanksP2) thanksP2.textContent = t('thanks.contact');
+        
+        const btnBack = document.getElementById('btn-back');
+        if (btnBack) btnBack.textContent = t('thanks.back');
+        
+        // GDPR
+        const gdprTitle = document.querySelector('.gdpr-text h4');
+        const gdprMessage = document.querySelector('.gdpr-text p');
+        const gdprAccept = document.querySelector('.btn-accept');
+        const gdprDecline = document.querySelector('.btn-decline');
+        
+        if (gdprTitle) gdprTitle.textContent = t('gdpr.title');
+        if (gdprMessage) gdprMessage.textContent = t('gdpr.message');
+        if (gdprAccept) gdprAccept.textContent = t('gdpr.accept');
+        if (gdprDecline) gdprDecline.textContent = t('gdpr.decline');
+        
+        // Footer
+        this.updateFooter();
+    },
+    
+    updateFormLabels() {
+        const labels = {
+            'f-name': { label: 'checkout.name', placeholder: 'checkout.namePlaceholder' },
+            'f-email': { label: 'checkout.email', placeholder: 'checkout.emailPlaceholder' },
+            'f-phone': { label: 'checkout.phone', placeholder: 'checkout.phonePlaceholder' },
+            'f-addr': { label: 'checkout.address', placeholder: 'checkout.addressPlaceholder' }
+        };
+        
+        for (const [id, keys] of Object.entries(labels)) {
+            const input = document.getElementById(id);
+            if (input) {
+                input.placeholder = t(keys.placeholder);
+                const label = input.previousElementSibling;
+                if (label && label.tagName === 'LABEL') {
+                    label.innerHTML = `${t(keys.label)} *`;
+                }
+            }
+        }
+        
+        const hint = document.querySelector('.form-hint');
+        if (hint) hint.textContent = t('checkout.addressHint');
+        
+        const countryLabel = document.querySelector('label[for="f-country"]');
+        if (countryLabel) countryLabel.textContent = t('checkout.destination');
+        
+        const countrySelect = document.getElementById('f-country');
+        if (countrySelect) {
+            countrySelect.innerHTML = `
+                <option value="Italia">${t('checkout.italy')}</option>
+                <option value="Europa">${t('checkout.europe')}</option>
+            `;
+        }
+    },
+    
+    updateFooter() {
+        const footerCols = document.querySelectorAll('.footer-col');
+        if (footerCols.length < 4) return;
+        
+        const aboutP = footerCols[0].querySelectorAll('p');
+        if (aboutP[0]) aboutP[0].textContent = t('footer.about');
+        if (aboutP[1]) aboutP[1].textContent = t('footer.tradition');
+        
+        const catH4 = footerCols[1].querySelector('h4');
+        const catLinks = footerCols[1].querySelectorAll('a');
+        if (catH4) catH4.textContent = t('footer.categories');
+        if (catLinks[0]) catLinks[0].textContent = t('footer.catOil');
+        if (catLinks[1]) catLinks[1].textContent = t('footer.catConserves');
+        if (catLinks[2]) catLinks[2].textContent = t('footer.catPasta');
+        if (catLinks[3]) catLinks[3].textContent = t('footer.catWine');
+        
+        const supportH4 = footerCols[2].querySelector('h4');
+        const supportLinks = footerCols[2].querySelectorAll('a');
+        if (supportH4) supportH4.textContent = t('footer.support');
+        if (supportLinks[0]) supportLinks[0].textContent = t('footer.contact');
+        if (supportLinks[1]) supportLinks[1].textContent = t('footer.shippingInfo');
+        if (supportLinks[2]) supportLinks[2].textContent = t('footer.returns');
+        if (supportLinks[3]) supportLinks[3].textContent = t('footer.faq');
+        
+        const contactH4 = footerCols[3].querySelector('h4');
+        if (contactH4) contactH4.textContent = t('footer.contactTitle');
+    },
+    
+    getSaved() {
+        return localStorage.getItem('gizzi_lang') || CONFIG.defaultLanguage;
     }
 };
 
@@ -1175,15 +1467,23 @@ const Language = {
    ======================================== */
 const App = {
     async init() {
-        // Initialize components
         Loader.init();
         Toast.init();
         Theme.init();
         Cart.load();
-        Search.init();
         
-        // Setup event listeners
+        // Load saved language
+        const savedLang = Language.getSaved();
+        state.lang = savedLang;
+        const langSelect = document.getElementById('lang-sel');
+        if (langSelect) langSelect.value = savedLang;
+        
+        // Setup listeners
         this.setupListeners();
+        
+        // Initial UI update
+        Language.updateAllElements();
+        Search.init();
         
         // Load products
         const success = await Products.load();
@@ -1194,15 +1494,11 @@ const App = {
             Carousel.autoPlay();
         }
         
-        // Hide loader (with safety)
         Loader.hide();
-        
-        // Check GDPR
         setTimeout(() => GDPR.check(), 1000);
     },
     
     setupListeners() {
-        // Header scroll effect
         window.addEventListener('scroll', Utils.debounce(() => {
             const header = document.getElementById('main-header');
             if (header) {
@@ -1210,10 +1506,8 @@ const App = {
             }
         }, 10));
         
-        // Cart overlay
         document.getElementById('cart-overlay')?.addEventListener('click', () => Cart.toggle());
         
-        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 Confirm.close();
@@ -1224,7 +1518,6 @@ const App = {
             }
         });
         
-        // Search input
         document.getElementById('search-input')?.addEventListener('keyup', (e) => Search.onKeyUp(e));
     },
     
@@ -1237,15 +1530,9 @@ const App = {
     
     goToCategory(catId) {
         if (state.view !== 'cats') this.switchView('cats');
-        
         document.querySelectorAll('.cat-link').forEach(a => a.classList.remove('active'));
         event?.target?.classList.add('active');
-        
         setTimeout(() => Utils.scrollTo(`cat-${catId}`, 120), 100);
-    },
-    
-    scrollToProducts() {
-        Utils.scrollTo('negozio', 100);
     },
     
     reload() {
@@ -1255,7 +1542,7 @@ const App = {
 };
 
 /* ========================================
-   GLOBAL FUNCTIONS (for HTML onclick)
+   GLOBAL FUNCTIONS
    ======================================== */
 function toggleTheme() { Theme.toggle(); }
 function toggleCart() { Cart.toggle(); }
@@ -1280,11 +1567,8 @@ function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
    ======================================== */
 document.addEventListener('DOMContentLoaded', () => App.init());
 
-// Fallback: hide loader if still visible after timeout
 window.addEventListener('load', () => {
     setTimeout(() => {
-        if (state.isLoading) {
-            Loader.hide();
-        }
+        if (state.isLoading) Loader.hide();
     }, 1000);
 });

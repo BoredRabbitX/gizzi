@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "code": "de",
+    "name": "Deutsch",
+    "flag": "🇩🇪"
+  },
+  "hero": {
+    "h1": "Cilento Gold,<br>zu Ihnen nach Hause.",
+    "p": "Kulinarische Exzellenz aus dem Nationalpark. Authentische Produkte, Tradition und Geschmack.",
+    "badge": "✨ Cilento Qualität",
+    "cta": "Jetzt Kaufen"
+  },
+  "nav": {
+    "shipping": "KOSTENLOSER Versand ab €120",
+    "theme": "🌙 Dunkel",
+    "themeLight": "☀️ Hell",
+    "searchPlaceholder": "Suche Olivenöl, Pasta, Wein..."
+  },
+  "products": {
+    "deals": "Aktuelle Angebote",
+    "all": "Alle Produkte",
+    "byCat": "Nach Kategorie",
+    "viewAll": "Alle anzeigen",
+    "add": "In den Warenkorb",
+    "added": "Hinzugefügt!",
+    "out": "Ausverkauft",
+    "low": "Letzte Stücke!",
+    "ok": "Verfügbar",
+    "maxQty": "Max verfügbar",
+    "noResults": "Keine Produkte gefunden",
+    "tryAgain": "Versuchen Sie andere Suchbegriffe"
+  },
+  "cart": {
+    "title": "🛒 Ihr Warenkorb",
+    "empty": "Ihr Warenkorb ist leer",
+    "emptyDesc": "Entdecken Sie unsere Produkte und finden Sie etwas Besonderes!",
+    "clear": "Warenkorb leeren",
+    "shipping": "Versand",
+    "freeShipping": "KOSTENLOS",
+    "total": "Gesamt",
+    "checkout": "Zur Kasse"
+  },
+  "checkout": {
+    "title": "Versanddetails",
+    "subtitle": "Geben Sie Ihre Daten ein, um die Bestellung abzuschließen",
+    "name": "Vollständiger Name",
+    "namePlaceholder": "Max Mustermann",
+    "email": "E-Mail",
+    "emailPlaceholder": "max@email.com",
+    "phone": "Telefon",
+    "phonePlaceholder": "+49 123 4567890",
+    "address": "Vollständige Adresse",
+    "addressPlaceholder": "Hauptstraße 1, 10115 Berlin",
+    "addressHint": "Straße, Hausnummer, PLZ und Stadt",
+    "destination": "Ziel",
+    "italy": "🇮🇹 Italien",
+    "europe": "🇪🇺 Europa (EU)",
+    "confirm": "Bestellung bestätigen"
+  },
+  "thanks": {
+    "title": "Vielen Dank!",
+    "message": "Ihre Bestellung wurde erfolgreich gesendet.",
+    "contact": "Wir kontaktieren Sie bald per WhatsApp.",
+    "back": "Zurück zum Shop"
+  },
+  "toast": {
+    "cartAdd": "Zum Warenkorb hinzugefügt",
+    "cartRemove": "Aus Warenkorb entfernt",
+    "cartEmpty": "Warenkorb geleert",
+    "maxStock": "Maximale Menge erreicht",
+    "maxStockDesc": "Keine weiteren Stücke verfügbar",
+    "error": "Fehler",
+    "success": "Fertig!",
+    "orderSent": "Bestellung gesendet!",
+    "searchResults": "Ergebnisse gefunden"
+  },
+  "confirm": {
+    "emptyTitle": "Warenkorb leeren?",
+    "emptyMsg": "Alle Produkte werden aus dem Warenkorb entfernt.",
+    "removeTitle": "Produkt entfernen?",
+    "cancel": "Abbrechen",
+    "ok": "Bestätigen",
+    "delete": "Entfernen"
+  },
+  "errors": {
+    "empty": "Warenkorb leer",
+    "emptyDesc": "Fügen Sie Produkte hinzu, bevor Sie fortfahren",
+    "form": "Alle Felder ausfüllen",
+    "formDesc": "Einige Pflichtfelder sind leer",
+    "email": "Ungültige E-Mail",
+    "emailDesc": "Überprüfen Sie das E-Mail-Format",
+    "load": "Ladefehler",
+    "loadDesc": "Produkte konnten nicht geladen werden. Seite neu laden."
+  },
+  "loading": {
+    "text": "Laden...",
+    "products": "Die besten Produkte aus Cilento werden vorbereitet..."
+  },
+  "gdpr": {
+    "title": "Datenschutz & Cookie-Richtlinie",
+    "message": "Wir verwenden Cookies, um Ihnen die beste Erfahrung zu bieten. Durch Fortfahren akzeptieren Sie unsere Cookie-Richtlinie.",
+    "accept": "Alle akzeptieren",
+    "decline": "Ablehnen"
+  },
+  "footer": {
+    "about": "Kulinarische Exzellenz aus dem Nationalpark Cilento.",
+    "tradition": "Tradition seit 1980",
+    "categories": "Kategorien",
+    "catOil": "Olivenöl",
+    "catConserves": "Konserven",
+    "catPasta": "Handgemachte Pasta",
+    "catWine": "Lokale Weine",
+    "support": "Hilfe",
+    "contact": "Kontakt",
+    "shippingInfo": "Versand",
+    "returns": "Rückgabe & Erstattung",
+    "faq": "FAQ",
+    "contactTitle": "Kontakt",
+    "copyright": "Alle Rechte vorbehalten."
+  }
+}

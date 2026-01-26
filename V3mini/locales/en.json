@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "code": "en",
+    "name": "English",
+    "flag": "🇬🇧"
+  },
+  "hero": {
+    "h1": "Cilento's Gold,<br>at your home.",
+    "p": "Gastronomic excellence from the National Park. Authentic products, tradition and flavor.",
+    "badge": "✨ Cilento Quality",
+    "cta": "Shop Now"
+  },
+  "nav": {
+    "shipping": "FREE Shipping on orders over €120",
+    "theme": "🌙 Dark Mode",
+    "themeLight": "☀️ Light Mode",
+    "searchPlaceholder": "Search olive oil, pasta, wine..."
+  },
+  "products": {
+    "deals": "Today's Deals",
+    "all": "All Products",
+    "byCat": "By Category",
+    "viewAll": "View all",
+    "add": "Add to Cart",
+    "added": "Added!",
+    "out": "Out of Stock",
+    "low": "Last pieces!",
+    "ok": "In Stock",
+    "maxQty": "Max available",
+    "noResults": "No products found",
+    "tryAgain": "Try different keywords"
+  },
+  "cart": {
+    "title": "🛒 Your Cart",
+    "empty": "Your cart is empty",
+    "emptyDesc": "Explore our products and find something special!",
+    "clear": "Empty Cart",
+    "shipping": "Shipping",
+    "freeShipping": "FREE",
+    "total": "Total",
+    "checkout": "Proceed to Checkout"
+  },
+  "checkout": {
+    "title": "Shipping Details",
+    "subtitle": "Enter your details to complete the order",
+    "name": "Full Name",
+    "namePlaceholder": "John Doe",
+    "email": "Email",
+    "emailPlaceholder": "john@email.com",
+    "phone": "Phone",
+    "phonePlaceholder": "+39 333 1234567",
+    "address": "Full Address",
+    "addressPlaceholder": "123 Main St, 00100 Rome",
+    "addressHint": "Street, number, ZIP and city",
+    "destination": "Destination",
+    "italy": "🇮🇹 Italy",
+    "europe": "🇪🇺 Europe (EU)",
+    "confirm": "Confirm Order"
+  },
+  "thanks": {
+    "title": "Thank You!",
+    "message": "Your order has been sent successfully.",
+    "contact": "We'll contact you soon via WhatsApp.",
+    "back": "Back to Shop"
+  },
+  "toast": {
+    "cartAdd": "Added to cart",
+    "cartRemove": "Removed from cart",
+    "cartEmpty": "Cart emptied",
+    "maxStock": "Maximum quantity reached",
+    "maxStockDesc": "Cannot add more of this product",
+    "error": "Error",
+    "success": "Done!",
+    "orderSent": "Order sent!",
+    "searchResults": "results found"
+  },
+  "confirm": {
+    "emptyTitle": "Empty cart?",
+    "emptyMsg": "All products will be removed from the cart.",
+    "removeTitle": "Remove product?",
+    "cancel": "Cancel",
+    "ok": "Confirm",
+    "delete": "Remove"
+  },
+  "errors": {
+    "empty": "Empty cart",
+    "emptyDesc": "Add some products before proceeding",
+    "form": "Fill all fields",
+    "formDesc": "Some required fields are empty",
+    "email": "Invalid email",
+    "emailDesc": "Check the email format",
+    "load": "Loading error",
+    "loadDesc": "Unable to load products. Reload the page."
+  },
+  "loading": {
+    "text": "Loading...",
+    "products": "Preparing the best products from Cilento..."
+  },
+  "gdpr": {
+    "title": "Privacy & Cookie Policy",
+    "message": "We use cookies to offer you the best experience. By continuing you accept our Cookie Policy.",
+    "accept": "Accept All",
+    "decline": "Decline"
+  },
+  "footer": {
+    "about": "Gastronomic excellence from Cilento National Park.",
+    "tradition": "Tradition since 1980",
+    "categories": "Categories",
+    "catOil": "Olive Oil",
+    "catConserves": "Preserves",
+    "catPasta": "Artisan Pasta",
+    "catWine": "Local Wines",
+    "support": "Support",
+    "contact": "Contact Us",
+    "shippingInfo": "Shipping",
+    "returns": "Returns & Refunds",
+    "faq": "FAQ",
+    "contactTitle": "Contact",
+    "copyright": "All rights reserved."
+  }
+}
