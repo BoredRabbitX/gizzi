@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gruppo Gizzi | Il Tuo Supermercato del Cilento</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- LOADING SCREEN -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="loading-logo">GIZZI</div>
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loading-text">Caricamento prodotti...</div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- CONFIRM MODAL -->
+    <div class="confirm-modal" id="confirm-modal">
+        <div class="confirm-box">
+            <div class="confirm-icon" id="confirm-icon">⚠️</div>
+            <h3 class="confirm-title" id="confirm-title">Conferma</h3>
+            <p class="confirm-message" id="confirm-message">Sei sicuro di voler procedere?</p>
+            <div class="confirm-buttons">
+                <button class="confirm-btn cancel" onclick="closeConfirm()" id="confirm-cancel">Annulla</button>
+                <button class="confirm-btn confirm" id="confirm-ok">Conferma</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CART OVERLAY -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-left">
+                <span class="top-bar-badge">🌟 NUOVO</span>
+                <span id="top-bar-shipping">Spedizione GRATUITA per ordini oltre €120</span>
+            </div>
+            <div>
+                <select id="lang-sel" onchange="updateLang(this.value)">
+                    <option value="it">🇮🇹 Italiano</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                    <option value="hu">🇭🇺 Magyar</option>
+                </select>
+                <a href="#" onclick="toggleTheme();return false;" id="theme-link">🌙 Tema Scuro</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header id="main-header">
+        <div class="header-main">
+            <a href="#" class="logo" onclick="scrollToTop();return false;">
+                <div class="logo-icon">G</div>
+                <span>GIZZI</span>
+            </a>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Cerca olio, pasta, vino..." id="search-input" onkeyup="handleSearch(event)">
+                <button class="search-btn" onclick="performSearch()" aria-label="Cerca">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="header-actions">
+                <button class="header-btn" onclick="toggleTheme()" aria-label="Cambia tema">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" id="theme-icon-svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                    <span class="icon-text" id="theme-text">Tema</span>
+                </button>
+                <button class="cart-btn" onclick="toggleCart()" aria-label="Apri carrello">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    <span id="cart-count" class="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+        <nav class="category-nav">
+            <div class="category-nav-inner" id="category-nav"></div>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero-banner">
+        <div class="hero-content">
+            <div class="hero-text">
+                <span class="hero-badge" id="hero-badge">✨ Qualità Cilentana</span>
+                <h1 id="hero-h1">L'Oro del Cilento,<br>a casa tua.</h1>
+                <p id="hero-p">Eccellenza gastronomica dal cuore del Parco Nazionale. Prodotti autentici, tradizione e sapore.</p>
+                <button class="hero-cta" onclick="smoothScrollTo('negozio')" id="hero-cta">
+                    Scopri i Prodotti
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="hero-image">
+                <img src="https://tourismmedia.italia.it/is/image/mitur/2480X1000_parco_nazionale_del_cilento_destination_proposta-2?wid=600&hei=320&fit=crop" alt="Paesaggio del Cilento">
+            </div>
+        </div>
+    </section>
+
+    <!-- PROMO STRIP -->
+    <div class="promo-strip">
+        <span>🌿 Prodotti Freschi</span>
+        <span>|</span>
+        <span>🚚 Spedizione Veloce</span>
+        <span>|</span>
+        <span>✓ 100% Autentici</span>
+        <span>|</span>
+        <span>👨‍🌾 Dal Produttore</span>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- DEALS CAROUSEL -->
+        <section class="deals-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="flash">★</span> 
+                    <span id="deals-title">Offerte del Momento</span>
+                </h2>
+                <a href="#" class="view-all" onclick="switchView('all');smoothScrollTo('negozio');return false;" id="view-all-link">
+                    Vedi tutti
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+            <div class="carousel-wrapper">
+                <button class="carousel-btn prev" onclick="moveCarousel(-1)" aria-label="Precedente">❮</button>
+                <div id="carousel-track" class="carousel-track"></div>
+                <button class="carousel-btn next" onclick="moveCarousel(1)" aria-label="Successivo">❯</button>
+            </div>
+        </section>
+
+        <!-- VIEW TOGGLE -->
+        <div class="view-toggle">
+            <button id="btn-all" class="toggle-btn active" onclick="switchView('all')">Tutti i Prodotti</button>
+            <button id="btn-cats" class="toggle-btn" onclick="switchView('cats')">Per Categoria</button>
+        </div>
+
+        <!-- PRODUCTS CONTAINER -->
+        <div id="negozio"></div>
+    </main>
+
+    <!-- CART PANEL -->
+    <div class="cart-panel" id="cart-panel">
+        <div class="cart-header">
+            <h2 id="cart-label">🛒 Il Tuo Carrello</h2>
+            <button class="cart-close" onclick="toggleCart()" aria-label="Chiudi carrello">×</button>
+        </div>
+        <div class="cart-actions">
+            <button class="btn-clear" onclick="confirmEmptyCart()" id="btn-clear">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+                <span id="btn-clear-text">Svuota Carrello</span>
+            </button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <div class="cart-empty" id="cart-empty">
+                <div class="cart-empty-icon">🛒</div>
+                <p>Il carrello è vuoto</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-summary">
+                <div class="cart-row shipping">
+                    <span id="shipping-label">Spedizione</span>
+                    <span id="shipping-value">€ 0.00</span>
+                </div>
+                <div class="cart-row total">
+                    <span id="total-label">Totale</span>
+                    <span id="total-value">€ 0.00</span>
+                </div>
+            </div>
+            <button class="btn-checkout" onclick="openCheckout()" id="btn-checkout" disabled>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+                <span id="btn-checkout-text">Prosegui all'Ordine</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- CHECKOUT MODAL -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeCheckout()" aria-label="Chiudi">×</button>
+            <div class="modal-icon">📦</div>
+            <h2 class="modal-title" id="modal-title">Dati di Spedizione</h2>
+            <p class="modal-subtitle" id="modal-subtitle">Inserisci i tuoi dati per completare l'ordine</p>
+            <form id="checkout-form" onsubmit="event.preventDefault();validateAndSubmit();">
+                <div class="form-group">
+                    <label class="form-label" for="f-name">Nome e Cognome *</label>
+                    <input type="text" id="f-name" placeholder="Mario Rossi" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="f-email">Email *</label>
+                        <input type="email" id="f-email" placeholder="mario@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="f-phone">Telefono *</label>
+                        <input type="tel" id="f-phone" placeholder="+39 333 1234567" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="f-addr">Indirizzo completo *</label>
+                    <input type="text" id="f-addr" placeholder="Via Roma 1, 00100 Roma" required>
+                    <p class="form-hint">Via, numero civico, CAP e città</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="f-country">Destinazione</label>
+                    <select id="f-country" onchange="updateCartUI()">
+                        <option value="Italia">🇮🇹 Italia</option>
+                        <option value="Europa">🇪🇺 Europa (UE)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-checkout" id="btn-confirm">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span id="btn-confirm-text">Conferma Ordine</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- THANKS POPUP -->
+    <div class="thanks-popup" id="thanks-popup">
+        <div class="thanks-content">
+            <div class="thanks-icon">✓</div>
+            <h2 id="thanks-h">Grazie!</h2>
+            <p id="thanks-p">Il tuo ordine è stato inviato con successo.</p>
+            <p class="thanks-order-id" id="thanks-order-id">Ordine #GZ-000000</p>
+            <p id="thanks-p2">Ti contatteremo presto via WhatsApp.</p>
+            <button class="btn-back" onclick="clearAndReload()" id="btn-back">Torna al Sito</button>
+        </div>
+    </div>
+
+    <!-- GDPR BANNER -->
+    <div class="gdpr-banner" id="gdpr-banner">
+        <div class="gdpr-content">
+            <div class="gdpr-icon">🍪</div>
+            <div class="gdpr-text">
+                <h4>Privacy & Cookie Policy</h4>
+                <p>Utilizziamo cookie per offrirti la migliore esperienza. Proseguendo accetti la nostra Cookie Policy.</p>
+            </div>
+            <div class="gdpr-buttons">
+                <button class="btn-gdpr btn-decline" onclick="rejectGDPR()">Rifiuta</button>
+                <button class="btn-gdpr btn-accept" onclick="acceptGDPR()">Accetta Tutto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>Gruppo Gizzi</h4>
+                <p>Eccellenze gastronomiche dal Parco Nazionale del Cilento.</p>
+                <p>Tradizione dal 1980</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link" aria-label="Facebook">📘</a>
+                    <a href="#" class="social-link" aria-label="Instagram">📷</a>
+                    <a href="#" class="social-link" aria-label="WhatsApp">💬</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Categorie</h4>
+                <a href="#">Olio d'Oliva</a>
+                <a href="#">Conserve</a>
+                <a href="#">Pasta Artigianale</a>
+                <a href="#">Vini Locali</a>
+            </div>
+            <div class="footer-col">
+                <h4>Assistenza</h4>
+                <a href="#">Contattaci</a>
+                <a href="#">Spedizioni</a>
+                <a href="#">Resi e Rimborsi</a>
+                <a href="#">FAQ</a>
+            </div>
+            <div class="footer-col">
+                <h4>Contatti</h4>
+                <p>📧 info@gruppogizzi.it</p>
+                <p>📞 +39 333 123 4567</p>
+                <p>📍 Cilento, Italia</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 Gruppo Gizzi. Tutti i diritti riservati. | P.IVA 00000000000
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
