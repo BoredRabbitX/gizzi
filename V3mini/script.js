@@ -467,7 +467,8 @@ const state = {
     carouselIndex: 0,
     searchQuery: '',
     isLoading: true,
-    confirmCallback: null
+    confirmCallback: null,
+    currentCategories: []
 };
 
 /* ========================================
@@ -1060,7 +1061,9 @@ const Render = {
     },
     
     categoryNav() {
-        const categories = Utils.shuffle(Products.getCategories());
+        const categories = Products.getCategories();
+        // Salva le categorie nello state per riutilizzarle nel footer
+        state.currentCategories = categories;
         document.getElementById('category-nav').innerHTML = categories.map(cat =>
             `<a class="cat-link" href="#" onclick="App.goToCategory('${cat.replace(/\s+/g, '')}');return false;">${cat}</a>`
         ).join('');
@@ -1445,7 +1448,8 @@ const Language = {
         const oldCatLinks = catCol.querySelectorAll('a');
         oldCatLinks.forEach(link => link.remove());
         
-        const categories = Products.getCategories();
+        // Usa le stesse categorie dell'header (salvate in state.currentCategories)
+        const categories = state.currentCategories || Products.getCategories();
         categories.forEach(cat => {
             const link = document.createElement('a');
             link.href = '#';
@@ -1530,6 +1534,8 @@ const App = {
             Render.all();
             Cart.updateUI();
             Carousel.autoPlay();
+            // Aggiorna footer DOPO caricamento prodotti per avere le categorie
+            Language.updateFooter();
         }
         
         Loader.hide();
@@ -1546,25 +1552,33 @@ const App = {
         
         document.getElementById('cart-overlay')?.addEventListener('click', () => Cart.toggle());
         
-        // Event delegation per pulsanti carrello
-        document.getElementById('cart-items')?.addEventListener('click', (e) => {
-            const target = e.target.closest('button');
-            if (!target) return;
-            
-            const id = target.dataset.id;
-            if (!id) return;
-            
-            if (target.classList.contains('qty-minus')) {
-                Cart.updateQty(id, -1);
-            } else if (target.classList.contains('qty-plus')) {
-                Cart.updateQty(id, 1);
-            } else if (target.classList.contains('cart-item-remove')) {
-                Cart.confirmRemove(id);
-            }
-        });
-        
-        // Event delegation per pulsante svuota carrello
-        document.getElementById('btn-clear')?.addEventListener('click', () => Cart.confirmEmpty());
+        // Event delegation per tutto il pannello carrello
+        const cartPanel = document.getElementById('cart-panel');
+        if (cartPanel) {
+            cartPanel.addEventListener('click', (e) => {
+                // Pulsante svuota carrello
+                if (e.target.closest('#btn-clear')) {
+                    e.preventDefault();
+                    Cart.confirmEmpty();
+                    return;
+                }
+                
+                // Pulsanti dentro cart-items
+                const btn = e.target.closest('button');
+                if (!btn) return;
+                
+                const id = btn.dataset.id;
+                if (!id) return;
+                
+                if (btn.classList.contains('qty-minus')) {
+                    Cart.updateQty(id, -1);
+                } else if (btn.classList.contains('qty-plus')) {
+                    Cart.updateQty(id, 1);
+                } else if (btn.classList.contains('cart-item-remove')) {
+                    Cart.confirmRemove(id);
+                }
+            });
+        }
         
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
