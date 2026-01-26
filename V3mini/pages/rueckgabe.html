@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rückgabe & Erstattung | Gruppo Gizzi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .page-hero {
+            background: linear-gradient(135deg, var(--gizzi-deep) 0%, #2d5f47 100%);
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+        }
+        .page-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        .page-hero p {
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .page-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gizzi-deep);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        .back-link:hover {
+            color: var(--gizzi-gold);
+        }
+        .info-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 24px;
+        }
+        .info-card h2 {
+            color: var(--gizzi-deep);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .info-card h2 svg {
+            width: 28px;
+            height: 28px;
+            color: var(--gizzi-gold);
+        }
+        .info-card p, .info-card li {
+            color: var(--text);
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        .info-card ul {
+            padding-left: 20px;
+        }
+        .info-card ul li {
+            margin-bottom: 8px;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(26, 71, 49, 0.05), rgba(26, 71, 49, 0.1));
+            border-left: 4px solid var(--gizzi-gold);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+        .highlight-box p {
+            margin: 0;
+            font-weight: 500;
+        }
+        .steps-list {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+        }
+        .steps-list li {
+            counter-increment: step;
+            padding-left: 50px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .steps-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background: var(--gizzi-deep);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-hero">
+        <h1>Rückgabe & Erstattung</h1>
+        <p>Ihre Zufriedenheit hat für uns Priorität. Erfahren Sie, wie Sie eine Rückgabe oder Erstattung beantragen können.</p>
+    </div>
+
+    <div class="page-content">
+        <a href="../index.html" class="back-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Zurück zum Shop
+        </a>
+
+        <div class="info-card">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Rückgaberichtlinie
+            </h2>
+            <p>Sie haben <strong>14 Tage</strong> ab Lieferdatum Zeit, eine Rückgabe zu beantragen. Das Produkt muss:</p>
+            <ul>
+                <li>Ungeöffnet und in der versiegelten Originalverpackung sein</li>
+                <li>In einwandfreiem Zustand, wie erhalten</li>
+                <li>Mit Quittung oder Bestellbestätigung begleitet sein</li>
+            </ul>
+            <div class="highlight-box">
+                <p>⚠️ Geöffnete oder verdorbene Lebensmittel können aus Hygiene- und Sicherheitsgründen nicht zurückgegeben werden.</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                So beantragen Sie eine Rückgabe
+            </h2>
+            <ol class="steps-list">
+                <li><strong>Kontaktieren Sie uns</strong> per E-Mail an info@gruppogizzi.it oder WhatsApp mit Ihrer Bestellnummer und dem Rückgabegrund.</li>
+                <li><strong>Warten Sie auf die Bestätigung</strong> unseres Teams mit Versandanweisungen für die Rückgabe.</li>
+                <li><strong>Verpacken Sie das Produkt</strong> sorgfältig in der Originalverpackung.</li>
+                <li><strong>Versenden Sie das Paket</strong> an die Adresse, die wir Ihnen mitteilen.</li>
+            </ol>
+        </div>
+
+        <div class="info-card">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Erstattungen
+            </h2>
+            <p>Sobald wir die Rückgabe erhalten und überprüft haben, bearbeiten wir Ihre Erstattung innerhalb von <strong>7 Werktagen</strong>.</p>
+            <ul>
+                <li><strong>Erstattungsmethode:</strong> Dieselbe Zahlungsmethode wie bei der ursprünglichen Bestellung</li>
+                <li><strong>Rücksendekosten:</strong> Vom Kunden zu tragen, es sei denn, das Produkt ist defekt oder es liegt ein Fehler unsererseits vor</li>
+                <li><strong>Defekte Produkte:</strong> Vollständige Erstattung einschließlich Versandkosten</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Beschädigte Produkte
+            </h2>
+            <p>Wenn Sie ein beim Versand beschädigtes Produkt erhalten:</p>
+            <ul>
+                <li>Kontaktieren Sie uns innerhalb von <strong>48 Stunden</strong> nach Lieferung</li>
+                <li>Senden Sie uns Fotos des Produkts und der beschädigten Verpackung</li>
+                <li>Wir veranlassen einen Ersatz oder eine vollständige Erstattung ohne zusätzliche Kosten</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const savedTheme = localStorage.getItem('gizzi-theme');
+        if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+</body>
+</html>

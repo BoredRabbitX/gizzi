@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visszaküldés és Visszatérítés | Gruppo Gizzi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .page-hero {
+            background: linear-gradient(135deg, var(--gizzi-deep) 0%, #2d5f47 100%);
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+        }
+        .page-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        .page-hero p {
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .page-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gizzi-deep);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        .back-link:hover {
+            color: var(--gizzi-gold);
+        }
+        .info-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 24px;
+        }
+        .info-card h2 {
+            color: var(--gizzi-deep);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .info-card h2 svg {
+            width: 28px;
+            height: 28px;
+            color: var(--gizzi-gold);
+        }
+        .info-card p, .info-card li {
+            color: var(--text);
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        .info-card ul {
+            padding-left: 20px;
+        }
+        .info-card ul li {
+            margin-bottom: 8px;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(26, 71, 49, 0.05), rgba(26, 71, 49, 0.1));
+            border-left: 4px solid var(--gizzi-gold);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+        .highlight-box p {
+            margin: 0;
+            font-weight: 500;
+        }
+        .steps-list {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+        }
+        .steps-list li {
+            counter-increment: step;
+            padding-left: 50px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .steps-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background: var(--gizzi-deep);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-hero">
+        <h1>Visszaküldés és Visszatérítés</h1>
+        <p>Az Ön elégedettsége a legfontosabb számunkra. Tudja meg, hogyan kérhet visszaküldést vagy visszatérítést.</p>
+    </div>
+
+    <div class="page-content">
+        <a href="../index.html" class="back-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Vissza a boltba
+        </a>
+
+        <div class="info-card">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Visszaküldési szabályzat
+            </h2>
+            <p>A kézbesítéstől számított <strong>14 napon</strong> belül kérhet visszaküldést. A terméknek:</p>
+            <ul>
+                <li>Bontatlannak és eredeti, lezárt csomagolásban kell lennie</li>
+                <li>Tökéletes állapotban, ahogy megkapta</li>
+                <li>A nyugtával vagy rendelés-visszaigazolással együtt</li>
+            </ul>
+            <div class="highlight-box">
+                <p>⚠️ A felbontott vagy romlott élelmiszereket higiéniai és biztonsági okokból nem lehet visszaküldeni.</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Hogyan kérjen visszaküldést
+            </h2>
+            <ol class="steps-list">
+                <li><strong>Lépjen kapcsolatba velünk</strong> e-mailben az info@gruppogizzi.it címen vagy WhatsApp-on, megadva a rendelésszámot és a visszaküldés okát.</li>
+                <li><strong>Várja meg a megerősítést</strong> csapatunktól a visszaküldés szállítási utasításaival.</li>
+                <li><strong>Csomagolja be gondosan a terméket</strong> az eredeti csomagolásba.</li>
+                <li><strong>Küldje el a csomagot</strong> a megadott címre.</li>
+            </ol>
+        </div>
+
+        <div class="info-card">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Visszatérítések
+            </h2>
+            <p>Miután megkaptuk és ellenőriztük a visszaküldést, <strong>7 munkanapon</strong> belül feldolgozzuk a visszatérítést.</p>
+            <ul>
+                <li><strong>Visszatérítési mód:</strong> Ugyanaz a fizetési mód, amelyet az eredeti rendeléshez használt</li>
+                <li><strong>Visszaküldési költségek:</strong> A vásárlót terhelik, kivéve ha a termék hibás vagy a mi hibánk történt</li>
+                <li><strong>Hibás termékek:</strong> Teljes visszatérítés a szállítási költségekkel együtt</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Sérült termékek
+            </h2>
+            <p>Ha szállítás közben sérült terméket kap:</p>
+            <ul>
+                <li>Lépjen kapcsolatba velünk a kézbesítéstől számított <strong>48 órán</strong> belül</li>
+                <li>Küldjön fotókat a termékről és a sérült csomagolásról</li>
+                <li>Cserét vagy teljes visszatérítést biztosítunk további költségek nélkül</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const savedTheme = localStorage.getItem('gizzi-theme');
+        if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+</body>
+</html>

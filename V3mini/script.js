@@ -1448,13 +1448,39 @@ const Language = {
         const supportH4 = footerCols[2].querySelector('h4');
         const supportLinks = footerCols[2].querySelectorAll('a');
         if (supportH4) supportH4.textContent = t('footer.support');
-        if (supportLinks[0]) supportLinks[0].textContent = t('footer.contact');
-        if (supportLinks[1]) supportLinks[1].textContent = t('footer.shippingInfo');
-        if (supportLinks[2]) supportLinks[2].textContent = t('footer.returns');
-        if (supportLinks[3]) supportLinks[3].textContent = t('footer.faq');
+        if (supportLinks[0]) {
+            supportLinks[0].textContent = t('footer.contact');
+            supportLinks[0].href = '#';
+            supportLinks[0].onclick = (e) => { e.preventDefault(); openPageModal('contact'); };
+        }
+        if (supportLinks[1]) {
+            supportLinks[1].textContent = t('footer.shippingInfo');
+            supportLinks[1].href = '#';
+            supportLinks[1].onclick = (e) => { e.preventDefault(); openPageModal('shipping'); };
+        }
+        if (supportLinks[2]) {
+            supportLinks[2].textContent = t('footer.returns');
+            supportLinks[2].href = '#';
+            supportLinks[2].onclick = (e) => { e.preventDefault(); openPageModal('returns'); };
+        }
+        if (supportLinks[3]) {
+            supportLinks[3].textContent = t('footer.faq');
+            supportLinks[3].href = '#';
+            supportLinks[3].onclick = (e) => { e.preventDefault(); openPageModal('faq'); };
+        }
         
         const contactH4 = footerCols[3].querySelector('h4');
         if (contactH4) contactH4.textContent = t('footer.contactTitle');
+    },
+    
+    getPageLink(page) {
+        const pages = {
+            contact: { it: 'contatti', en: 'contact', de: 'kontakt', hu: 'kapcsolat' },
+            shipping: { it: 'spedizioni', en: 'shipping', de: 'versand', hu: 'szallitas' },
+            returns: { it: 'resi', en: 'returns', de: 'rueckgabe', hu: 'visszakuldes' },
+            faq: { it: 'faq', en: 'faq-en', de: 'faq-de', hu: 'gyik' }
+        };
+        return `pages/${pages[page][state.lang]}.html`;
     },
     
     getSaved() {
@@ -1512,6 +1538,7 @@ const App = {
             if (e.key === 'Escape') {
                 Confirm.close();
                 Checkout.close();
+                closePageModal();
                 if (document.getElementById('cart-panel')?.classList.contains('active')) {
                     Cart.toggle();
                 }
@@ -1561,6 +1588,35 @@ function performSearch() { Search.perform(); }
 function handleSearch(e) { Search.onKeyUp(e); }
 function smoothScrollTo(id) { Utils.scrollTo(id, 100); }
 function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+/* ========================================
+   PAGE MODAL FUNCTIONS
+   ======================================== */
+function openPageModal(page) {
+    const modal = document.getElementById('page-modal');
+    const iframe = document.getElementById('page-modal-iframe');
+    
+    if (!modal || !iframe) return;
+    
+    // Get page URL based on language
+    const pageUrl = Language.getPageLink(page);
+    
+    // Set iframe source and show modal
+    iframe.src = pageUrl;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePageModal() {
+    const modal = document.getElementById('page-modal');
+    const iframe = document.getElementById('page-modal-iframe');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        // Clear iframe to stop any loading
+        if (iframe) iframe.src = '';
+    }
+}
 
 /* ========================================
    INIT

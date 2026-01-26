@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GYIK | Gruppo Gizzi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .page-hero {
+            background: linear-gradient(135deg, var(--gizzi-deep) 0%, #2d5f47 100%);
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+        }
+        .page-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        .page-hero p {
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .page-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gizzi-deep);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        .back-link:hover {
+            color: var(--gizzi-gold);
+        }
+        .faq-section {
+            margin-bottom: 40px;
+        }
+        .faq-section h2 {
+            color: var(--gizzi-deep);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gizzi-gold);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .faq-section h2 svg {
+            width: 24px;
+            height: 24px;
+            color: var(--gizzi-gold);
+        }
+        .faq-item {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+        .faq-question:hover {
+            background: rgba(26, 71, 49, 0.03);
+        }
+        .faq-question svg {
+            width: 20px;
+            height: 20px;
+            color: var(--gizzi-gold);
+            transition: transform 0.3s ease;
+        }
+        .faq-item.open .faq-question svg {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+        }
+        .faq-answer-content {
+            padding: 0 20px 20px;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+        .contact-cta {
+            background: linear-gradient(135deg, var(--gizzi-deep), #2d5f47);
+            color: white;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        .contact-cta h3 {
+            margin-bottom: 12px;
+        }
+        .contact-cta p {
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        .contact-cta a {
+            display: inline-block;
+            background: var(--gizzi-gold);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .contact-cta a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-hero">
+        <h1>Gyakran Ismételt Kérdések</h1>
+        <p>Találja meg a leggyakrabban feltett kérdésekre a válaszokat termékeinkkel és szolgáltatásainkkal kapcsolatban.</p>
+    </div>
+
+    <div class="page-content">
+        <a href="../index.html" class="back-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Vissza a boltba
+        </a>
+
+        <div class="faq-section">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                Rendelések és Fizetés
+            </h2>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Hogyan adhatok le rendelést?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Böngéssze termékeinket, adja a kívánt termékeket a kosárba, és folytassa a pénztárhoz. Adja meg szállítási adatait és erősítse meg a rendelést. WhatsApp-on felvesszük Önnel a kapcsolatot a megerősítéshez és a fizetéshez.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Milyen fizetési módokat fogadnak el?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Banki átutalást, PayPal-t és utánvétet (Olaszországban) fogadunk el. A fizetési részleteket a rendelés visszaigazolása után közöljük.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Módosíthatom vagy lemondhatom a rendelést?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Igen, a visszaigazolástól számított 24 órán belül módosíthatja vagy lemondhatja rendelését. A szállítás után a lemondás már nem lehetséges.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                </svg>
+                Szállítás
+            </h2>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Mennyibe kerül a szállítás?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        A szállítás INGYENES €120 feletti rendeléseknél. Kisebb rendeléseknél a szállítási díj €9,90 Olaszországon belül és €14,90 Európában.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Mennyi idő alatt érkezik meg a rendelésem?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Olaszország: 2-4 munkanap. Európa: 5-7 munkanap. Az időtartam a csúcsszezonokban eltérhet.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Szállítanak külföldre?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Igen, az egész Európai Unióba szállítunk. EU-n kívüli szállításért kérjük, lépjen velünk kapcsolatba egyedi árajánlatért.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+                Termékek és Minőség
+            </h2>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Autentikusak a termékeik?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Feltétlenül! Minden termékünk közvetlenül Cilentóból származik, a legjobb helyi termelőktől kiválogatva. 100%-os eredetiséget és minőséget garantálunk.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Hogyan tároljam a termékeket?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Minden termék címkéjén megtalálhatók a tárolási utasítások. Általában: az olívaolajat fénytől és hőtől védve kell tárolni, a konzerveket hűvös, száraz helyen, a borokat hűvös környezetben.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-cta">
+            <h3>Nem találta meg a választ?</h3>
+            <p>Csapatunk készen áll, hogy bármilyen kérdésben segítsen.</p>
+            <a href="kapcsolat.html">Kapcsolat</a>
+        </div>
+    </div>
+
+    <script>
+        const savedTheme = localStorage.getItem('gizzi-theme');
+        if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            item.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

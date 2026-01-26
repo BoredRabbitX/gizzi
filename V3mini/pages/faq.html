@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | Gruppo Gizzi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .page-hero {
+            background: linear-gradient(135deg, var(--gizzi-deep) 0%, #2d5f47 100%);
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+        }
+        .page-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        .page-hero p {
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .page-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gizzi-deep);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        .back-link:hover {
+            color: var(--gizzi-gold);
+        }
+        .faq-section {
+            margin-bottom: 40px;
+        }
+        .faq-section h2 {
+            color: var(--gizzi-deep);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gizzi-gold);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .faq-section h2 svg {
+            width: 24px;
+            height: 24px;
+            color: var(--gizzi-gold);
+        }
+        .faq-item {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+        .faq-question:hover {
+            background: rgba(26, 71, 49, 0.03);
+        }
+        .faq-question svg {
+            width: 20px;
+            height: 20px;
+            color: var(--gizzi-gold);
+            transition: transform 0.3s ease;
+        }
+        .faq-item.open .faq-question svg {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+        }
+        .faq-answer-content {
+            padding: 0 20px 20px;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+        .contact-cta {
+            background: linear-gradient(135deg, var(--gizzi-deep), #2d5f47);
+            color: white;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        .contact-cta h3 {
+            margin-bottom: 12px;
+        }
+        .contact-cta p {
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        .contact-cta a {
+            display: inline-block;
+            background: var(--gizzi-gold);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .contact-cta a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-hero">
+        <h1>Domande Frequenti</h1>
+        <p>Trova le risposte alle domande più comuni sui nostri prodotti e servizi.</p>
+    </div>
+
+    <div class="page-content">
+        <a href="../index.html" class="back-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Torna al Negozio
+        </a>
+
+        <div class="faq-section">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                Ordini e Pagamenti
+            </h2>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Come posso effettuare un ordine?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Sfoglia i nostri prodotti, aggiungi quelli desiderati al carrello e prosegui al checkout. Inserisci i tuoi dati di spedizione e conferma l'ordine. Ti contatteremo via WhatsApp per confermare e procedere al pagamento.
+</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Quali metodi di pagamento accettate?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Accettiamo bonifico bancario, PayPal e pagamento in contrassegno per l'Italia. I dettagli per il pagamento ti verranno comunicati dopo la conferma dell'ordine.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Posso modificare o annullare un ordine?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Sì, puoi modificare o annullare l'ordine contattandoci entro 24 ore dalla conferma. Dopo la spedizione, non sarà più possibile annullare.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                </svg>
+                Spedizioni
+            </h2>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Quanto costa la spedizione?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        La spedizione è GRATUITA per ordini superiori a €120. Per ordini inferiori, il costo è di €9.90 in Italia e €14.90 per l'Europa.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    In quanto tempo ricevo il mio ordine?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Italia: 2-4 giorni lavorativi. Europa: 5-7 giorni lavorativi. I tempi possono variare durante periodi di alta stagione.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Spedite anche all'estero?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Sì, spediamo in tutta l'Unione Europea. Per spedizioni extra-UE, contattaci per un preventivo personalizzato.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+                Prodotti e Qualità
+            </h2>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    I vostri prodotti sono autentici?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Assolutamente sì! Tutti i nostri prodotti provengono direttamente dal Cilento, selezionati dai migliori produttori locali. Garantiamo autenticità e qualità al 100%.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Come conservo i prodotti?
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Ogni prodotto riporta le istruzioni di conservazione sull'etichetta. In generale: l'olio va conservato al riparo dalla luce e dal calore, le conserve in luogo fresco e asciutto, i vini in ambiente fresco.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-cta">
+            <h3>Non hai trovato la risposta?</h3>
+            <p>Il nostro team è pronto ad aiutarti per qualsiasi domanda.</p>
+            <a href="contatti.html">Contattaci</a>
+        </div>
+    </div>
+
+    <script>
+        const savedTheme = localStorage.getItem('gizzi-theme');
+        if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            item.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
