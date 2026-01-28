@@ -1014,16 +1014,18 @@ const Products = {
         return `
             <article class="product-card" data-id="${product.ID}">
                 ${badge}
-                <div class="product-img-wrapper">
+                <div class="product-img-wrapper" onclick="openProductModal('${product.ID}')" style="cursor: pointer;">
                     <img class="product-img" 
                          src="${product.Immagine}" 
                          alt="${productName}" 
                          loading="lazy"
                          style="${isOut ? 'filter:grayscale(1);opacity:0.5;' : ''}"
                          onerror="this.src='https://via.placeholder.com/200x160?text=📦'">
-                    <div class="product-overlay"></div>
+                    <div class="product-overlay">
+                        <span class="product-info-btn">ℹ️ Info</span>
+                    </div>
                 </div>
-                <h3 class="product-name">${productName}</h3>
+                <h3 class="product-name" onclick="openProductModal('${product.ID}')" style="cursor: pointer;">${productName}</h3>
                 <div class="product-price">
                     <span class="price-current">€${product.Prezzo}</span>
                     <span class="price-unit">/ ${product.Unità || 'pz'}</span>
@@ -1556,31 +1558,37 @@ const App = {
         const cartPanel = document.getElementById('cart-panel');
         if (cartPanel) {
             cartPanel.addEventListener('click', (e) => {
-                // Pulsante svuota carrello - cerca sia per ID che per classe
-                const clearBtn = e.target.closest('#btn-clear') || e.target.closest('.btn-clear');
-                if (clearBtn) {
+                // Pulsante svuota carrello
+                if (e.target.closest('.btn-clear') || e.target.closest('#btn-clear')) {
                     e.preventDefault();
                     e.stopPropagation();
                     Cart.confirmEmpty();
                     return;
                 }
                 
-                // Pulsanti dentro cart-items
-                const btn = e.target.closest('button');
-                if (!btn) return;
+                // Pulsante rimuovi prodotto
+                const removeBtn = e.target.closest('.cart-item-remove');
+                if (removeBtn) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const id = removeBtn.dataset.id;
+                    if (id) Cart.confirmRemove(id);
+                    return;
+                }
                 
-                const id = btn.dataset.id;
-                if (!id) return;
-                
-                if (btn.classList.contains('qty-minus')) {
+                // Pulsanti quantità
+                const qtyBtn = e.target.closest('.qty-btn');
+                if (qtyBtn) {
                     e.preventDefault();
-                    Cart.updateQty(id, -1);
-                } else if (btn.classList.contains('qty-plus')) {
-                    e.preventDefault();
-                    Cart.updateQty(id, 1);
-                } else if (btn.classList.contains('cart-item-remove')) {
-                    e.preventDefault();
-                    Cart.confirmRemove(id);
+                    e.stopPropagation();
+                    const id = qtyBtn.dataset.id;
+                    if (!id) return;
+                    
+                    if (qtyBtn.classList.contains('qty-minus')) {
+                        Cart.updateQty(id, -1);
+                    } else if (qtyBtn.classList.contains('qty-plus')) {
+                        Cart.updateQty(id, 1);
+                    }
                 }
             });
         }
@@ -1641,31 +1649,59 @@ function smoothScrollTo(id) { Utils.scrollTo(id, 100); }
 function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
 /* ========================================
-   PAGE MODAL FUNCTIONS
+   PRODUCT MODAL FUNCTIONS
    ======================================== */
-function openPageModal(page) {
-    const modal = document.getElementById('page-modal');
-    const iframe = document.getElementById('page-modal-iframe');
+function openProductModal(productId) {
+    const product = state.products.find(p => p.ID === productId);
+    if (!product) return;
     
-    if (!modal || !iframe) return;
+    const modal = document.getElementById('product-modal');
+    const img = document.getElementById('product-modal-img');
+    const name = document.getElementById('product-modal-name');
+    const price = document.getElementById('product-modal-price');
+    const desc = document.getElementById('product-modal-desc');
     
-    // Get page URL based on language
-    const pageUrl = Language.getPageLink(page);
+    if (!modal) return;
     
-    // Set iframe source and show modal
-    iframe.src = pageUrl;
+    // Get localized content
+    const nameKey = state.lang === 'it' ? 'Nome' : `Nome_${state.lang.toUpperCase()}`;
+    const descKey = state.lang === 'it' ? 'Descrizione' : `Descrizione_${state.lang.toUpperCase()}`;
+    
+    const productName = product[nameKey] || product.Nome;
+    const productDesc = product[descKey] || product.Descrizione || 'Nessuna descrizione disponibile.';
+    
+    if (img) {
+        img.src = product.Immagine;
+        img.alt = productName;
+    }
+    if (name) name.textContent = productName;
+    if (price) price.innerHTML = `€${product.Prezzo} <span style="font-size: 0.9rem; color: var(--text-light); font-weight: 400;">/ ${product.Unità || 'pz'}</span>`;
+    if (desc) desc.innerHTML = `<p class="description">${productDesc}</p>`;
+    
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
-function closePageModal() {
-    const modal = document.getElementById('page-modal');
-    const iframe = document.getElementById('page-modal-iframe');
+function closeProductModal() {
+    const modal = document.getElementById('product-modal');
     if (modal) {
         modal.classList.remove('active');
         document.body.style.overflow = '';
-        // Clear iframe to stop any loading
-        if (iframe) iframe.src = '';
+    }
+}
+
+// Footer links - navigate to pages instead of modal
+function openPageModal(page) {
+    const pages = {
+        contact: { it: 'pages/contatti.html', en: 'pages/contact.html', de: 'pages/kontakt.html', hu: 'pages/kapcsolat.html' },
+        shipping: { it: 'pages/spedizioni.html', en: 'pages/shipping.html', de: 'pages/versand.html', hu: 'pages/szallitas.html' },
+        returns: { it: 'pages/resi.html', en: 'pages/returns.html', de: 'pages/rueckgabe.html', hu: 'pages/visszakuldes.html' },
+        faq: { it: 'pages/faq.html', en: 'pages/faq-en.html', de: 'pages/faq-de.html', hu: 'pages/gyik.html' }
+    };
+    
+    const url = pages[page]?.[state.lang] || pages[page]?.it;
+    if (url) {
+        window.location.href = url;
     }
 }
 

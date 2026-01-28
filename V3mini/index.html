@@ -269,11 +269,18 @@
         </div>
     </div>
 
-    <!-- PAGE MODAL -->
-    <div class="page-modal" id="page-modal">
-        <div class="page-modal-content">
-            <button class="page-modal-close" onclick="closePageModal()" aria-label="Chiudi">&times;</button>
-            <iframe class="page-modal-iframe" id="page-modal-iframe" src="" frameborder="0"></iframe>
+    <!-- PRODUCT INFO MODAL -->
+    <div class="product-modal" id="product-modal">
+        <div class="product-modal-content">
+            <button class="product-modal-close" onclick="closeProductModal()" aria-label="Chiudi">&times;</button>
+            <div class="product-modal-body">
+                <img id="product-modal-img" src="" alt="">
+                <div class="product-modal-info">
+                    <h2 id="product-modal-name"></h2>
+                    <p id="product-modal-price"></p>
+                    <div id="product-modal-desc"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -311,10 +318,10 @@
             </div>
             <div class="footer-col">
                 <h4 id="footer-support">Assistenza</h4>
-                <a href="#" onclick="openPageModal('contact');return false;" id="footer-contact">Contattaci</a>
-                <a href="#" onclick="openPageModal('shipping');return false;" id="footer-shipping">Spedizioni</a>
-                <a href="#" onclick="openPageModal('returns');return false;" id="footer-returns">Resi e Rimborsi</a>
-                <a href="#" onclick="openPageModal('faq');return false;" id="footer-faq">FAQ</a>
+                <a href="pages/contatti.html" id="footer-contact">Contattaci</a>
+                <a href="pages/spedizioni.html" id="footer-shipping">Spedizioni</a>
+                <a href="pages/resi.html" id="footer-returns">Resi e Rimborsi</a>
+                <a href="pages/faq.html" id="footer-faq">FAQ</a>
             </div>
             <div class="footer-col">
                 <h4>Contatti</h4>
@@ -324,7 +331,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            © 2026 Gruppo Gizzi. Tutti i diritti riservati. | P.IVA 00000000000
+            © 2026 Gruppo Gizzi. Tutti i diritti riservati. | P.IVA 00000000000 | <span class="version">v3.1.0</span>
         </div>
     </footer>
 

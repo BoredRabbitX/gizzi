@@ -1045,13 +1045,32 @@ header.scrolled {
 .product-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
+    background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
     opacity: 0;
     transition: opacity 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 20px;
 }
 
 .product-card:hover .product-overlay {
     opacity: 1;
+}
+
+.product-info-btn {
+    background: var(--gizzi-gold);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transform: translateY(10px);
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-info-btn {
+    transform: translateY(0);
 }
 
 .product-name {
@@ -1267,7 +1286,7 @@ header.scrolled {
     right: -100%;
     top: 0;
     width: 100%;
-    max-width: 450px;
+    max-width: 520px;
     height: 100%;
     background: var(--white);
     z-index: 2001;
@@ -2155,12 +2174,12 @@ footer {
 }
 
 /* ========================================
-   PAGE MODAL
+   PRODUCT MODAL
    ======================================== */
-.page-modal {
+.product-modal {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
     z-index: 9500;
     display: flex;
@@ -2172,29 +2191,29 @@ footer {
     transition: all 0.3s ease;
 }
 
-.page-modal.active {
+.product-modal.active {
     opacity: 1;
     visibility: visible;
 }
 
-.page-modal-content {
-    background: var(--bg);
+.product-modal-content {
+    background: var(--white);
     border-radius: 20px;
     width: 100%;
-    max-width: 900px;
+    max-width: 600px;
     max-height: 90vh;
     overflow: hidden;
     position: relative;
     transform: scale(0.9) translateY(20px);
     transition: transform 0.3s ease;
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
 }
 
-.page-modal.active .page-modal-content {
+.product-modal.active .product-modal-content {
     transform: scale(1) translateY(0);
 }
 
-.page-modal-close {
+.product-modal-close {
     position: absolute;
     top: 15px;
     right: 15px;
@@ -2213,31 +2232,73 @@ footer {
     transition: all 0.2s;
 }
 
-.page-modal-close:hover {
+.product-modal-close:hover {
     background: var(--danger);
     color: white;
     border-color: var(--danger);
 }
 
-.page-modal-iframe {
+.product-modal-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-modal-body img {
     width: 100%;
-    height: calc(90vh - 60px);
-    border: none;
-    border-radius: 0 0 20px 20px;
+    height: 250px;
+    object-fit: cover;
+}
+
+.product-modal-info {
+    padding: 30px;
+}
+
+.product-modal-info h2 {
+    color: var(--gizzi-deep);
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+}
+
+.product-modal-info .price {
+    color: var(--gizzi-gold);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.product-modal-info .description {
+    color: var(--text);
+    line-height: 1.7;
 }
 
 @media (max-width: 600px) {
-    .page-modal {
+    .product-modal {
         padding: 10px;
     }
     
-    .page-modal-content {
+    .product-modal-content {
         border-radius: 16px;
         max-height: 95vh;
     }
     
-    .page-modal-iframe {
-        height: calc(95vh - 50px);
-        border-radius: 0 0 16px 16px;
+    .product-modal-body img {
+        height: 200px;
     }
+    
+    .product-modal-info {
+        padding: 20px;
+    }
+}
+
+/* ========================================
+   VERSION BADGE
+   ======================================== */
+.version {
+    background: var(--gizzi-gold);
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 10px;
 }
