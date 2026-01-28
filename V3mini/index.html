@@ -49,7 +49,7 @@
     <!-- HEADER -->
     <header id="main-header">
         <div class="header-main">
-            <a href="#" class="logo" onclick="scrollToTop();return false;">
+            <a href="#" class="logo" onclick="Router.navigate('home'); return false;">
                 <div class="logo-icon">G</div>
                 <span>GIZZI</span>
             </a>
@@ -95,13 +95,13 @@
     </header>
 
     <!-- HERO -->
-    <section class="hero-banner">
+    <section class="hero-banner" id="hero-section">
         <div class="hero-content">
             <div class="hero-text">
                 <span class="hero-badge" id="hero-badge">✨ Qualità Cilentana</span>
                 <h1 id="hero-h1">L'Oro del Cilento,<br>a casa tua.</h1>
                 <p id="hero-p">Eccellenza gastronomica dal cuore del Parco Nazionale. Prodotti autentici, tradizione e sapore.</p>
-                <button class="hero-cta" onclick="smoothScrollTo('negozio')" id="hero-cta">
+                <button class="hero-cta" onclick="Router.navigate('home'); smoothScrollTo('negozio');" id="hero-cta">
                     Scopri i Prodotti
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
@@ -115,7 +115,7 @@
     </section>
 
     <!-- PROMO STRIP -->
-    <div class="promo-strip">
+    <div class="promo-strip" id="promo-strip">
         <span>🌿 Prodotti Freschi</span>
         <span>|</span>
         <span>🚚 Spedizione Veloce</span>
@@ -125,38 +125,44 @@
         <span>👨‍🌾 Dal Produttore</span>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <main class="main-content">
-        <!-- DEALS CAROUSEL -->
-        <section class="deals-section">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <span class="flash">★</span> 
-                    <span id="deals-title">Offerte del Momento</span>
-                </h2>
-                <a href="#" class="view-all" onclick="switchView('all');smoothScrollTo('negozio');return false;" id="view-all-link">
-                    Vedi tutti
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </a>
-            </div>
-            <div class="carousel-wrapper">
-                <button class="carousel-btn prev" onclick="moveCarousel(-1)" aria-label="Precedente">❮</button>
-                <div id="carousel-track" class="carousel-track"></div>
-                <button class="carousel-btn next" onclick="moveCarousel(1)" aria-label="Successivo">❯</button>
-            </div>
-        </section>
+    <!-- DYNAMIC CONTENT AREA -->
+    <div id="page-container">
+        <!-- HOME CONTENT -->
+        <main class="main-content" id="home-content">
+            <!-- DEALS CAROUSEL -->
+            <section class="deals-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="flash">★</span> 
+                        <span id="deals-title">Offerte del Momento</span>
+                    </h2>
+                    <a href="#" class="view-all" onclick="switchView('all');smoothScrollTo('negozio');return false;" id="view-all-link">
+                        Vedi tutti
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+                <div class="carousel-wrapper">
+                    <button class="carousel-btn prev" onclick="moveCarousel(-1)" aria-label="Precedente">❮</button>
+                    <div id="carousel-track" class="carousel-track"></div>
+                    <button class="carousel-btn next" onclick="moveCarousel(1)" aria-label="Successivo">❯</button>
+                </div>
+            </section>
 
-        <!-- VIEW TOGGLE -->
-        <div class="view-toggle">
-            <button id="btn-all" class="toggle-btn active" onclick="switchView('all')">Tutti i Prodotti</button>
-            <button id="btn-cats" class="toggle-btn" onclick="switchView('cats')">Per Categoria</button>
-        </div>
+            <!-- VIEW TOGGLE -->
+            <div class="view-toggle">
+                <button id="btn-all" class="toggle-btn active" onclick="switchView('all')">Tutti i Prodotti</button>
+                <button id="btn-cats" class="toggle-btn" onclick="switchView('cats')">Per Categoria</button>
+            </div>
 
-        <!-- PRODUCTS CONTAINER -->
-        <div id="negozio"></div>
-    </main>
+            <!-- PRODUCTS CONTAINER -->
+            <div id="negozio"></div>
+        </main>
+
+        <!-- PAGE CONTENT (loaded dynamically) -->
+        <main class="main-content page-view" id="page-content" style="display: none;"></main>
+    </div>
 
     <!-- CART PANEL -->
     <div class="cart-panel" id="cart-panel">
@@ -165,12 +171,12 @@
             <button class="cart-close" onclick="toggleCart()" aria-label="Chiudi carrello">×</button>
         </div>
         <div class="cart-actions">
-            <a href="javascript:void(0)" class="btn-clear" id="btn-clear" onclick="confirmEmptyCart(); return false;">
+            <button type="button" class="btn-clear" id="btn-clear" onclick="Cart.confirmEmpty()">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                 </svg>
                 <span id="btn-clear-text">Svuota Carrello</span>
-            </a>
+            </button>
         </div>
         <div class="cart-items" id="cart-items">
             <div class="cart-empty" id="cart-empty">
@@ -311,17 +317,17 @@
             </div>
             <div class="footer-col">
                 <h4>Categorie</h4>
-                <a href="#">Olio d'Oliva</a>
-                <a href="#">Conserve</a>
-                <a href="#">Pasta Artigianale</a>
-                <a href="#">Vini Locali</a>
+                <a href="#" onclick="Router.navigate('home'); return false;">Olio d'Oliva</a>
+                <a href="#" onclick="Router.navigate('home'); return false;">Conserve</a>
+                <a href="#" onclick="Router.navigate('home'); return false;">Pasta Artigianale</a>
+                <a href="#" onclick="Router.navigate('home'); return false;">Vini Locali</a>
             </div>
             <div class="footer-col">
                 <h4 id="footer-support">Assistenza</h4>
-                <a href="pages/contatti.html" id="footer-contact">Contattaci</a>
-                <a href="pages/spedizioni.html" id="footer-shipping">Spedizioni</a>
-                <a href="pages/resi.html" id="footer-returns">Resi e Rimborsi</a>
-                <a href="pages/faq.html" id="footer-faq">FAQ</a>
+                <a href="#contatti" onclick="Router.navigate('contatti'); return false;" id="footer-contact">Contattaci</a>
+                <a href="#spedizioni" onclick="Router.navigate('spedizioni'); return false;" id="footer-shipping">Spedizioni</a>
+                <a href="#resi" onclick="Router.navigate('resi'); return false;" id="footer-returns">Resi e Rimborsi</a>
+                <a href="#faq" onclick="Router.navigate('faq'); return false;" id="footer-faq">FAQ</a>
             </div>
             <div class="footer-col">
                 <h4>Contatti</h4>
@@ -338,3 +344,84 @@
     <script src="script.js"></script>
 </body>
 </html>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+    <script src="script.js"></script>
+</body>
+</html>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+</html>
+
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+</html>
+
+
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+    <script src="script.js"></script>
+</body>
+</html>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+</html>
+
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+</html>
+
+
+
+
+

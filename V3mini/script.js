@@ -1664,6 +1664,9 @@ const App = {
         Loader.hide();
         setTimeout(() => GDPR.check(), 1000);
         
+        // Initialize Router for SPA navigation
+        Router.init();
+        
         console.log('[DEBUG] App.init() - Fine inizializzazione');
     },
     
@@ -1749,6 +1752,213 @@ function smoothScrollTo(id) { Utils.scrollTo(id, 100); }
 function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
 /* ========================================
+   ROUTER - SPA NAVIGATION
+   ======================================== */
+const Router = {
+    currentPage: 'home',
+    
+    // Page configurations with multilingual support
+    pages: {
+        home: {
+            id: 'home',
+            showHero: true,
+            showPromo: true,
+            showHomeContent: true,
+            showPageContent: false
+        },
+        contatti: {
+            id: 'contatti',
+            file: 'pages/contatti.html',
+            showHero: false,
+            showPromo: false,
+            showHomeContent: false,
+            showPageContent: true
+        },
+        spedizioni: {
+            id: 'spedizioni',
+            file: 'pages/spedizioni.html',
+            showHero: false,
+            showPromo: false,
+            showHomeContent: false,
+            showPageContent: true
+        },
+        resi: {
+            id: 'resi',
+            file: 'pages/resi.html',
+            showHero: false,
+            showPromo: false,
+            showHomeContent: false,
+            showPageContent: true
+        },
+        faq: {
+            id: 'faq',
+            file: 'pages/faq.html',
+            showHero: false,
+            showPromo: false,
+            showHomeContent: false,
+            showPageContent: true
+        }
+    },
+    
+    init() {
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', (e) => {
+            const page = window.location.hash.replace('#', '') || 'home';
+            this.loadPage(page, false);
+        });
+        
+        // Load initial page based on URL hash
+        const initialPage = window.location.hash.replace('#', '') || 'home';
+        this.loadPage(initialPage, false);
+    },
+    
+    navigate(pageId) {
+        if (!this.pages[pageId]) {
+            console.error(`Page ${pageId} not found`);
+            return;
+        }
+        
+        // Update URL hash
+        window.location.hash = pageId === 'home' ? '' : pageId;
+        
+        // Load the page
+        this.loadPage(pageId, true);
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    
+    async loadPage(pageId, pushState = true) {
+        const config = this.pages[pageId];
+        if (!config) return;
+        
+        this.currentPage = pageId;
+        
+        // Toggle visibility of sections
+        this.toggleSection('hero-section', config.showHero);
+        this.toggleSection('promo-strip', config.showPromo);
+        this.toggleSection('home-content', config.showHomeContent);
+        
+        const pageContentEl = document.getElementById('page-content');
+        
+        if (config.showPageContent && config.file) {
+            // Load page content dynamically
+            try {
+                const response = await fetch(config.file);
+                if (!response.ok) throw new Error('Page not found');
+                
+                let html = await response.text();
+                
+                // Extract body content if it's a full HTML page
+                const bodyMatch = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+                if (bodyMatch) {
+                    html = bodyMatch[1];
+                }
+                
+                // Update page content
+                pageContentEl.innerHTML = html;
+                pageContentEl.style.display = 'block';
+                
+                // Initialize page-specific scripts
+                this.initPageScripts(pageId);
+                
+            } catch (error) {
+                console.error('Error loading page:', error);
+                pageContentEl.innerHTML = `
+                    <div class="page-error">
+                        <h2>Errore di caricamento</h2>
+                        <p>Impossibile caricare la pagina richiesta.</p>
+                        <button onclick="Router.navigate('home')">Torna alla Home</button>
+                    </div>
+                `;
+                pageContentEl.style.display = 'block';
+            }
+        } else {
+            pageContentEl.style.display = 'none';
+            pageContentEl.innerHTML = '';
+        }
+        
+        // Update active state in navigation
+        this.updateActiveNav(pageId);
+        
+        // Update page title based on language
+        this.updatePageTitle(pageId);
+    },
+    
+    toggleSection(id, show) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.style.display = show ? '' : 'none';
+        }
+    },
+    
+    updateActiveNav(pageId) {
+        // Remove active class from all nav links
+        document.querySelectorAll('.footer-col a').forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        // Add active class to current page link
+        const activeLink = document.querySelector(`a[href="#${pageId}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+    },
+    
+    updatePageTitle(pageId) {
+        const titles = {
+            it: {
+                home: 'Gruppo Gizzi | Il Tuo Supermercato del Cilento',
+                contatti: 'Contattaci | Gruppo Gizzi',
+                spedizioni: 'Spedizioni | Gruppo Gizzi',
+                resi: 'Resi e Rimborsi | Gruppo Gizzi',
+                faq: 'FAQ | Gruppo Gizzi'
+            },
+            en: {
+                home: 'Gruppo Gizzi | Your Cilento Supermarket',
+                contatti: 'Contact Us | Gruppo Gizzi',
+                spedizioni: 'Shipping | Gruppo Gizzi',
+                resi: 'Returns & Refunds | Gruppo Gizzi',
+                faq: 'FAQ | Gruppo Gizzi'
+            },
+            de: {
+                home: 'Gruppo Gizzi | Ihr Cilento Supermarkt',
+                contatti: 'Kontakt | Gruppo Gizzi',
+                spedizioni: 'Versand | Gruppo Gizzi',
+                resi: 'Rückgabe & Erstattung | Gruppo Gizzi',
+                faq: 'FAQ | Gruppo Gizzi'
+            },
+            hu: {
+                home: 'Gruppo Gizzi | Az Ön Cilento Szupermarketje',
+                contatti: 'Kapcsolat | Gruppo Gizzi',
+                spedizioni: 'Szállítás | Gruppo Gizzi',
+                resi: 'Visszaküldés és Visszatérítés | Gruppo Gizzi',
+                faq: 'GYIK | Gruppo Gizzi'
+            }
+        };
+        
+        const lang = state.lang || 'it';
+        const title = titles[lang]?.[pageId] || titles['it'][pageId];
+        document.title = title;
+    },
+    
+    initPageScripts(pageId) {
+        // Re-initialize any scripts needed for the loaded page
+        if (pageId === 'contatti' || pageId === 'contact' || pageId === 'kontakt' || pageId === 'kapcsolat') {
+            // Initialize contact form if present
+            const form = document.getElementById('contact-form');
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    // Handle form submission
+                    Toast.success('Messaggio inviato!', 'Ti contatteremo presto.');
+                });
+            }
+        }
+    }
+};
+
+/* ========================================
    PRODUCT MODAL FUNCTIONS
    ======================================== */
 function openProductModal(productId) {
@@ -1815,3 +2025,606 @@ window.addEventListener('load', () => {
         if (state.isLoading) Loader.hide();
     }, 1000);
 });
+    },
+    
+    async loadPage(pageId, pushState = true) {
+        const config = this.pages[pageId];
+        if (!config) return;
+        
+        this.currentPage = pageId;
+        
+        // Toggle visibility of sections
+        this.toggleSection('hero-section', config.showHero);
+        this.toggleSection('promo-strip', config.showPromo);
+        this.toggleSection('home-content', config.showHomeContent);
+        
+        const pageContentEl = document.getElementById('page-content');
+        
+        if (config.showPageContent && config.file) {
+            // Load page content dynamically
+            try {
+                const response = await fetch(config.file);
+                if (!response.ok) throw new Error('Page not found');
+                
+                let html = await response.text();
+                
+                // Extract body content if it's a full HTML page
+                const bodyMatch = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+                if (bodyMatch) {
+                    html = bodyMatch[1];
+                }
+                
+                // Update page content
+                pageContentEl.innerHTML = html;
+                pageContentEl.style.display = 'block';
+                
+                // Initialize page-specific scripts
+                this.initPageScripts(pageId);
+                
+            } catch (error) {
+                console.error('Error loading page:', error);
+                pageContentEl.innerHTML = `
+                    <div class="page-error">
+                        <h2>Errore di caricamento</h2>
+                        <p>Impossibile caricare la pagina richiesta.</p>
+                        <button onclick="Router.navigate('home')">Torna alla Home</button>
+                    </div>
+                `;
+                pageContentEl.style.display = 'block';
+            }
+        } else {
+            pageContentEl.style.display = 'none';
+            pageContentEl.innerHTML = '';
+        }
+        
+        // Update active state in navigation
+        this.updateActiveNav(pageId);
+        
+        // Update page title based on language
+        this.updatePageTitle(pageId);
+    },
+    
+    toggleSection(id, show) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.style.display = show ? '' : 'none';
+        }
+    },
+    
+    updateActiveNav(pageId) {
+        // Remove active class from all nav links
+        document.querySelectorAll('.footer-col a').forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        // Add active class to current page link
+        const activeLink = document.querySelector(`a[href="#${pageId}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+    },
+    
+    updatePageTitle(pageId) {
+        const titles = {
+            it: {
+                home: 'Gruppo Gizzi | Il Tuo Supermercato del Cilento',
+                contatti: 'Contattaci | Gruppo Gizzi',
+                spedizioni: 'Spedizioni | Gruppo Gizzi',
+                resi: 'Resi e Rimborsi | Gruppo Gizzi',
+                faq: 'FAQ | Gruppo Gizzi'
+            },
+            en: {
+                home: 'Gruppo Gizzi | Your Cilento Supermarket',
+                contatti: 'Contact Us | Gruppo Gizzi',
+                spedizioni: 'Shipping | Gruppo Gizzi',
+                resi: 'Returns & Refunds | Gruppo Gizzi',
+                faq: 'FAQ | Gruppo Gizzi'
+            },
+            de: {
+                home: 'Gruppo Gizzi | Ihr Cilento Supermarkt',
+                contatti: 'Kontakt | Gruppo Gizzi',
+                spedizioni: 'Versand | Gruppo Gizzi',
+                resi: 'Rückgabe & Erstattung | Gruppo Gizzi',
+                faq: 'FAQ | Gruppo Gizzi'
+            },
+            hu: {
+                home: 'Gruppo Gizzi | Az Ön Cilento Szupermarketje',
+                contatti: 'Kapcsolat | Gruppo Gizzi',
+                spedizioni: 'Szállítás | Gruppo Gizzi',
+                resi: 'Visszaküldés és Visszatérítés | Gruppo Gizzi',
+                faq: 'GYIK | Gruppo Gizzi'
+            }
+        };
+        
+        const lang = state.lang || 'it';
+        const title = titles[lang]?.[pageId] || titles['it'][pageId];
+        document.title = title;
+    },
+    
+    initPageScripts(pageId) {
+        // Re-initialize any scripts needed for the loaded page
+        if (pageId === 'contatti' || pageId === 'contact' || pageId === 'kontakt' || pageId === 'kapcsolat') {
+            // Initialize contact form if present
+            const form = document.getElementById('contact-form');
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    // Handle form submission
+                    Toast.success('Messaggio inviato!', 'Ti contatteremo presto.');
+                });
+            }
+        }
+    }
+};
+
+/* ========================================
+   PRODUCT MODAL FUNCTIONS
+   ======================================== */
+function openProductModal(productId) {
+    const product = state.products.find(p => p.ID === productId);
+    if (!product) return;
+    
+    const modal = document.getElementById('product-modal');
+    const img = document.getElementById('product-modal-img');
+    const name = document.getElementById('product-modal-name');
+    const price = document.getElementById('product-modal-price');
+    const desc = document.getElementById('product-modal-desc');
+    
+    if (!modal) return;
+    
+    // Get localized content
+    const nameKey = state.lang === 'it' ? 'Nome' : `Nome_${state.lang.toUpperCase()}`;
+    const descKey = state.lang === 'it' ? 'Descrizione' : `Descrizione_${state.lang.toUpperCase()}`;
+    
+    const productName = product[nameKey] || product.Nome;
+    const productDesc = product[descKey] || product.Descrizione || 'Nessuna descrizione disponibile.';
+    
+    if (img) {
+        img.src = product.Immagine;
+        img.alt = productName;
+    }
+    if (name) name.textContent = productName;
+    if (price) price.innerHTML = `€${product.Prezzo} <span style="font-size: 0.9rem; color: var(--text-light); font-weight: 400;">/ ${product.Unità || 'pz'}</span>`;
+    if (desc) desc.innerHTML = `<p class="description">${productDesc}</p>`;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeProductModal() {
+    const modal = document.getElementById('product-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Footer links - navigate to pages instead of modal
+function openPageModal(page) {
+    const pages = {
+        contact: { it: 'pages/contatti.html', en: 'pages/contact.html', de: 'pages/kontakt.html', hu: 'pages/kapcsolat.html' },
+        shipping: { it: 'pages/spedizioni.html', en: 'pages/shipping.html', de: 'pages/versand.html', hu: 'pages/szallitas.html' },
+        returns: { it: 'pages/resi.html', en: 'pages/returns.html', de: 'pages/rueckgabe.html', hu: 'pages/visszakuldes.html' },
+        faq: { it: 'pages/faq.html', en: 'pages/faq-en.html', de: 'pages/faq-de.html', hu: 'pages/gyik.html' }
+    };
+    
+    const url = pages[page]?.[state.lang] || pages[page]?.it;
+    if (url) {
+        window.location.href = url;
+    }
+}
+
+/* ========================================
+   INIT
+   ======================================== */
+document.addEventListener('DOMContentLoaded', () => App.init());
+
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        if (state.isLoading) Loader.hide();
+    }, 1000);
+});
+
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    
+    async loadPage(pageId, pushState = true) {
+        const config = this.pages[pageId];
+        if (!config) return;
+        
+        this.currentPage = pageId;
+        
+        // Toggle visibility of sections
+        this.toggleSection('hero-section', config.showHero);
+        this.toggleSection('promo-strip', config.showPromo);
+        this.toggleSection('home-content', config.showHomeContent);
+        
+        const pageContentEl = document.getElementById('page-content');
+        
+        if (config.showPageContent && config.file) {
+            // Load page content dynamically
+            try {
+                const response = await fetch(config.file);
+                if (!response.ok) throw new Error('Page not found');
+                
+                let html = await response.text();
+                
+                // Extract body content if it's a full HTML page
+                const bodyMatch = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+                if (bodyMatch) {
+                    html = bodyMatch[1];
+                }
+                
+                // Update page content
+                pageContentEl.innerHTML = html;
+                pageContentEl.style.display = 'block';
+                
+                // Initialize page-specific scripts
+                this.initPageScripts(pageId);
+                
+            } catch (error) {
+                console.error('Error loading page:', error);
+                pageContentEl.innerHTML = `
+                    <div class="page-error">
+                        <h2>Errore di caricamento</h2>
+                        <p>Impossibile caricare la pagina richiesta.</p>
+                        <button onclick="Router.navigate('home')">Torna alla Home</button>
+                    </div>
+                `;
+                pageContentEl.style.display = 'block';
+            }
+        } else {
+            pageContentEl.style.display = 'none';
+            pageContentEl.innerHTML = '';
+        }
+        
+        // Update active state in navigation
+        this.updateActiveNav(pageId);
+        
+        // Update page title based on language
+        this.updatePageTitle(pageId);
+    },
+    
+    toggleSection(id, show) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.style.display = show ? '' : 'none';
+        }
+    },
+    
+    updateActiveNav(pageId) {
+        // Remove active class from all nav links
+        document.querySelectorAll('.footer-col a').forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        // Add active class to current page link
+        const activeLink = document.querySelector(`a[href="#${pageId}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+    },
+    
+    updatePageTitle(pageId) {
+        const titles = {
+            it: {
+                home: 'Gruppo Gizzi | Il Tuo Supermercato del Cilento',
+                contatti: 'Contattaci | Gruppo Gizzi',
+                spedizioni: 'Spedizioni | Gruppo Gizzi',
+                resi: 'Resi e Rimborsi | Gruppo Gizzi',
+                faq: 'FAQ | Gruppo Gizzi'
+            },
+            en: {
+                home: 'Gruppo Gizzi | Your Cilento Supermarket',
+                contatti: 'Contact Us | Gruppo Gizzi',
+                spedizioni: 'Shipping | Gruppo Gizzi',
+                resi: 'Returns & Refunds | Gruppo Gizzi',
+                faq: 'FAQ | Gruppo Gizzi'
+            },
+            de: {
+                home: 'Gruppo Gizzi | Ihr Cilento Supermarkt',
+                contatti: 'Kontakt | Gruppo Gizzi',
+                spedizioni: 'Versand | Gruppo Gizzi',
+                resi: 'Rückgabe & Erstattung | Gruppo Gizzi',
+                faq: 'FAQ | Gruppo Gizzi'
+            },
+            hu: {
+                home: 'Gruppo Gizzi | Az Ön Cilento Szupermarketje',
+                contatti: 'Kapcsolat | Gruppo Gizzi',
+                spedizioni: 'Szállítás | Gruppo Gizzi',
+                resi: 'Visszaküldés és Visszatérítés | Gruppo Gizzi',
+                faq: 'GYIK | Gruppo Gizzi'
+            }
+        };
+        
+        const lang = state.lang || 'it';
+        const title = titles[lang]?.[pageId] || titles['it'][pageId];
+        document.title = title;
+    },
+    
+    initPageScripts(pageId) {
+        // Re-initialize any scripts needed for the loaded page
+        if (pageId === 'contatti' || pageId === 'contact' || pageId === 'kontakt' || pageId === 'kapcsolat') {
+            // Initialize contact form if present
+            const form = document.getElementById('contact-form');
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    // Handle form submission
+                    Toast.success('Messaggio inviato!', 'Ti contatteremo presto.');
+                });
+            }
+        }
+    }
+};
+
+/* ========================================
+   PRODUCT MODAL FUNCTIONS
+   ======================================== */
+function openProductModal(productId) {
+    const product = state.products.find(p => p.ID === productId);
+    if (!product) return;
+    
+    const modal = document.getElementById('product-modal');
+    const img = document.getElementById('product-modal-img');
+    const name = document.getElementById('product-modal-name');
+    const price = document.getElementById('product-modal-price');
+    const desc = document.getElementById('product-modal-desc');
+    
+    if (!modal) return;
+    
+    // Get localized content
+    const nameKey = state.lang === 'it' ? 'Nome' : `Nome_${state.lang.toUpperCase()}`;
+    const descKey = state.lang === 'it' ? 'Descrizione' : `Descrizione_${state.lang.toUpperCase()}`;
+    
+    const productName = product[nameKey] || product.Nome;
+    const productDesc = product[descKey] || product.Descrizione || 'Nessuna descrizione disponibile.';
+    
+    if (img) {
+        img.src = product.Immagine;
+        img.alt = productName;
+    }
+    if (name) name.textContent = productName;
+    if (price) price.innerHTML = `€${product.Prezzo} <span style="font-size: 0.9rem; color: var(--text-light); font-weight: 400;">/ ${product.Unità || 'pz'}</span>`;
+    if (desc) desc.innerHTML = `<p class="description">${productDesc}</p>`;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeProductModal() {
+    const modal = document.getElementById('product-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Footer links - navigate to pages instead of modal
+function openPageModal(page) {
+    const pages = {
+        contact: { it: 'pages/contatti.html', en: 'pages/contact.html', de: 'pages/kontakt.html', hu: 'pages/kapcsolat.html' },
+        shipping: { it: 'pages/spedizioni.html', en: 'pages/shipping.html', de: 'pages/versand.html', hu: 'pages/szallitas.html' },
+        returns: { it: 'pages/resi.html', en: 'pages/returns.html', de: 'pages/rueckgabe.html', hu: 'pages/visszakuldes.html' },
+        faq: { it: 'pages/faq.html', en: 'pages/faq-en.html', de: 'pages/faq-de.html', hu: 'pages/gyik.html' }
+    };
+    
+    const url = pages[page]?.[state.lang] || pages[page]?.it;
+    if (url) {
+        window.location.href = url;
+    }
+}
+
+/* ========================================
+   INIT
+   ======================================== */
+document.addEventListener('DOMContentLoaded', () => App.init());
+
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        if (state.isLoading) Loader.hide();
+    }, 1000);
+});
+    },
+    
+    async loadPage(pageId, pushState = true) {
+        const config = this.pages[pageId];
+        if (!config) return;
+        
+        this.currentPage = pageId;
+        
+        // Toggle visibility of sections
+        this.toggleSection('hero-section', config.showHero);
+        this.toggleSection('promo-strip', config.showPromo);
+        this.toggleSection('home-content', config.showHomeContent);
+        
+        const pageContentEl = document.getElementById('page-content');
+        
+        if (config.showPageContent && config.file) {
+            // Load page content dynamically
+            try {
+                const response = await fetch(config.file);
+                if (!response.ok) throw new Error('Page not found');
+                
+                let html = await response.text();
+                
+                // Extract body content if it's a full HTML page
+                const bodyMatch = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+                if (bodyMatch) {
+                    html = bodyMatch[1];
+                }
+                
+                // Update page content
+                pageContentEl.innerHTML = html;
+                pageContentEl.style.display = 'block';
+                
+                // Initialize page-specific scripts
+                this.initPageScripts(pageId);
+                
+            } catch (error) {
+                console.error('Error loading page:', error);
+                pageContentEl.innerHTML = `
+                    <div class="page-error">
+                        <h2>Errore di caricamento</h2>
+                        <p>Impossibile caricare la pagina richiesta.</p>
+                        <button onclick="Router.navigate('home')">Torna alla Home</button>
+                    </div>
+                `;
+                pageContentEl.style.display = 'block';
+            }
+        } else {
+            pageContentEl.style.display = 'none';
+            pageContentEl.innerHTML = '';
+        }
+        
+        // Update active state in navigation
+        this.updateActiveNav(pageId);
+        
+        // Update page title based on language
+        this.updatePageTitle(pageId);
+    },
+    
+    toggleSection(id, show) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.style.display = show ? '' : 'none';
+        }
+    },
+    
+    updateActiveNav(pageId) {
+        // Remove active class from all nav links
+        document.querySelectorAll('.footer-col a').forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        // Add active class to current page link
+        const activeLink = document.querySelector(`a[href="#${pageId}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+    },
+    
+    updatePageTitle(pageId) {
+        const titles = {
+            it: {
+                home: 'Gruppo Gizzi | Il Tuo Supermercato del Cilento',
+                contatti: 'Contattaci | Gruppo Gizzi',
+                spedizioni: 'Spedizioni | Gruppo Gizzi',
+                resi: 'Resi e Rimborsi | Gruppo Gizzi',
+                faq: 'FAQ | Gruppo Gizzi'
+            },
+            en: {
+                home: 'Gruppo Gizzi | Your Cilento Supermarket',
+                contatti: 'Contact Us | Gruppo Gizzi',
+                spedizioni: 'Shipping | Gruppo Gizzi',
+                resi: 'Returns & Refunds | Gruppo Gizzi',
+                faq: 'FAQ | Gruppo Gizzi'
+            },
+            de: {
+                home: 'Gruppo Gizzi | Ihr Cilento Supermarkt',
+                contatti: 'Kontakt | Gruppo Gizzi',
+                spedizioni: 'Versand | Gruppo Gizzi',
+                resi: 'Rückgabe & Erstattung | Gruppo Gizzi',
+                faq: 'FAQ | Gruppo Gizzi'
+            },
+            hu: {
+                home: 'Gruppo Gizzi | Az Ön Cilento Szupermarketje',
+                contatti: 'Kapcsolat | Gruppo Gizzi',
+                spedizioni: 'Szállítás | Gruppo Gizzi',
+                resi: 'Visszaküldés és Visszatérítés | Gruppo Gizzi',
+                faq: 'GYIK | Gruppo Gizzi'
+            }
+        };
+        
+        const lang = state.lang || 'it';
+        const title = titles[lang]?.[pageId] || titles['it'][pageId];
+        document.title = title;
+    },
+    
+    initPageScripts(pageId) {
+        // Re-initialize any scripts needed for the loaded page
+        if (pageId === 'contatti' || pageId === 'contact' || pageId === 'kontakt' || pageId === 'kapcsolat') {
+            // Initialize contact form if present
+            const form = document.getElementById('contact-form');
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    // Handle form submission
+                    Toast.success('Messaggio inviato!', 'Ti contatteremo presto.');
+                });
+            }
+        }
+    }
+};
+
+/* ========================================
+   PRODUCT MODAL FUNCTIONS
+   ======================================== */
+function openProductModal(productId) {
+    const product = state.products.find(p => p.ID === productId);
+    if (!product) return;
+    
+    const modal = document.getElementById('product-modal');
+    const img = document.getElementById('product-modal-img');
+    const name = document.getElementById('product-modal-name');
+    const price = document.getElementById('product-modal-price');
+    const desc = document.getElementById('product-modal-desc');
+    
+    if (!modal) return;
+    
+    // Get localized content
+    const nameKey = state.lang === 'it' ? 'Nome' : `Nome_${state.lang.toUpperCase()}`;
+    const descKey = state.lang === 'it' ? 'Descrizione' : `Descrizione_${state.lang.toUpperCase()}`;
+    
+    const productName = product[nameKey] || product.Nome;
+    const productDesc = product[descKey] || product.Descrizione || 'Nessuna descrizione disponibile.';
+    
+    if (img) {
+        img.src = product.Immagine;
+        img.alt = productName;
+    }
+    if (name) name.textContent = productName;
+    if (price) price.innerHTML = `€${product.Prezzo} <span style="font-size: 0.9rem; color: var(--text-light); font-weight: 400;">/ ${product.Unità || 'pz'}</span>`;
+    if (desc) desc.innerHTML = `<p class="description">${productDesc}</p>`;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeProductModal() {
+    const modal = document.getElementById('product-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Footer links - navigate to pages instead of modal
+function openPageModal(page) {
+    const pages = {
+        contact: { it: 'pages/contatti.html', en: 'pages/contact.html', de: 'pages/kontakt.html', hu: 'pages/kapcsolat.html' },
+        shipping: { it: 'pages/spedizioni.html', en: 'pages/shipping.html', de: 'pages/versand.html', hu: 'pages/szallitas.html' },
+        returns: { it: 'pages/resi.html', en: 'pages/returns.html', de: 'pages/rueckgabe.html', hu: 'pages/visszakuldes.html' },
+        faq: { it: 'pages/faq.html', en: 'pages/faq-en.html', de: 'pages/faq-de.html', hu: 'pages/gyik.html' }
+    };
+    
+    const url = pages[page]?.[state.lang] || pages[page]?.it;
+    if (url) {
+        window.location.href = url;
+    }
+}
+
+/* ========================================
+   INIT
+   ======================================== */
+document.addEventListener('DOMContentLoaded', () => App.init());
+
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        if (state.isLoading) Loader.hide();
+    }, 1000);
+});
+
+
