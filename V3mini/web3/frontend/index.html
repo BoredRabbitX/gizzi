@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loyalty Rewards dApp - Decentralized Rewards Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --accent: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-light: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: #475569;
+            --bronze: #cd7f32;
+            --silver: #c0c0c0;
+            --gold: #ffd700;
+            --platinum: #e5e4e2;
+            --diamond: #b9f2ff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .wallet-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .wallet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .wallet-btn.connected {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Dashboard Grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        /* Tier Card */
+        .tier-card {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-light) 100%);
+        }
+
+        .tier-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tier-bronze { background: rgba(205, 127, 50, 0.2); color: var(--bronze); border: 1px solid var(--bronze); }
+        .tier-silver { background: rgba(192, 192, 192, 0.2); color: var(--silver); border: 1px solid var(--silver); }
+        .tier-gold { background: rgba(255, 215, 0, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+        .tier-platinum { background: rgba(229, 228, 226, 0.2); color: var(--platinum); border: 1px solid var(--platinum); }
+        .tier-diamond { background: rgba(185, 242, 255, 0.2); color: var(--diamond); border: 1px solid var(--diamond); }
+
+        .tier-progress {
+            margin-top: 1.5rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-light);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-box {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-box-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stat-box-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Action Buttons */
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-light);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+        }
+
+        /* Staking Section */
+        .staking-input {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .staking-input input {
+            flex: 1;
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .staking-input input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Achievements */
+        .achievement-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 12px;
+            border: 1px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .achievement-item:hover {
+            border-color: var(--primary);
+        }
+
+        .achievement-item.completed {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .achievement-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--bg-dark);
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .achievement-desc {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .achievement-reward {
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        /* Merchants */
+        .merchant-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .merchant-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .merchant-item:hover {
+            background: var(--border);
+        }
+
+        .merchant-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .merchant-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .merchant-name {
+            font-weight: 600;
+        }
+
+        .merchant-rate {
+            font-size: 0.875rem;
+            color: var(--success);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 2rem;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .toast {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease;
+            min-width: 300px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--error); }
+        .toast.warning { border-left: 4px solid var(--warning); }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Not Connected State */
+        .not-connected {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .not-connected-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .not-connected h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .not-connected p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <div class="logo-icon">💎</div>
+                <span>LoyaltyRewards</span>
+            </div>
+            <div class="nav-links">
+                <a href="#dashboard">Dashboard</a>
+                <a href="#staking">Staking</a>
+                <a href="#achievements">Achievements</a>
+                <a href="#merchants">Merchants</a>
+            </div>
+            <button class="wallet-btn" id="connectWallet">
+                <span>Connect Wallet</span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Decentralized Loyalty Rewards</h1>
+            <p>Earn tokens for every purchase, stake for passive income, and unlock exclusive rewards across our merchant network.</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalUsers">0</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalRewards">0</div>
+                    <div class="stat-label">Rewards Distributed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalStaked">0</div>
+                    <div class="stat-label">Total Staked</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard -->
+        <section id="dashboard" class="dashboard" style="display: none;">
+            <!-- Tier Card -->
+            <div class="card tier-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);">🏆</div>
+                        Your Tier
+                    </div>
+                    <span class="tier-badge tier-bronze" id="userTier">BRONZE</span>
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Your current loyalty tier determines your reward multiplier and benefits.</p>
+                <div class="tier-progress">
+                    <div class="progress-text">
+                        <span>Progress to next tier</span>
+                        <span id="tierProgressText">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="tierProgressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Token Balance Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-icon" style="background: rgba(99, 102, 241, 0.2);">💰</div>
+                        Token Balance
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="tokenBalance">0</div>
+                        <div class="stat-box-label">LOYAL Tokens</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="stakedBalance">0</div>
+                        <div class="stat-box-label">Staked</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="pendingRewards">0</div>
+                        <div class="stat-box-label">Pending Rewards</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="totalEarned">0</div>
+                        <div class="stat-box-label">Total Earned</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="stakeBtn">
+                    <span>Stake Tokens</span>
+                </button>
+            </div>
+
+            <!-- Activity Stats -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-icon" style="background: rgba(16, 185, 129, 0.2);">📊</div>
+                        Activity
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="totalPurchases">0</div>
+                        <div class="stat-box-label">Total Purchases</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="totalSpent">0 ETH</div>
+                        <div class="stat-box-label">Total Spent</div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" id="simulatePurchaseBtn">
+                    <span>🛒 Simulate Purchase</span>
+                </button>
+            </div>
+
+            <!-- Staking Card -->
+            <div class="card" id="staking">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-icon" style="background: rgba(245, 158, 11, 0.2);">🔒</div>
+                        Staking
+                    </div>
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Stake your LOYAL tokens to earn passive income. Minimum 7 days, up to 5% APY.</p>
+                <div class="staking-input">
+                    <input type="number" id="stakeAmount" placeholder="Amount to stake" min="0" step="0.01">
+                    <select id="stakeDuration" style="background: var(--bg-light); border: 1px solid var(--border); padding: 0.75rem; border-radius: 10px; color: var(--text-primary);">
+                        <option value="7">7 days</option>
+                        <option value="30">30 days</option>
+                        <option value="90">90 days</option>
+                        <option value="365">365 days</option>
+                    </select>
+                </div>
+                <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-light); border-radius: 10px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="color: var(--text-secondary);">Estimated APY:</span>
+                        <span style="font-weight: 600; color: var(--success);">5% - 15%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-secondary);">Estimated Reward:</span>
+                        <span style="font-weight: 600;" id="estimatedReward">0 LOYAL</span>
+                    </div>
+                </div>
+                <button class="btn btn-success" id="confirmStakeBtn">
+                    <span>Confirm Stake</span>
+                </button>
+                <button class="btn btn-primary" id="unstakeBtn" style="margin-top: 0.5rem;">
+                    <span>Unstake All</span>
+                </button>
+            </div>
+
+            <!-- Achievements Card -->
+            <div class="card" id="achievements">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-icon" style="background: rgba(236, 72, 153, 0.2);">🎯</div>
+                        Achievements
+                    </div>
+                </div>
+                <div class="achievement-list" id="achievementList">
+                    <!-- Achievements will be populated by JS -->
+                </div>
+            </div>
+
+            <!-- Merchants Card -->
+            <div class="card" id="merchants">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-icon" style="background: rgba(139, 92, 246, 0.2);">🏪</div>
+                        Partner Merchants
+                    </div>
+                </div>
+                <div class="merchant-list" id="merchantList">
+                    <!-- Merchants will be populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Not Connected State -->
+        <section id="notConnected" class="not-connected">
+            <div class="not-connected-icon">🔗</div>
+            <h2>Connect Your Wallet</h2>
+            <p>Connect your Ethereum wallet to view your loyalty rewards, stake tokens, and track achievements.</p>
+            <button class="wallet-btn" id="connectWalletHero" style="font-size: 1.125rem; padding: 1rem 2rem;">
+                <span>Connect Wallet</span>
+            </button>
+        </section>
+    </main>
+
+    <!-- Stake Modal -->
+    <div class="modal-overlay" id="stakeModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Stake Tokens</h3>
+                <button class="modal-close" id="closeStakeModal">&times;</button>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Stake your LOYAL tokens to earn passive rewards. Tokens are locked for the selected duration.</p>
+            <div class="staking-input">
+                <input type="number" id="modalStakeAmount" placeholder="Amount" min="0" step="0.01">
+            </div>
+            <div style="margin-top: 1rem;">
+                <label style="color: var(--text-secondary); font-size: 0.875rem;">Duration</label>
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                    <button class="duration-btn" data-days="7">7 days</button>
+                    <button class="duration-btn" data-days="30">30 days</button>
+                    <button class="duration-btn" data-days="90">90 days</button>
+                    <button class="duration-btn" data-days="365">1 year</button>
+                </div>
+            </div>
+            <button class="btn btn-success" id="confirmModalStake" style="margin-top: 1.5rem;">
+                <span>Stake Tokens</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loyalty Rewards dApp - Decentralized Rewards Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --accent: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-light: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: #475569;
+            --bronze: #cd7f32;
+            --silver: #c0c0c0;
+            --gold: #ffd700;
+            --platinum: #e5e4e2;
+            --diamond: #b9f2ff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .wallet-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .wallet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .wallet-btn.connected {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Dashboard Grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        /* Tier Card */
+        .tier-card {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-light) 100%);
+        }
+
+        .tier-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tier-bronze { background: rgba(205, 127, 50, 0.2); color: var(--bronze); border: 1px solid var(--bronze); }
+        .tier-silver { background: rgba(192, 192, 192, 0.2); color: var(--silver); border: 1px solid var(--silver); }
+        .tier-gold { background: rgba(255, 215, 0, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+        .tier-platinum { background: rgba(229, 228, 226, 0.2); color: var(--platinum); border: 1px solid var(--platinum); }
+        .tier-diamond { background: rgba(185, 242, 255, 0.2); color: var(--diamond); border: 1px solid var(--diamond); }
+
+        .tier-progress {
+            margin-top: 1.5rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-light);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-box {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-box-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stat-box-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Action Buttons */
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-light);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+        }
+
+        /* Staking Section */
+        .staking-input {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .staking-input input {
+            flex: 1;
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .staking-input input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Achievements */
+        .achievement-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 12px;
+            border: 1px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .achievement-item:hover {
+            border-color: var(--primary);
+        }
+
+        .achievement-item.completed {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .achievement-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--bg-dark);
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .achievement-desc {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .achievement-reward {
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        /* Merchants */
+        .merchant-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .merchant-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .merchant-item:hover {
+            background: var(--border);
+        }
+
+        .merchant-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .merchant-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .merchant-name {
+            font-weight: 600;
+        }
+
+        .merchant-rate {
+            font-size: 0.875rem;
+            color: var(--success);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 2rem;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .toast {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease;
+            min-width: 300px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--error); }
+        .toast.warning { border-left: 4px solid var(--warning); }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Not Connected State */
+        .not-connected {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .not-connected-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .not-connected h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .not-connected p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <div class="logo-icon">💎</div>
+                <span>LoyaltyRewards</span>
+            </div>
+            <div class="nav-links">
+                <a href="#dashboard">Dashboard</a>
+                <a href="#staking">Staking</a>
+                <a href="#achievements">Achievements</a>
+                <a href="#merchants">Merchants</a>
+            </div>
+            <button class="wallet-btn" id="connectWallet">
+                <span>Connect Wallet</span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Decentralized Loyalty Rewards</h1>
+            <p>Earn tokens for every purchase, stake for passive income, and unlock exclusive rewards across our merchant network.</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalUsers">0</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalRewards">0</div>
+                    <div class="stat-label">Rewards Distributed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalStaked">0</div>
+                    <div class="stat-label">Total Staked</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard -->
+        <section id="dashboard" class="dashboard" style="display: none;">
+            <!-- Tier Card -->
+            <div class="card tier-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);">🏆</div>
+                        Your Tier
+                    </div>
+                    <span class="tier-badge tier-bronze" id="userTier">BRONZE</span>
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Your current loyalty tier determines your reward multiplier and benefits.</p>
+                <div class="tier-progress">
+                    <div class="progress-text">
+                        <span>Progress to next tier</span>
+                        <span id="tierProgressText">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="tierProgressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Token Balance Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-icon" style="background: rgba(99, 102, 241, 0.2);">💰</div>
+                        Token Balance
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="tokenBalance">0</div>
+                        <div class="stat-box-label">LOYAL Tokens</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="stakedBalance">0</div>
+                        <div class="stat-box-label">Staked</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="pendingRewards">0</div>
+                        <div class="stat-box-label">Pending Rewards</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="totalEarned">0</div>
+                        <div class="stat-box-label">Total Earned</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="stakeBtn">
+                    <span>Stake Tokens</span>
+                </button>
+            </div>
+
+            <!-- Activity Stats -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-icon" style="background: rgba(16, 185, 129, 0.2);">📊</div>
+                        Activity
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="totalPurchases">0</div>
+                        <div class="stat-box-label">Total Purchases</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="totalSpent">0 ETH</div>
+                        <div class="stat-box-label">Total Spent</div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" id="simulatePurchaseBtn">
+                    <span>🛒 Simulate Purchase</span>
+                </button>
+            </div>
+
+            <!-- Staking Card -->
+            <div class="card" id="staking">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-icon" style="background: rgba(245, 158, 11, 0.2);">🔒</div>
+                        Staking
+                    </div>
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Stake your LOYAL tokens to earn passive income. Minimum 7 days, up to 5% APY.</p>
+                <div class="staking-input">
+                    <input type="number" id="stakeAmount" placeholder="Amount to stake" min="0" step="0.01">
+                    <select id="stakeDuration" style="background: var(--bg-light); border: 1px solid var(--border); padding: 0.75rem; border-radius: 10px; color: var(--text-primary);">
+                        <option value="7">7 days</option>
+                        <option value="30">30 days</option>
+                        <option value="90">90 days</option>
+                        <option value="365">365 days</option>
+                    </select>
+                </div>
+                <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-light); border-radius: 10px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="color: var(--text-secondary);">Estimated APY:</span>
+                        <span style="font-weight: 600; color: var(--success);">5% - 15%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-secondary);">Estimated Reward:</span>
+                        <span style="font-weight: 600;" id="estimatedReward">0 LOYAL</span>
+                    </div>
+                </div>
+                <button class="btn btn-success" id="confirmStakeBtn">
+                    <span>Confirm Stake</span>
+                </button>
+                <button class="btn btn-primary" id="unstakeBtn" style="margin-top: 0.5rem;">
+                    <span>Unstake All</span>
+                </button>
+            </div>
+
+            <!-- Achievements Card -->
+            <div class="card" id="achievements">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-icon" style="background: rgba(236, 72, 153, 0.2);">🎯</div>
+                        Achievements
+                    </div>
+                </div>
+                <div class="achievement-list" id="achievementList">
+                    <!-- Achievements will be populated by JS -->
+                </div>
+            </div>
+
+            <!-- Merchants Card -->
+            <div class="card" id="merchants">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="card-icon" style="background: rgba(139, 92, 246, 0.2);">🏪</div>
+                        Partner Merchants
+                    </div>
+                </div>
+                <div class="merchant-list" id="merchantList">
+                    <!-- Merchants will be populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Not Connected State -->
+        <section id="notConnected" class="not-connected">
+            <div class="not-connected-icon">🔗</div>
+            <h2>Connect Your Wallet</h2>
+            <p>Connect your Ethereum wallet to view your loyalty rewards, stake tokens, and track achievements.</p>
+            <button class="wallet-btn" id="connectWalletHero" style="font-size: 1.125rem; padding: 1rem 2rem;">
+                <span>Connect Wallet</span>
+            </button>
+        </section>
+    </main>
+
+    <!-- Stake Modal -->
+    <div class="modal-overlay" id="stakeModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Stake Tokens</h3>
+                <button class="modal-close" id="closeStakeModal">&times;</button>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Stake your LOYAL tokens to earn passive rewards. Tokens are locked for the selected duration.</p>
+            <div class="staking-input">
+                <input type="number" id="modalStakeAmount" placeholder="Amount" min="0" step="0.01">
+            </div>
+            <div style="margin-top: 1rem;">
+                <label style="color: var(--text-secondary); font-size: 0.875rem;">Duration</label>
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                    <button class="duration-btn" data-days="7">7 days</button>
+                    <button class="duration-btn" data-days="30">30 days</button>
+                    <button class="duration-btn" data-days="90">90 days</button>
+                    <button class="duration-btn" data-days="365">1 year</button>
+                </div>
+            </div>
+            <button class="btn btn-success" id="confirmModalStake" style="margin-top: 1.5rem;">
+                <span>Stake Tokens</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
