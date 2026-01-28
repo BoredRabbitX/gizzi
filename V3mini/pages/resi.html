@@ -9,189 +9,82 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
     <style>
-        .page-hero {
-            background: linear-gradient(135deg, var(--gizzi-deep) 0%, #2d5f47 100%);
-            padding: 80px 20px;
-            text-align: center;
-            color: white;
-        }
-        .page-hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 16px;
-        }
-        .page-hero p {
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .page-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 60px 20px;
-        }
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--gizzi-deep);
-            text-decoration: none;
-            font-weight: 600;
-            margin-bottom: 30px;
-        }
-        .back-link:hover {
-            color: var(--gizzi-gold);
-        }
-        .info-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 24px;
-        }
-        .info-card h2 {
-            color: var(--gizzi-deep);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .info-card h2 svg {
-            width: 28px;
-            height: 28px;
-            color: var(--gizzi-gold);
-        }
-        .info-card p, .info-card li {
-            color: var(--text);
-            line-height: 1.7;
-            margin-bottom: 12px;
-        }
-        .info-card ul {
-            padding-left: 20px;
-        }
-        .info-card ul li {
-            margin-bottom: 8px;
-        }
-        .highlight-box {
-            background: linear-gradient(135deg, rgba(26, 71, 49, 0.05), rgba(26, 71, 49, 0.1));
-            border-left: 4px solid var(--gizzi-gold);
-            padding: 20px;
-            border-radius: 0 12px 12px 0;
-            margin: 20px 0;
-        }
-        .highlight-box p {
-            margin: 0;
-            font-weight: 500;
-        }
-        .steps-list {
-            counter-reset: step;
-            list-style: none;
-            padding: 0;
-        }
-        .steps-list li {
-            counter-increment: step;
-            padding-left: 50px;
-            position: relative;
-            margin-bottom: 20px;
-        }
-        .steps-list li::before {
-            content: counter(step);
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 32px;
-            height: 32px;
-            background: var(--gizzi-deep);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.9rem;
-        }
+        .page-hero { background: linear-gradient(135deg, var(--gizzi-deep) 0%, #2d5f47 100%); padding: 80px 20px; text-align: center; color: white; }
+        .page-hero h1 { font-size: 2.5rem; margin-bottom: 16px; }
+        .page-hero p { opacity: 0.9; max-width: 600px; margin: 0 auto; }
+        .page-content { max-width: 900px; margin: 0 auto; padding: 60px 20px; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--gizzi-deep); text-decoration: none; font-weight: 600; margin-bottom: 30px; }
+        .back-link:hover { color: var(--gizzi-gold); }
+        .info-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 30px; margin-bottom: 24px; }
+        .info-card h2 { color: var(--gizzi-deep); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+        .info-card h2 svg { width: 28px; height: 28px; color: var(--gizzi-gold); }
+        .info-card p, .info-card li { color: var(--text); line-height: 1.7; margin-bottom: 12px; }
+        .info-card ul { padding-left: 20px; }
+        .highlight-box { background: linear-gradient(135deg, rgba(26, 71, 49, 0.05), rgba(26, 71, 49, 0.1)); border-left: 4px solid var(--gizzi-gold); padding: 20px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .highlight-box p { margin: 0; font-weight: 500; }
+        .steps-list { counter-reset: step; list-style: none; padding: 0; }
+        .steps-list li { counter-increment: step; padding-left: 50px; position: relative; margin-bottom: 20px; }
+        .steps-list li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 32px; height: 32px; background: var(--gizzi-deep); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; }
     </style>
 </head>
 <body>
     <div class="page-hero">
         <h1>Resi e Rimborsi</h1>
-        <p>La tua soddisfazione è la nostra priorità. Scopri come effettuare un reso o richiedere un rimborso.</p>
+        <p>La tua soddisfazione è la nostra priorità.</p>
     </div>
-
     <div class="page-content">
         <a href="../index.html" class="back-link">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             Torna al Negozio
         </a>
-
-        <div class="info-card">
-            <h2>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                Politica di Reso
-            </h2>
-            <p>Hai <strong>14 giorni</strong> dalla data di consegna per richiedere un reso. Il prodotto deve essere:</p>
-            <ul>
-                <li>Non aperto e nella confezione originale sigillata</li>
-                <li>In perfette condizioni, come ricevuto</li>
-                <li>Accompagnato dalla ricevuta o conferma d'ordine</li>
-            </ul>
-            <div class="highlight-box">
-                <p>⚠️ I prodotti alimentari aperti o deteriorati non possono essere resi per motivi igienico-sanitari.</p>
-            </div>
-        </div>
-
-        <div class="info-card">
-            <h2>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                </svg>
-                Come Richiedere un Reso
-            </h2>
-            <ol class="steps-list">
-                <li><strong>Contattaci</strong> via email a info@gruppogizzi.it o WhatsApp indicando il numero d'ordine e il motivo del reso.</li>
-                <li><strong>Attendi la conferma</strong> del nostro team con le istruzioni per la spedizione del reso.</li>
-                <li><strong>Imballa il prodotto</strong> con cura nella confezione originale.</li>
-                <li><strong>Spedisci il pacco</strong> all'indirizzo che ti forniremo.</li>
-            </ol>
-        </div>
-
-        <div class="info-card">
-            <h2>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                Rimborsi
-            </h2>
-            <p>Una volta ricevuto e verificato il reso, procederemo al rimborso entro <strong>7 giorni lavorativi</strong>.</p>
-            <ul>
-                <li><strong>Metodo di rimborso:</strong> Stesso metodo di pagamento utilizzato per l'ordine</li>
-                <li><strong>Spese di spedizione del reso:</strong> A carico del cliente, salvo prodotti difettosi o errori da parte nostra</li>
-                <li><strong>Prodotti difettosi:</strong> Rimborso completo incluse le spese di spedizione</li>
-            </ul>
-        </div>
-
-        <div class="info-card">
-            <h2>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                Prodotti Danneggiati
-            </h2>
-            <p>Se ricevi un prodotto danneggiato durante il trasporto:</p>
-            <ul>
-                <li>Contattaci entro <strong>48 ore</strong> dalla consegna</li>
-                <li>Inviaci foto del prodotto e dell'imballaggio danneggiato</li>
-                <li>Provvederemo alla sostituzione o al rimborso completo senza costi aggiuntivi</li>
-            </ul>
-        </div>
+        <div id="page-content"></div>
     </div>
-
     <script>
-        const savedTheme = localStorage.getItem('gizzi-theme');
+        const savedTheme = localStorage.getItem('gizzi_theme');
         if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+        const content = document.getElementById('page-content');
+        if (content) {
+            content.innerHTML = `
+                <div class="info-card">
+                    <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Politica di Reso</h2>
+                    <p>Hai <strong>14 giorni</strong> dalla data di consegna per richiedere un reso. Il prodotto deve essere:</p>
+                    <ul>
+                        <li>Non aperto e nella confezione originale sigillata</li>
+                        <li>In perfette condizioni, come ricevuto</li>
+                        <li>Accompagnato dalla ricevuta o conferma d'ordine</li>
+                    </ul>
+                    <div class="highlight-box"><p>⚠️ I prodotti alimentari aperti o deteriorati non possono essere resi per motivi igienico-sanitari.</p></div>
+                </div>
+                <div class="info-card">
+                    <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Come Richiedere un Reso</h2>
+                    <ol class="steps-list">
+                        <li><strong>Contattaci</strong> via email a info@gruppogizzi.it o WhatsApp indicando il numero d'ordine e il motivo del reso.</li>
+                        <li><strong>Attendi la conferma</strong> del nostro team con le istruzioni per la spedizione del reso.</li>
+                        <li><strong>Imballa il prodotto</strong> con cura nella confezione originale.</li>
+                        <li><strong>Spedisci il pacco</strong> all'indirizzo che ti forniremo.</li>
+                    </ol>
+                </div>
+                <div class="info-card">
+                    <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Rimborsi</h2>
+                    <p>Una volta ricevuto e verificato il reso, procederemo al rimborso entro <strong>7 giorni lavorativi</strong>.</p>
+                    <ul>
+                        <li><strong>Metodo di rimborso:</strong> Stesso metodo di pagamento utilizzato per l'ordine</li>
+                        <li><strong>Spese di spedizione del reso:</strong> A carico del cliente, salvo prodotti difettosi o errori da parte nostra</li>
+                        <li><strong>Prodotti difettosi:</strong> Rimborso completo incluse le spese di spedizione</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Prodotti Danneggiati</h2>
+                    <p>Se ricevi un prodotto danneggiato durante il trasporto:</p>
+                    <ul>
+                        <li>Contattaci entro <strong>48 ore</strong> dalla consegna</li>
+                        <li>Inviaci foto del prodotto e dell'imballaggio danneggiato</li>
+                        <li>Provvederemo alla sostituzione o al rimborso completo senza costi aggiuntivi</li>
+                    </ul>
+                </div>
+            `;
+        }
     </script>
 </body>
 </html>

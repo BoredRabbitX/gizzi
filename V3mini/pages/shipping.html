@@ -14,6 +14,7 @@
         .page-hero p { opacity: 0.9; max-width: 600px; margin: 0 auto; }
         .page-content { max-width: 900px; margin: 0 auto; padding: 60px 20px; }
         .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--gizzi-deep); text-decoration: none; font-weight: 600; margin-bottom: 30px; }
+        .back-link:hover { color: var(--gizzi-gold); }
         .info-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 30px; margin-bottom: 24px; }
         .info-card h2 { color: var(--gizzi-deep); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
         .info-card h2 svg { width: 28px; height: 28px; color: var(--gizzi-gold); }
@@ -26,44 +27,60 @@
     </style>
 </head>
 <body>
-    <div class="page-hero"><h1>Shipping</h1><p>Information about delivery times, costs, and shipping methods for our products.</p></div>
-    <div class="page-content">
-        <a href="../index.html" class="back-link"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>Back to Shop</a>
-        <div class="info-card highlight">
-            <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>Free Shipping</h2>
-            <p><strong>FREE shipping on orders over €120!</strong> Take advantage of this offer to receive the best Cilento products directly to your home at no extra cost.</p>
-        </div>
-        <div class="info-card">
-            <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Delivery Times</h2>
-            <table class="shipping-table">
-                <thead><tr><th>Destination</th><th>Estimated Time</th><th>Cost</th></tr></thead>
-                <tbody>
-                    <tr><td>Italy (North)</td><td>2-3 business days</td><td>€8.90 / Free over €120</td></tr>
-                    <tr><td>Italy (Center)</td><td>1-2 business days</td><td>€7.90 / Free over €120</td></tr>
-                    <tr><td>Italy (South & Islands)</td><td>2-4 business days</td><td>€9.90 / Free over €120</td></tr>
-                    <tr><td>Europe (EU)</td><td>5-7 business days</td><td>€15.90</td></tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="info-card">
-            <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>How It Works</h2>
-            <ul>
-                <li><strong>Order processing:</strong> Orders are processed within 24-48 business hours.</li>
-                <li><strong>Tracking:</strong> You'll receive an email with tracking code once shipped.</li>
-                <li><strong>Courier:</strong> We use reliable couriers like GLS, BRT, and DHL for safe deliveries.</li>
-                <li><strong>Packaging:</strong> Products are carefully packaged to preserve quality during transport.</li>
-            </ul>
-        </div>
-        <div class="info-card">
-            <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Important Notes</h2>
-            <ul>
-                <li>Deliveries occur Monday to Friday, excluding holidays.</li>
-                <li>Minor islands may require 1-2 additional days.</li>
-                <li>If you're not home, the courier will leave a notice for a second delivery attempt.</li>
-                <li>For remote areas, please contact us for more information.</li>
-            </ul>
-        </div>
+    <div class="page-hero">
+        <h1>Shipping</h1>
+        <p>Information about delivery times, costs, and shipping methods.</p>
     </div>
-    <script>const t=localStorage.getItem('gizzi-theme');if(t)document.documentElement.setAttribute('data-theme',t);</script>
+    <div class="page-content">
+        <a href="../index.html" class="back-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            Back to Shop
+        </a>
+        <div id="page-content"></div>
+    </div>
+    <script>
+        const savedTheme = localStorage.getItem('gizzi_theme');
+        if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+        const content = document.getElementById('page-content');
+        if (content) {
+            content.innerHTML = `
+                <div class="info-card highlight">
+                    <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>Free Shipping</h2>
+                    <p><strong>FREE shipping on orders over €120!</strong> Take advantage of this offer to receive the best Cilento products directly to your home at no extra cost.</p>
+                </div>
+                <div class="info-card">
+                    <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Delivery Times</h2>
+                    <table class="shipping-table">
+                        <thead><tr><th>Destination</th><th>Estimated Time</th><th>Cost</th></tr></thead>
+                        <tbody>
+                            <tr><td>Italy (North)</td><td>2-3 business days</td><td>€8.90 / Free over €120</td></tr>
+                            <tr><td>Italy (Center)</td><td>1-2 business days</td><td>€7.90 / Free over €120</td></tr>
+                            <tr><td>Italy (South & Islands)</td><td>2-4 business days</td><td>€9.90 / Free over €120</td></tr>
+                            <tr><td>Europe (EU)</td><td>5-7 business days</td><td>€15.90</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="info-card">
+                    <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>How It Works</h2>
+                    <ul>
+                        <li><strong>Order processing:</strong> Orders are processed within 24-48 business hours.</li>
+                        <li><strong>Tracking:</strong> You'll receive an email with tracking code once shipped.</li>
+                        <li><strong>Courier:</strong> We use reliable couriers like GLS, BRT, and DHL for safe deliveries.</li>
+                        <li><strong>Packaging:</strong> Products are carefully packaged to preserve quality during transport.</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Important Notes</h2>
+                    <ul>
+                        <li>Deliveries occur Monday to Friday, excluding holidays.</li>
+                        <li>Minor islands may require 1-2 additional days.</li>
+                        <li>If you're not home, the courier will leave a notice for a second delivery attempt.</li>
+                        <li>For remote areas, please contact us for more information.</li>
+                    </ul>
+                </div>
+            `;
+        }
+    </script>
 </body>
 </html>

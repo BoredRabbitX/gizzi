@@ -9,146 +9,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
     <style>
-        .page-hero {
-            background: linear-gradient(135deg, var(--gizzi-deep) 0%, #2d5f47 100%);
-            padding: 80px 20px;
-            text-align: center;
-            color: white;
-        }
-        .page-hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 16px;
-        }
-        .page-hero p {
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .page-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 60px 20px;
-        }
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-        .contact-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        .contact-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px var(--shadow);
-        }
-        .contact-card svg {
-            width: 48px;
-            height: 48px;
-            color: var(--gizzi-gold);
-            margin-bottom: 20px;
-        }
-        .contact-card h3 {
-            color: var(--gizzi-deep);
-            margin-bottom: 12px;
-        }
-        .contact-card p {
-            color: var(--text-light);
-            margin-bottom: 16px;
-        }
-        .contact-card a {
-            color: var(--gizzi-deep);
-            font-weight: 600;
-            text-decoration: none;
-        }
-        .contact-card a:hover {
-            color: var(--gizzi-gold);
-        }
-        .contact-form {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 40px;
-        }
-        .contact-form h2 {
-            color: var(--gizzi-deep);
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text);
-        }
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-size: 1rem;
-            background: var(--bg);
-            color: var(--text);
-            transition: all 0.3s ease;
-        }
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--gizzi-gold);
-        }
-        .form-group textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-        .btn-submit {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--gizzi-deep), #2d5f47);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .btn-submit:hover {
-            background: linear-gradient(135deg, var(--gizzi-gold), #c9a66b);
-            transform: translateY(-2px);
-        }
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--gizzi-deep);
-            text-decoration: none;
-            font-weight: 600;
-            margin-bottom: 30px;
-        }
-        .back-link:hover {
-            color: var(--gizzi-gold);
-        }
-        @media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
+        .page-hero { background: linear-gradient(135deg, var(--gizzi-deep) 0%, #2d5f47 100%); padding: 80px 20px; text-align: center; color: white; }
+        .page-hero h1 { font-size: 2.5rem; margin-bottom: 16px; }
+        .page-hero p { opacity: 0.9; max-width: 600px; margin: 0 auto; }
+        .page-content { max-width: 1000px; margin: 0 auto; padding: 60px 20px; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--gizzi-deep); text-decoration: none; font-weight: 600; margin-bottom: 30px; }
+        .back-link:hover { color: var(--gizzi-gold); }
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 50px; }
+        .contact-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 30px; text-align: center; transition: all 0.3s ease; }
+        .contact-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px var(--shadow); }
+        .contact-card svg { width: 48px; height: 48px; color: var(--gizzi-gold); margin-bottom: 20px; }
+        .contact-card h3 { color: var(--gizzi-deep); margin-bottom: 12px; }
+        .contact-card p { color: var(--text-light); margin-bottom: 16px; }
+        .contact-card a { color: var(--gizzi-deep); font-weight: 600; text-decoration: none; }
+        .contact-card a:hover { color: var(--gizzi-gold); }
+        .contact-form { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 40px; }
+        .contact-form h2 { color: var(--gizzi-deep); margin-bottom: 30px; text-align: center; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 14px 18px; border: 2px solid var(--border); border-radius: 10px; font-size: 1rem; background: var(--bg); color: var(--text); transition: all 0.3s ease; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--gizzi-gold); }
+        .form-group textarea { min-height: 150px; resize: vertical; }
+        .btn-submit { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--gizzi-deep), #2d5f47); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; }
+        .btn-submit:hover { background: linear-gradient(135deg, var(--gizzi-gold), #c9a66b); transform: translateY(-2px); }
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -156,79 +41,74 @@
         <h1>Contattaci</h1>
         <p>Siamo qui per aiutarti. Contattaci per qualsiasi domanda sui nostri prodotti o servizi.</p>
     </div>
-
     <div class="page-content">
         <a href="../index.html" class="back-link">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             Torna al Negozio
         </a>
-
-        <div class="contact-grid">
-            <div class="contact-card">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                </svg>
-                <h3>Email</h3>
-                <p>Rispondiamo entro 24 ore</p>
-                <a href="mailto:info@gruppogizzi.it">info@gruppogizzi.it</a>
-            </div>
-            <div class="contact-card">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                </svg>
-                <h3>Telefono</h3>
-                <p>Lun-Ven: 9:00-18:00</p>
-                <a href="tel:+393331234567">+39 333 123 4567</a>
-            </div>
-            <div class="contact-card">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-                <h3>Indirizzo</h3>
-                <p>Vieni a trovarci</p>
-                <span style="color: var(--text);">Cilento, Campania, Italia</span>
-            </div>
-        </div>
-
-        <div class="contact-form">
-            <h2>Inviaci un Messaggio</h2>
-            <form onsubmit="event.preventDefault(); alert('Messaggio inviato! Ti risponderemo presto.');">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="name">Nome e Cognome *</label>
-                        <input type="text" id="name" required placeholder="Mario Rossi">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email *</label>
-                        <input type="email" id="email" required placeholder="mario@email.com">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="subject">Oggetto</label>
-                    <select id="subject">
-                        <option value="info">Informazioni Prodotti</option>
-                        <option value="order">Stato Ordine</option>
-                        <option value="shipping">Spedizioni</option>
-                        <option value="returns">Resi e Rimborsi</option>
-                        <option value="other">Altro</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="message">Messaggio *</label>
-                    <textarea id="message" required placeholder="Scrivi qui il tuo messaggio..."></textarea>
-                </div>
-                <button type="submit" class="btn-submit">Invia Messaggio</button>
-            </form>
-        </div>
+        <div id="page-content"></div>
     </div>
-
     <script>
         // Theme detection
-        const savedTheme = localStorage.getItem('gizzi-theme');
+        const savedTheme = localStorage.getItem('gizzi_theme');
         if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Simple content for contatti page
+        const content = document.getElementById('page-content');
+        if (content) {
+            content.innerHTML = `
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <h3>Email</h3>
+                        <p>Rispondiamo entro 24 ore</p>
+                        <a href="mailto:info@gruppogizzi.it">info@gruppogizzi.it</a>
+                    </div>
+                    <div class="contact-card">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                        <h3>Telefono</h3>
+                        <p>Lun-Ven: 9:00-18:00</p>
+                        <a href="tel:+393331234567">+39 333 123 4567</a>
+                    </div>
+                    <div class="contact-card">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <h3>Indirizzo</h3>
+                        <p>Vieni a trovarci</p>
+                        <span style="color: var(--text);">Cilento, Campania, Italia</span>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h2>Inviaci un Messaggio</h2>
+                    <form onsubmit="event.preventDefault(); alert('Messaggio inviato! Ti risponderemo presto.');">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nome e Cognome *</label>
+                                <input type="text" required placeholder="Mario Rossi">
+                            </div>
+                            <div class="form-group">
+                                <label>Email *</label>
+                                <input type="email" required placeholder="mario@email.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Oggetto</label>
+                            <select>
+                                <option>Informazioni Prodotti</option>
+                                <option>Stato Ordine</option>
+                                <option>Spedizioni</option>
+                                <option>Resi e Rimborsi</option>
+                                <option>Altro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Messaggio *</label>
+                            <textarea required placeholder="Scrivi qui il tuo messaggio..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">Invia Messaggio</button>
+                    </form>
+                </div>
+            `;
+        }
     </script>
 </body>
 </html>

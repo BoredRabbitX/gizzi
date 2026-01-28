@@ -37,47 +37,51 @@
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             Torna al Negozio
         </a>
-
-        <div class="info-card highlight">
-            <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>Spedizione Gratuita</h2>
-            <p><strong>Spedizione GRATUITA per ordini superiori a €120!</strong> Approfitta di questa offerta per ricevere i migliori prodotti del Cilento direttamente a casa tua senza costi aggiuntivi.</p>
-        </div>
-
-        <div class="info-card">
-            <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Tempi di Consegna</h2>
-            <table class="shipping-table">
-                <thead>
-                    <tr><th>Destinazione</th><th>Tempi Stimati</th><th>Costo</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Italia (Nord)</td><td>2-3 giorni lavorativi</td><td>€8.90 / Gratis oltre €120</td></tr>
-                    <tr><td>Italia (Centro)</td><td>1-2 giorni lavorativi</td><td>€7.90 / Gratis oltre €120</td></tr>
-                    <tr><td>Italia (Sud e Isole)</td><td>2-4 giorni lavorativi</td><td>€9.90 / Gratis oltre €120</td></tr>
-                    <tr><td>Europa (UE)</td><td>5-7 giorni lavorativi</td><td>€15.90</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="info-card">
-            <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>Come Funziona</h2>
-            <ul>
-                <li><strong>Elaborazione ordine:</strong> Gli ordini vengono elaborati entro 24-48 ore lavorative.</li>
-                <li><strong>Tracking:</strong> Riceverai un'email con il codice di tracciamento non appena il pacco sarà spedito.</li>
-                <li><strong>Corriere:</strong> Utilizziamo corrieri affidabili come GLS, BRT e DHL per garantire consegne sicure.</li>
-                <li><strong>Imballaggio:</strong> I prodotti sono accuratamente imballati per preservarne la qualità durante il trasporto.</li>
-            </ul>
-        </div>
-
-        <div class="info-card">
-            <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Note Importanti</h2>
-            <ul>
-                <li>Le consegne avvengono dal lunedì al venerdì, esclusi i giorni festivi.</li>
-                <li>Per le isole minori potrebbero essere necessari 1-2 giorni aggiuntivi.</li>
-                <li>In caso di assenza, il corriere lascerà un avviso per un secondo tentativo di consegna.</li>
-                <li>Per spedizioni in zone remote o difficilmente raggiungibili, contattaci per informazioni.</li>
-            </ul>
-        </div>
+        <div id="page-content"></div>
     </div>
-    <script>const t=localStorage.getItem('gizzi-theme');if(t)document.documentElement.setAttribute('data-theme',t);</script>
+    <script>
+        const savedTheme = localStorage.getItem('gizzi_theme');
+        if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+        const content = document.getElementById('page-content');
+        if (content) {
+            content.innerHTML = `
+                <div class="info-card highlight">
+                    <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>Spedizione Gratuita</h2>
+                    <p><strong>Spedizione GRATUITA per ordini superiori a €120!</strong> Approfitta di questa offerta per ricevere i migliori prodotti del Cilento direttamente a casa tua senza costi aggiuntivi.</p>
+                </div>
+                <div class="info-card">
+                    <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Tempi di Consegna</h2>
+                    <table class="shipping-table">
+                        <thead><tr><th>Destinazione</th><th>Tempi Stimati</th><th>Costo</th></tr></thead>
+                        <tbody>
+                            <tr><td>Italia (Nord)</td><td>2-3 giorni lavorativi</td><td>€8.90 / Gratis oltre €120</td></tr>
+                            <tr><td>Italia (Centro)</td><td>1-2 giorni lavorativi</td><td>€7.90 / Gratis oltre €120</td></tr>
+                            <tr><td>Italia (Sud e Isole)</td><td>2-4 giorni lavorativi</td><td>€9.90 / Gratis oltre €120</td></tr>
+                            <tr><td>Europa (UE)</td><td>5-7 giorni lavorativi</td><td>€15.90</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="info-card">
+                    <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>Come Funziona</h2>
+                    <ul>
+                        <li><strong>Elaborazione ordine:</strong> Gli ordini vengono elaborati entro 24-48 ore lavorative.</li>
+                        <li><strong>Tracking:</strong> Riceverai un'email con il codice di tracciamento non appena il pacco sarà spedito.</li>
+                        <li><strong>Corriere:</strong> Utilizziamo corrieri affidabili come GLS, BRT e DHL per garantire consegne sicure.</li>
+                        <li><strong>Imballaggio:</strong> I prodotti sono accuratamente imballati per preservarne la qualità durante il trasporto.</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h2><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Note Importanti</h2>
+                    <ul>
+                        <li>Le consegne avvengono dal lunedì al venerdì, esclusi i giorni festivi.</li>
+                        <li>Per le isole minori potrebbero essere necessari 1-2 giorni aggiuntivi.</li>
+                        <li>In caso di assenza, il corriere lascerà un avviso per un secondo tentativo di consegna.</li>
+                        <li>Per spedizioni in zone remote o difficilmente raggiungibili, contattaci per informazioni.</li>
+                    </ul>
+                </div>
+            `;
+        }
+    </script>
 </body>
 </html>

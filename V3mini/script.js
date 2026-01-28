@@ -903,8 +903,8 @@ const Cart = {
                             <button class="qty-btn qty-plus" data-id="${item.ID}" ${item.qty >= product?.StockNum ? 'disabled' : ''}>+</button>
                         </div>
                         <div class="cart-item-price">€${Utils.formatPrice(itemTotal)}</div>
-                        <button class="cart-item-remove" data-id="${item.ID}" title="${t('confirm.delete')}">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <button class="cart-item-remove" data-id="${item.ID}" title="${t('confirm.delete')}" type="button">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
                         </button>
@@ -1556,9 +1556,11 @@ const App = {
         const cartPanel = document.getElementById('cart-panel');
         if (cartPanel) {
             cartPanel.addEventListener('click', (e) => {
-                // Pulsante svuota carrello
-                if (e.target.closest('#btn-clear')) {
+                // Pulsante svuota carrello - cerca sia per ID che per classe
+                const clearBtn = e.target.closest('#btn-clear') || e.target.closest('.btn-clear');
+                if (clearBtn) {
                     e.preventDefault();
+                    e.stopPropagation();
                     Cart.confirmEmpty();
                     return;
                 }
@@ -1571,10 +1573,13 @@ const App = {
                 if (!id) return;
                 
                 if (btn.classList.contains('qty-minus')) {
+                    e.preventDefault();
                     Cart.updateQty(id, -1);
                 } else if (btn.classList.contains('qty-plus')) {
+                    e.preventDefault();
                     Cart.updateQty(id, 1);
                 } else if (btn.classList.contains('cart-item-remove')) {
+                    e.preventDefault();
                     Cart.confirmRemove(id);
                 }
             });
