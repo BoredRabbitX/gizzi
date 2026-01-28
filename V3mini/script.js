@@ -803,8 +803,23 @@ const Cart = {
             message: `"${productName}"`,
             type: 'danger',
             confirmText: t('confirm.delete'),
-            onConfirm: () => this.remove(productId)
+            onConfirm: () => this.removeByZeroQty(productId)
         });
+    },
+    
+    removeByZeroQty(productId) {
+        // Porta la quantità a 0 per rimuovere il prodotto (come il tasto -)
+        const item = state.cart.find(c => c.ID === productId);
+        if (!item) return;
+        
+        item.qty = 0;
+        state.cart = state.cart.filter(c => c.qty > 0);
+        this.save();
+        this.updateUI();
+        
+        const nameKey = state.lang === 'it' ? 'Nome' : `Nome_${state.lang.toUpperCase()}`;
+        const productName = item[nameKey] || item.Nome;
+        Toast.info(t('toast.cartRemove'), productName);
     },
     
     updateQty(productId, delta) {
@@ -836,8 +851,20 @@ const Cart = {
             message: t('confirm.emptyMsg'),
             type: 'danger',
             confirmText: t('cart.clear'),
-            onConfirm: () => this.empty()
+            onConfirm: () => this.emptyByZeroQty()
         });
+    },
+    
+    emptyByZeroQty() {
+        // Porta tutte le quantità a 0 per rimuovere tutti i prodotti
+        state.cart.forEach(item => {
+            item.qty = 0;
+        });
+        // Filtra via tutti i prodotti con quantità 0
+        state.cart = state.cart.filter(c => c.qty > 0);
+        this.save();
+        this.updateUI();
+        Toast.info(t('toast.cartEmpty'));
     },
     
     empty() {
