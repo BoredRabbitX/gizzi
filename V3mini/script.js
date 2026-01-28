@@ -903,7 +903,7 @@ const Cart = {
                             <button class="qty-btn qty-plus" onclick="Cart.updateQty('${item.ID}', 1)" ${item.qty >= product?.StockNum ? 'disabled' : ''}>+</button>
                         </div>
                         <div class="cart-item-price">€${Utils.formatPrice(itemTotal)}</div>
-                        <button class="cart-item-remove" onclick="Cart.confirmRemove('${item.ID}')" title="${t('confirm.delete')}" type="button">
+                        <button class="cart-item-remove" data-id="${item.ID}" title="${t('confirm.delete')}" type="button">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
@@ -1663,7 +1663,7 @@ const App = {
                     return;
                 }
                 
-                // Pulsante rimuovi prodotto
+                // Pulsante rimuovi prodotto (usa data-id)
                 const removeBtn = e.target.closest('.cart-item-remove');
                 if (removeBtn) {
                     e.preventDefault();
@@ -1687,16 +1687,6 @@ const App = {
                         Cart.updateQty(id, 1);
                     }
                 }
-            });
-        }
-        
-        // Setup listeners anche per i bottoni del carrello (fallback)
-        const btnClear = document.getElementById('btn-clear');
-        if (btnClear) {
-            btnClear.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                Cart.confirmEmpty();
             });
         }
         
