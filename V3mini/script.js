@@ -903,11 +903,11 @@ const Cart = {
                             <button class="qty-btn qty-plus" onclick="Cart.updateQty('${item.ID}', 1)" ${item.qty >= product?.StockNum ? 'disabled' : ''}>+</button>
                         </div>
                         <div class="cart-item-price">€${Utils.formatPrice(itemTotal)}</div>
-                        <button class="cart-item-remove" onclick="Cart.confirmRemove('${item.ID}')" title="${t('confirm.delete')}" type="button">
+                        <a href="javascript:void(0)" class="cart-item-remove" onclick="confirmRemoveCartItem('${item.ID}'); return false;" title="${t('confirm.delete')}">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
-                        </button>
+                        </a>
                     </div>
                 `;
             }).join('');
@@ -1713,6 +1713,7 @@ function updateLang(lang) { Language.update(lang); }
 function acceptGDPR() { GDPR.accept(); }
 function rejectGDPR() { GDPR.reject(); }
 function confirmEmptyCart() { Cart.confirmEmpty(); }
+function confirmRemoveCartItem(id) { Cart.confirmRemove(id); }
 function validateAndSubmit() { Checkout.submit(); }
 function clearAndReload() { App.reload(); }
 function performSearch() { Search.perform(); }
