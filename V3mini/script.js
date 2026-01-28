@@ -942,43 +942,80 @@ const Products = {
     async load() {
         Loader.show(t('loading.products'));
         
+        console.log('[DEBUG] Products.load() - Inizio caricamento');
+        console.log('[DEBUG] Config catalog URL:', CONFIG.catalog);
+        
         try {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), CONFIG.loadingTimeout - 1000);
             
+            console.log('[DEBUG] Fetching catalog...');
             const res = await fetch(CONFIG.catalog, { signal: controller.signal });
             clearTimeout(timeoutId);
             
-            const text = await res.text();
-            const rows = text.split('\n').filter(r => r.trim());
-            const headers = rows[0].split(',').map(h => h.trim());
+            console.log('[DEBUG] Response status:', res.status, res.ok);
             
-            state.products = rows.slice(1).map(row => {
+            const text = await res.text();
+            console.log('[DEBUG] Response text length:', text.length);
+            console.log('[DEBUG] First 200 chars:', text.substring(0, 200));
+            
+            const rows = text.split('\n').filter(r => r.trim());
+            console.log('[DEBUG] Total rows:', rows.length);
+            
+            if (rows.length === 0) {
+                console.error('[DEBUG] ERROR: No rows found in CSV');
+                throw new Error('CSV vuoto');
+            }
+            
+            const headers = rows[0].split(',').map(h => h.trim());
+            console.log('[DEBUG] Headers:', headers);
+            
+            state.products = rows.slice(1).map((row, index) => {
                 const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 const obj = {};
                 headers.forEach((h, i) => obj[h] = cols[i]?.replace(/"/g, '').trim());
                 const stockVal = obj.Stock || obj.Quantità || obj.stock;
                 obj.StockNum = stockVal === '' || stockVal === undefined ? 999 : parseInt(stockVal);
+                
+                if (index < 3) {
+                    console.log(`[DEBUG] Product ${index}:`, obj);
+                }
+                
                 return obj;
             });
             
+            console.log('[DEBUG] Total products parsed:', state.products.length);
+            console.log('[DEBUG] Sample product:', state.products[0]);
+            
             return true;
         } catch (error) {
-            console.error('Error loading products:', error);
+            console.error('[DEBUG] Error loading products:', error);
+            console.error('[DEBUG] Error name:', error.name);
+            console.error('[DEBUG] Error message:', error.message);
             Toast.error(t('errors.load'), t('errors.loadDesc'));
             return false;
         }
     },
     
     getActive() {
-        let products = state.products.filter(p => p.Disponibile === 'SI');
+        console.log('[DEBUG] Products.getActive() - Total products:', state.products.length);
+        
+        let products = state.products.filter(p => {
+            const isAvailable = p.Disponibile === 'SI';
+            if (!isAvailable && state.products.length < 5) {
+                console.log('[DEBUG] Product filtered out (not available):', p.Nome, 'Disponibile:', p.Disponibile);
+            }
+            return isAvailable;
+        });
+        
+        console.log('[DEBUG] Products.getActive() - Available products:', products.length);
         
         if (state.searchQuery) {
             const q = state.searchQuery.toLowerCase();
             const nameKey = state.lang === 'it' ? 'Nome' : `Nome_${state.lang.toUpperCase()}`;
             const catKey = state.lang === 'it' ? 'Categoria' : `Categoria_${state.lang.toUpperCase()}`;
             
-            products = products.filter(p => 
+            products = products.filter(p =>
                 (p[nameKey] || p.Nome).toLowerCase().includes(q) ||
                 (p[catKey] || p.Categoria).toLowerCase().includes(q)
             );
@@ -988,12 +1025,18 @@ const Products = {
     },
     
     getFeatured() {
-        return Utils.shuffle(this.getActive().filter(p => p.Evidenza === 'SI' && p.StockNum > 0));
+        const active = this.getActive();
+        const featured = active.filter(p => p.Evidenza === 'SI' && p.StockNum > 0);
+        console.log('[DEBUG] Products.getFeatured() - Featured count:', featured.length, 'of', active.length);
+        return Utils.shuffle(featured);
     },
     
     getCategories() {
+        const active = this.getActive();
         const catKey = state.lang === 'it' ? 'Categoria' : `Categoria_${state.lang.toUpperCase()}`;
-        return [...new Set(this.getActive().map(p => p[catKey] || p.Categoria))];
+        const categories = [...new Set(active.map(p => p[catKey] || p.Categoria))].filter(Boolean);
+        console.log('[DEBUG] Products.getCategories() - Categories:', categories);
+        return categories;
     },
     
     createCard(product) {
@@ -1050,35 +1093,75 @@ const Products = {
    ======================================== */
 const Render = {
     all() {
+        console.log('[DEBUG] Render.all() - Inizio rendering');
+        console.log('[DEBUG] Products in state:', state.products.length);
+        
         this.carousel();
         this.categoryNav();
         this.products();
+        
+        console.log('[DEBUG] Render.all() - Fine rendering');
     },
     
     carousel() {
         const featured = Products.getFeatured();
+        console.log('[DEBUG] Render.carousel() - Featured products:', featured.length);
+        
         const track = document.getElementById('carousel-track');
-        track.innerHTML = featured.map(p => Products.createCard(p)).join('');
+        if (!track) {
+            console.error('[DEBUG] ERROR: carousel-track element not found!');
+            return;
+        }
+        
+        if (featured.length === 0) {
+            console.warn('[DEBUG] WARNING: No featured products to display');
+            track.innerHTML = '<p style="padding: 20px; text-align: center;">Nessun prodotto in evidenza</p>';
+        } else {
+            track.innerHTML = featured.map(p => Products.createCard(p)).join('');
+        }
         state.carouselIndex = 0;
     },
     
     categoryNav() {
         const categories = Products.getCategories();
+        console.log('[DEBUG] Render.categoryNav() - Categories:', categories);
+        
         // Salva le categorie nello state per riutilizzarle nel footer
         state.currentCategories = categories;
-        document.getElementById('category-nav').innerHTML = categories.map(cat =>
-            `<a class="cat-link" href="#" onclick="App.goToCategory('${cat.replace(/\s+/g, '')}');return false;">${cat}</a>`
-        ).join('');
+        
+        const nav = document.getElementById('category-nav');
+        if (!nav) {
+            console.error('[DEBUG] ERROR: category-nav element not found!');
+            return;
+        }
+        
+        if (categories.length === 0) {
+            console.warn('[DEBUG] WARNING: No categories found');
+            nav.innerHTML = '<span style="padding: 10px;">Nessuna categoria</span>';
+        } else {
+            nav.innerHTML = categories.map(cat =>
+                `<a class="cat-link" href="#" onclick="App.goToCategory('${cat.replace(/\s+/g, '')}');return false;">${cat}</a>`
+            ).join('');
+        }
     },
     
     products() {
         const products = Products.getActive();
+        console.log('[DEBUG] Render.products() - Active products:', products.length);
+        
         const categories = Utils.shuffle(Products.getCategories());
         const catKey = state.lang === 'it' ? 'Categoria' : `Categoria_${state.lang.toUpperCase()}`;
+        
+        const container = document.getElementById('negozio');
+        if (!container) {
+            console.error('[DEBUG] ERROR: negozio element not found!');
+            return;
+        }
         
         let html = '';
         
         if (products.length === 0) {
+            console.warn('[DEBUG] WARNING: No active products found');
             html = `
                 <div class="no-results">
                     <div class="no-results-icon">🔍</div>
@@ -1101,7 +1184,8 @@ const Render = {
             }).join('');
         }
         
-        document.getElementById('negozio').innerHTML = html;
+        container.innerHTML = html;
+        console.log('[DEBUG] Render.products() - HTML injected, length:', html.length);
     }
 };
 
@@ -1511,13 +1595,18 @@ const Language = {
    ======================================== */
 const App = {
     async init() {
+        console.log('[DEBUG] App.init() - Inizio inizializzazione');
+        
         Loader.init();
         Toast.init();
         Theme.init();
         Cart.load();
         
+        console.log('[DEBUG] Cart loaded, items:', state.cart.length);
+        
         // Load saved language
         const savedLang = Language.getSaved();
+        console.log('[DEBUG] Saved language:', savedLang);
         state.lang = savedLang;
         const langSelect = document.getElementById('lang-sel');
         if (langSelect) langSelect.value = savedLang;
@@ -1530,18 +1619,25 @@ const App = {
         Search.init();
         
         // Load products
+        console.log('[DEBUG] Starting product load...');
         const success = await Products.load();
+        console.log('[DEBUG] Products.load() returned:', success);
         
         if (success) {
+            console.log('[DEBUG] Rendering products...');
             Render.all();
             Cart.updateUI();
             Carousel.autoPlay();
             // Aggiorna footer DOPO caricamento prodotti per avere le categorie
             Language.updateFooter();
+        } else {
+            console.error('[DEBUG] Product loading failed, skipping render');
         }
         
         Loader.hide();
         setTimeout(() => GDPR.check(), 1000);
+        
+        console.log('[DEBUG] App.init() - Fine inizializzazione');
     },
     
     setupListeners() {
