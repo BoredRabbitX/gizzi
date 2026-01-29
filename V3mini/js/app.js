@@ -121,6 +121,13 @@ const App = {
 // Inizializza l'applicazione quando il DOM è pronto
 document.addEventListener('DOMContentLoaded', () => App.init());
 
+// Fallback: forza hide loader dopo timeout (in caso di errori)
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        Loader.forceHide();
+    }, 2000);
+});
+
 // Esporta per l'uso in altri moduli
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { App };

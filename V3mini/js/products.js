@@ -8,7 +8,8 @@ const Products = {
      * @returns {Promise<boolean>}
      */
     async load() {
-        Loader.show(t('loading.products'));
+        const loadingText = typeof t !== 'undefined' ? t('loading.products') : 'Caricamento prodotti...';
+        Loader.show(loadingText);
         
         try {
             const controller = new AbortController();
@@ -38,7 +39,9 @@ const Products = {
             return true;
         } catch (error) {
             console.error('Error loading products:', error);
-            Toast.error(t('errors.load'), t('errors.loadDesc'));
+            const errorTitle = typeof t !== 'undefined' ? t('errors.load') : 'Errore caricamento';
+            const errorDesc = typeof t !== 'undefined' ? t('errors.loadDesc') : 'Verifica la connessione e ricarica la pagina.';
+            Toast.error(errorTitle, errorDesc);
             Loader.forceHide();
             return false;
         }
