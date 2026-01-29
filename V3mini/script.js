@@ -837,19 +837,7 @@ const Cart = {
     },
     
     confirmRemove(productId) {
-        const item = state.cart.find(c => c.ID === productId);
-        if (!item) return;
-        
-        const nameKey = state.lang === 'it' ? 'Nome' : `Nome_${state.lang.toUpperCase()}`;
-        const productName = item[nameKey] || item.Nome;
-        
-        Confirm.show({
-            title: t('confirm.removeTitle'),
-            message: `"${productName}"`,
-            type: 'danger',
-            confirmText: t('confirm.delete'),
-            onConfirm: () => this.removeByZeroQty(productId)
-        });
+        this.removeByZeroQty(productId);
     },
     
     confirmEmpty() {
