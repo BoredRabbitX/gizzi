@@ -176,6 +176,12 @@ const GDPR = {
     }
 };
 
+// Funzioni globali
+function toggleFaq(element) {
+    const item = element.parentElement;
+    item.classList.toggle('open');
+}
+
 // Esporta per l'uso in altri moduli
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { Toast, Confirm, Loader, Theme, GDPR };
