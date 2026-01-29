@@ -1873,6 +1873,131 @@ window.addEventListener('load', () => {
         if (state.isLoading) Loader.hide();
     }, 1000);
 });
+        meta: { code: "it", name: "Italiano", flag: "🇮🇹" },
+        hero: {
+            h1: "L'Oro del Cilento,<br>a casa tua.",
+            p: "Eccellenza gastronomica dal cuore del Parco Nazionale. Prodotti autentici, tradizione e sapore.",
+            badge: "✨ Qualità Cilentana",
+            cta: "Scopri i Prodotti"
+        },
+        nav: {
+            shipping: "Spedizione GRATUITA per ordini oltre €120",
+            searchPlaceholder: "Cerca olio, pasta, vino..."
+        },
+        products: {
+            deals: "Offerte del Momento",
+            all: "Tutti i Prodotti",
+            byCat: "Per Categoria",
+            viewAll: "Vedi tutti",
+            add: "Aggiungi",
+            added: "Aggiunto!",
+            out: "Esaurito",
+            low: "Ultimi pezzi!",
+            ok: "Disponibile",
+            noResults: "Nessun prodotto trovato",
+            tryAgain: "Prova con altre parole chiave"
+        },
+        cart: {
+            title: "🛒 Il Tuo Carrello",
+            empty: "Il tuo carrello è vuoto",
+            emptyDesc: "Esplora i nostri prodotti e trova qualcosa di speciale!",
+            clear: "Svuota Carrello",
+            shipping: "Spedizione",
+            freeShipping: "GRATIS",
+            total: "Totale",
+            checkout: "Prosegui all'Ordine"
+        },
+        checkout: {
+            title: "Dati di Spedizione",
+            subtitle: "Inserisci i tuoi dati per completare l'ordine",
+            name: "Nome e Cognome",
+            namePlaceholder: "Mario Rossi",
+            email: "Email",
+            emailPlaceholder: "mario@email.com",
+            phone: "Telefono",
+            phonePlaceholder: "+39 333 1234567",
+            address: "Indirizzo completo",
+            addressPlaceholder: "Via Roma 1, 00100 Roma",
+            addressHint: "Via, numero civico, CAP e città",
+            destination: "Destinazione",
+            italy: "🇮🇹 Italia",
+            europe: "🇪🇺 Europa (UE)",
+            confirm: "Conferma Ordine"
+        },
+        thanks: {
+            title: "Grazie!",
+            message: "Il tuo ordine è stato inviato con successo.",
+            contact: "Ti contatteremo presto via WhatsApp.",
+            back: "Torna al Sito"
+        },
+        toast: {
+            cartAdd: "Aggiunto al carrello",
+            cartRemove: "Rimosso dal carrello",
+            cartEmpty: "Carrello svuotato",
+            maxStock: "Quantità massima raggiunta",
+            maxStockDesc: "Non puoi aggiungere altri pezzi di questo prodotto",
+            searchResults: "risultati trovati"
+        },
+        confirm: {
+            emptyTitle: "Svuotare il carrello?",
+            emptyMsg: "Tutti i prodotti verranno rimossi dal carrello.",
+            removeTitle: "Rimuovere prodotto?",
+            cancel: "Annulla",
+            ok: "Conferma",
+            delete: "Rimuovi"
+        },
+        errors: {
+            empty: "Carrello vuoto",
+            emptyDesc: "Aggiungi qualche prodotto prima di procedere",
+            form: "Compila tutti i campi",
+            formDesc: "Alcuni campi obbligatori sono vuoti",
+            email: "Email non valida",
+            emailDesc: "Controlla il formato dell'email",
+            load: "Errore di caricamento",
+            loadDesc: "Impossibile caricare i prodotti. Ricarica la pagina."
+        },
+        loading: {
+            text: "Caricamento...",
+            products: "Preparando i migliori prodotti del Cilento..."
+        },
+        gdpr: {
+            title: "Privacy & Cookie Policy",
+            message: "Utilizziamo cookie per offrirti la migliore esperienza.",
+            accept: "Accetta Tutto",
+            decline: "Rifiuta"
+        },
+        footer: {
+            about: "Eccellenze gastronomiche dal Parco Nazionale del Cilento.",
+            tradition: "Tradizione dal 1980",
+            categories: "Categorie",
+            catOil: "Olio d'Oliva",
+            catConserves: "Conserve",
+            catPasta: "Pasta Artigianale",
+            catWine: "Vini Locali",
+            support: "Assistenza",
+            contact: "Contattaci",
+            shippingInfo: "Spedizioni",
+            returns: "Resi e Rimborsi",
+            faq: "FAQ",
+            contactTitle: "Contatti"
+        }
+    },
+    en: {
+        meta: { code: "en", name: "English", flag: "🇬🇧" },
+        hero: {
+            h1: "Cilento's Gold,<br>at your home.",
+            p: "Gastronomic excellence from the National Park. Authentic products, tradition and flavor.",
+            badge: "✨ Cilento Quality",
+            cta: "Shop Now"
+        },
+        nav: {
+            shipping: "FREE Shipping on orders over €120",
+            searchPlaceholder: "Search olive oil, pasta, wine..."
+        },
+        products: {
+            deals: "Today's Deals",
+            all: "All Products",
+            byCat: "By Category",
             viewAll: "View all",
             add: "Add to Cart",
             added: "Added!",
