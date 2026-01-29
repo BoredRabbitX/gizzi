@@ -988,6 +988,7 @@ const Products = {
         } catch (error) {
             console.error('Error loading products:', error);
             Toast.error(t('errors.load'), t('errors.loadDesc'));
+            Loader.forceHide();
             return false;
         }
     },
@@ -1736,7 +1737,7 @@ const App = {
             Language.updateFooter();
         }
         
-        Loader.hide();
+        Loader.forceHide();
         setTimeout(() => GDPR.check(), 1000);
         
         Router.init();
