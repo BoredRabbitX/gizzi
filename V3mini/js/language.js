@@ -236,13 +236,13 @@ const Language = {
         const catH4 = footerCols[1].querySelector('h4');
         if (catH4) catH4.textContent = t('footer.categories');
         
-        // Genera categorie dinamiche come nell'header
+        // Genera categorie dinamiche - usa Products.getCategories() per ottenere categorie nella lingua corrente
         const catCol = footerCols[1];
         const oldCatLinks = catCol.querySelectorAll('a');
         oldCatLinks.forEach(link => link.remove());
         
-        // Usa le stesse categorie dell'header (salvate in state.currentCategories)
-        const categories = state.currentCategories || Products.getCategories();
+        // Usa Products.getCategories() che restituisce categorie nella lingua corrente
+        const categories = Products.getCategories();
         categories.forEach(cat => {
             const link = document.createElement('a');
             link.href = '#';
