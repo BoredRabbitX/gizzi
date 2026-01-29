@@ -227,38 +227,15 @@ const Language = {
      */
     updateFooter() {
         const footerCols = document.querySelectorAll('.footer-col');
-        if (footerCols.length < 4) return;
+        if (footerCols.length < 3) return;
         
         const aboutP = footerCols[0].querySelectorAll('p');
         if (aboutP[0]) aboutP[0].textContent = t('footer.about');
         if (aboutP[1]) aboutP[1].textContent = t('footer.tradition');
         
-        const catH4 = footerCols[1].querySelector('h4');
-        if (catH4) catH4.textContent = t('footer.categories');
-        
-        // Genera categorie dinamiche - usa Products.getCategories() per ottenere categorie nella lingua corrente
-        const catCol = footerCols[1];
-        const oldCatLinks = catCol.querySelectorAll('a');
-        oldCatLinks.forEach(link => link.remove());
-        
-        // Usa Products.getCategories() che restituisce categorie nella lingua corrente
-        const categories = Products.getCategories();
-        categories.forEach(cat => {
-            const link = document.createElement('a');
-            link.href = '#';
-            link.textContent = cat;
-            link.onclick = (e) => {
-                e.preventDefault();
-                if (typeof Router !== 'undefined') {
-                    Router.navigate('home');
-                }
-                setTimeout(() => App.goToCategory(cat.replace(/\s+/g, '')), 100);
-            };
-            catCol.appendChild(link);
-        });
-        
-        const supportH4 = footerCols[2].querySelector('h4');
-        const supportLinks = footerCols[2].querySelectorAll('a');
+        // Colonna Assistenza (ora index 1)
+        const supportH4 = footerCols[1].querySelector('h4');
+        const supportLinks = footerCols[1].querySelectorAll('a');
         if (supportH4) supportH4.textContent = t('footer.support');
         if (supportLinks[0]) {
             supportLinks[0].textContent = t('footer.contact');
@@ -301,7 +278,8 @@ const Language = {
             };
         }
         
-        const contactH4 = footerCols[3].querySelector('h4');
+        // Colonna Contatti (ora index 2)
+        const contactH4 = footerCols[2].querySelector('h4');
         if (contactH4) contactH4.textContent = t('footer.contactTitle');
     },
     

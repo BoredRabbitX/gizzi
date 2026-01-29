@@ -1326,6 +1326,25 @@ const Checkout = {
 // LANGUAGE
 // ========================================
 const Language = {
+    /**
+     * Mappa delle pagine per lingua
+     */
+    pageMappings: {
+        it: { contact: 'contatti', shipping: 'spedizioni', returns: 'resi', faq: 'faq' },
+        en: { contact: 'contact', shipping: 'shipping', returns: 'returns', faq: 'faq-en' },
+        de: { contact: 'kontakt', shipping: 'versand', returns: 'rueckgabe', faq: 'faq' },
+        hu: { contact: 'kapcsolat', shipping: 'szallitas', returns: 'visszakuldes', faq: 'gyik' }
+    },
+    
+    /**
+     * Ottiene l'ID della pagina nella lingua corrente
+     * @param {string} pageType - Tipo di pagina (contact, shipping, returns, faq)
+     * @returns {string} - ID della pagina
+     */
+    getPageId(pageType) {
+        return this.pageMappings[state.lang]?.[pageType] || this.pageMappings['it'][pageType];
+    },
+    
     update(lang) {
         if (!CONFIG.supportedLanguages.includes(lang)) {
             lang = CONFIG.defaultLanguage;
@@ -1455,53 +1474,59 @@ const Language = {
     
     updateFooter() {
         const footerCols = document.querySelectorAll('.footer-col');
-        if (footerCols.length < 4) return;
+        if (footerCols.length < 3) return;
         
         const aboutP = footerCols[0].querySelectorAll('p');
         if (aboutP[0]) aboutP[0].textContent = t('footer.about');
         if (aboutP[1]) aboutP[1].textContent = t('footer.tradition');
         
-        const catH4 = footerCols[1].querySelector('h4');
-        if (catH4) catH4.textContent = t('footer.categories');
-        
-        const catCol = footerCols[1];
-        const oldCatLinks = catCol.querySelectorAll('a');
-        oldCatLinks.forEach(link => link.remove());
-        
-        const categories = state.currentCategories || Products.getCategories();
-        categories.forEach(cat => {
-            const link = document.createElement('a');
-            link.href = '#';
-            link.textContent = cat;
-            link.onclick = (e) => {
-                e.preventDefault();
-                Router.navigate('home');
-                setTimeout(() => App.goToCategory(cat.replace(/\s+/g, '')), 100);
-            };
-            catCol.appendChild(link);
-        });
-        
-        const supportH4 = footerCols[2].querySelector('h4');
-        const supportLinks = footerCols[2].querySelectorAll('a');
+        // Colonna Assistenza (ora index 1)
+        const supportH4 = footerCols[1].querySelector('h4');
+        const supportLinks = footerCols[1].querySelectorAll('a');
         if (supportH4) supportH4.textContent = t('footer.support');
         if (supportLinks[0]) {
             supportLinks[0].textContent = t('footer.contact');
-            supportLinks[0].onclick = (e) => { e.preventDefault(); Router.navigate('contatti'); };
+            supportLinks[0].href = '#' + this.getPageId('contact');
+            supportLinks[0].onclick = (e) => { 
+                e.preventDefault(); 
+                if (typeof Router !== 'undefined') {
+                    Router.navigate(this.getPageId('contact'));
+                }
+            };
         }
         if (supportLinks[1]) {
             supportLinks[1].textContent = t('footer.shippingInfo');
-            supportLinks[1].onclick = (e) => { e.preventDefault(); Router.navigate('spedizioni'); };
+            supportLinks[1].href = '#' + this.getPageId('shipping');
+            supportLinks[1].onclick = (e) => { 
+                e.preventDefault(); 
+                if (typeof Router !== 'undefined') {
+                    Router.navigate(this.getPageId('shipping'));
+                }
+            };
         }
         if (supportLinks[2]) {
             supportLinks[2].textContent = t('footer.returns');
-            supportLinks[2].onclick = (e) => { e.preventDefault(); Router.navigate('resi'); };
+            supportLinks[2].href = '#' + this.getPageId('returns');
+            supportLinks[2].onclick = (e) => { 
+                e.preventDefault(); 
+                if (typeof Router !== 'undefined') {
+                    Router.navigate(this.getPageId('returns'));
+                }
+            };
         }
         if (supportLinks[3]) {
             supportLinks[3].textContent = t('footer.faq');
-            supportLinks[3].onclick = (e) => { e.preventDefault(); Router.navigate('faq'); };
+            supportLinks[3].href = '#' + this.getPageId('faq');
+            supportLinks[3].onclick = (e) => { 
+                e.preventDefault(); 
+                if (typeof Router !== 'undefined') {
+                    Router.navigate(this.getPageId('faq'));
+                }
+            };
         }
         
-        const contactH4 = footerCols[3].querySelector('h4');
+        // Colonna Contatti (ora index 2)
+        const contactH4 = footerCols[2].querySelector('h4');
         if (contactH4) contactH4.textContent = t('footer.contactTitle');
     },
     
