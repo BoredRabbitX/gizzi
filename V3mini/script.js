@@ -1741,28 +1741,6 @@ const App = {
         
         document.getElementById('cart-overlay')?.addEventListener('click', () => Cart.toggle());
         
-        const cartPanel = document.getElementById('cart-panel');
-        if (cartPanel) {
-            cartPanel.addEventListener('click', (e) => {
-                const clearBtn = e.target.closest('#btn-clear') || e.target.closest('.btn-clear');
-                if (clearBtn) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    Cart.confirmEmpty();
-                    return;
-                }
-            });
-        }
-        
-        const btnClear = document.getElementById('btn-clear');
-        if (btnClear) {
-            btnClear.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                Cart.confirmEmpty();
-            });
-        }
-        
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 Confirm.close();

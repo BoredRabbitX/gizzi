@@ -58,28 +58,16 @@ const App = {
         // Cart overlay click
         document.getElementById('cart-overlay')?.addEventListener('click', () => Cart.toggle());
         
-        // Event delegation per il pannello carrello
+        // Cart panel click handling
         const cartPanel = document.getElementById('cart-panel');
         if (cartPanel) {
             cartPanel.addEventListener('click', (e) => {
-                // Pulsante svuota carrello
-                const clearBtn = e.target.closest('#btn-clear') || e.target.closest('.btn-clear');
-                if (clearBtn) {
+                // Handle remove button clicks
+                const removeBtn = e.target.closest('.cart-item-remove');
+                if (removeBtn) {
                     e.preventDefault();
                     e.stopPropagation();
-                    Cart.confirmEmpty();
-                    return;
                 }
-            });
-        }
-        
-        // Pulsante svuota carrello (fallback diretto)
-        const btnClear = document.getElementById('btn-clear');
-        if (btnClear) {
-            btnClear.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                Cart.confirmEmpty();
             });
         }
         
