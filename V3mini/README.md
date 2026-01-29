@@ -27,37 +27,131 @@ A modern, multi-language e-commerce website for Gruppo Gizzi, featuring products
 V3mini/
 ├── index.html              # Main entry point
 ├── style.css               # Main stylesheet
+├── script.js               # Unified script (for compatibility)
 ├── README.md               # This file
 ├── LICENSE                 # MIT License
-├── js/
-│   ├── config.js           # Configuration settings
-│   ├── state.js            # Global state management
-│   ├── translations.js     # UI translations
-│   ├── utils.js            # Utility functions
-│   ├── products.js         # Product catalog management
-│   ├── cart.js             # Shopping cart functionality
-│   ├── language.js         # Language/i18n management
-│   ├── ui.js               # UI components (Toast, Loader, Theme, etc.)
-│   ├── router.js           # SPA router
-│   ├── render.js           # DOM rendering utilities
+├── js/                     # Modular JavaScript files
+│   ├── app.js              # Main application controller and global functions
+│   ├── config.js           # Configuration settings (catalog URL, WhatsApp, etc.)
+│   ├── state.js            # Global state management (products, cart, language, etc.)
+│   ├── translations.js     # UI translations (4 languages: IT, EN, DE, HU)
+│   ├── utils.js            # Utility functions (shuffle, debounce, formatPrice, etc.)
+│   ├── products.js         # Product catalog management (loading, filtering, cards)
+│   ├── cart.js             # Shopping cart functionality (add, remove, update, save)
+│   ├── language.js         # Language/i18n management and UI updates
+│   ├── ui.js               # UI components (Toast, Confirm, Loader, Theme, GDPR)
+│   ├── router.js           # SPA router with hash-based navigation
+│   ├── render.js           # DOM rendering (products grid, carousel, categories)
 │   ├── search.js           # Product search functionality
-│   ├── app.js              # Main application controller
-│   └── checkout.js         # Checkout process
-├── locales/
+│   └── checkout.js         # Checkout process and form validation
+├── locales/                # JSON translation files
 │   ├── it.json             # Italian translations
 │   ├── en.json             # English translations
 │   ├── de.json             # German translations
 │   └── hu.json             # Hungarian translations
-├── pages/                  # HTML page templates
-│   ├── contatti.html       # Italian contact page
-│   ├── contact.html        # English contact page
-│   ├── spedizioni.html     # Italian shipping page
-│   ├── shipping.html       # English shipping page
-│   ├── resi.html           # Italian returns page
-│   ├── returns.html        # English returns page
-│   ├── faq.html            # Italian FAQ page
-│   └── faq-en.html         # English FAQ page
-└── web3/                   # Web3 integration (future)
+└── pages/                  # HTML page templates (legacy, inline content preferred)
+```
+
+## JavaScript Architecture
+
+### Module Structure
+
+The JavaScript code is organized into modular files following a dependency order:
+
+1. **Config & Data** → 2. **State & Utils** → 3. **Translations** → 4. **Core Modules** → 5. **UI Components** → 6. **Business Logic** → 7. **App Controller**
+
+### Dependency Order (as loaded in index.html)
+
+```html
+<script src="js/config.js"></script>       <!-- CONFIG: app settings -->
+<script src="js/state.js"></script>         <!-- state: global state -->
+<script src="js/translations.js"></script>  <!-- TRANSLATIONS: i18n data -->
+<script src="js/utils.js"></script>         <!-- Utils: helper functions -->
+<script src="js/products.js"></script>      <!-- Products: catalog logic -->
+<script src="js/cart.js"></script>          <!-- Cart: shopping cart -->
+<script src="js/language.js"></script>      <!-- Language: i18n system -->
+<script src="js/ui.js"></script>            <!-- UI: components -->
+<script src="js/router.js"></script>        <!-- Router: SPA navigation -->
+<script src="js/render.js"></script>        <!-- Render: DOM rendering -->
+<script src="js/search.js"></script>        <!-- Search: search functionality -->
+<script src="js/app.js"></script>           <!-- App: main controller + init -->
+<script src="js/checkout.js"></script>      <!-- Checkout: order processing -->
+```
+
+### Global State Pattern
+
+The application uses a global `state` object for centralized data management:
+
+```javascript
+// js/state.js
+const state = {
+    products: [],          // Loaded product catalog
+    cart: [],              // Shopping cart items
+    lang: 'it',            // Current language
+    view: 'all',           // Current view mode
+    carouselIndex: 0,      // Carousel position
+    searchQuery: '',       // Active search term
+    isLoading: true,       // Loading state
+    confirmCallback: null, // Modal callback
+    currentCategories: []  // Filtered categories
+};
+```
+
+### Translation System
+
+Translations use a nested key system with fallback:
+
+```javascript
+// Access translations via t() function
+t('hero.h1')           // Returns: "L'Oro del Cilento,<br>a casa tua."
+t('cart.empty')        // Returns: "Il tuo carrello è vuoto"
+t('products.deals')    // Returns: "Offerte del Momento"
+
+// Fallback handling: missing keys return the key itself or fallback value
+t('missing.key', 'Fallback text')
+```
+
+### Adding New Modules
+
+When adding new JavaScript modules, follow these conventions:
+
+1. **Define the module object** at the top level
+2. **Include JSDoc comments** for all methods
+3. **Use dependencies correctly** (order matters!)
+4. **Export for Node.js** if needed:
+
+```javascript
+// js/new-module.js
+
+const NewModule = {
+    /**
+     * Method description
+     * @param {string} param - Parameter description
+     * @returns {string} - Return value description
+     */
+    methodName(param) {
+        // Method implementation
+        return result;
+    }
+};
+
+// Export for Node.js (optional)
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { NewModule };
+}
+```
+
+### Global Functions
+
+Some functions are exposed globally for HTML onclick handlers:
+
+```javascript
+// Defined in js/app.js
+function toggleTheme() { Theme.toggle(); }
+function toggleCart() { Cart.toggle(); }
+function updateLang(lang) { Language.update(lang); }
+function openCheckout() { Checkout.open(); }
+// ... and more in js/app.js
 ```
 
 ## Getting Started
