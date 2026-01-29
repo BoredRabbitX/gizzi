@@ -204,6 +204,25 @@ const Language = {
     },
     
     /**
+     * Mappa delle pagine per lingua
+     */
+    pageMappings: {
+        it: { contact: 'contatti', shipping: 'spedizioni', returns: 'resi', faq: 'faq' },
+        en: { contact: 'contact', shipping: 'shipping', returns: 'returns', faq: 'faq-en' },
+        de: { contact: 'kontakt', shipping: 'versand', returns: 'rueckgabe', faq: 'faq' },
+        hu: { contact: 'kapcsolat', shipping: 'szallitas', returns: 'visszakuldes', faq: 'gyik' }
+    },
+    
+    /**
+     * Ottiene l'ID della pagina nella lingua corrente
+     * @param {string} pageType - Tipo di pagina (contact, shipping, returns, faq)
+     * @returns {string} - ID della pagina
+     */
+    getPageId(pageType) {
+        return this.pageMappings[state.lang]?.[pageType] || this.pageMappings['it'][pageType];
+    },
+    
+    /**
      * Aggiorna il footer
      */
     updateFooter() {
@@ -243,37 +262,41 @@ const Language = {
         if (supportH4) supportH4.textContent = t('footer.support');
         if (supportLinks[0]) {
             supportLinks[0].textContent = t('footer.contact');
+            supportLinks[0].href = '#' + this.getPageId('contact');
             supportLinks[0].onclick = (e) => { 
                 e.preventDefault(); 
                 if (typeof Router !== 'undefined') {
-                    Router.navigate('contatti');
+                    Router.navigate(this.getPageId('contact'));
                 }
             };
         }
         if (supportLinks[1]) {
             supportLinks[1].textContent = t('footer.shippingInfo');
+            supportLinks[1].href = '#' + this.getPageId('shipping');
             supportLinks[1].onclick = (e) => { 
                 e.preventDefault(); 
                 if (typeof Router !== 'undefined') {
-                    Router.navigate('spedizioni');
+                    Router.navigate(this.getPageId('shipping'));
                 }
             };
         }
         if (supportLinks[2]) {
             supportLinks[2].textContent = t('footer.returns');
+            supportLinks[2].href = '#' + this.getPageId('returns');
             supportLinks[2].onclick = (e) => { 
                 e.preventDefault(); 
                 if (typeof Router !== 'undefined') {
-                    Router.navigate('resi');
+                    Router.navigate(this.getPageId('returns'));
                 }
             };
         }
         if (supportLinks[3]) {
             supportLinks[3].textContent = t('footer.faq');
+            supportLinks[3].href = '#' + this.getPageId('faq');
             supportLinks[3].onclick = (e) => { 
                 e.preventDefault(); 
                 if (typeof Router !== 'undefined') {
-                    Router.navigate('faq');
+                    Router.navigate(this.getPageId('faq'));
                 }
             };
         }

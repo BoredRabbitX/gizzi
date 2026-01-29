@@ -363,10 +363,10 @@
             </div>
             <div class="footer-col">
                 <h4 id="footer-support">Assistenza</h4>
-                <a href="#contatti" onclick="Router.navigate('contatti'); return false;" id="footer-contact">Contattaci</a>
-                <a href="#spedizioni" onclick="Router.navigate('spedizioni'); return false;" id="footer-shipping">Spedizioni</a>
-                <a href="#resi" onclick="Router.navigate('resi'); return false;" id="footer-returns">Resi e Rimborsi</a>
-                <a href="#faq" onclick="Router.navigate('faq'); return false;" id="footer-faq">FAQ</a>
+                <a href="#contatti" data-page="contact" onclick="Router.navigate(Language.getPageId('contact')); return false;" id="footer-contact">Contattaci</a>
+                <a href="#spedizioni" data-page="shipping" onclick="Router.navigate(Language.getPageId('shipping')); return false;" id="footer-shipping">Spedizioni</a>
+                <a href="#resi" data-page="returns" onclick="Router.navigate(Language.getPageId('returns')); return false;" id="footer-returns">Resi e Rimborsi</a>
+                <a href="#faq" data-page="faq" onclick="Router.navigate(Language.getPageId('faq')); return false;" id="footer-faq">FAQ</a>
             </div>
             <div class="footer-col">
                 <h4>Contatti</h4>
