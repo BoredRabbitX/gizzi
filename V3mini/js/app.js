@@ -118,6 +118,9 @@ const App = {
     }
 };
 
+// Inizializza l'applicazione quando il DOM è pronto
+document.addEventListener('DOMContentLoaded', () => App.init());
+
 // Esporta per l'uso in altri moduli
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { App };
