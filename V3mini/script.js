@@ -672,6 +672,14 @@ const Loader = {
             if (this.element) this.element.style.display = 'none';
         }, 500);
         state.isLoading = false;
+    },
+    
+    forceHide() {
+        if (!this.element) this.init();
+        clearTimeout(this.timeout);
+        this.element.classList.add('hidden');
+        this.element.style.display = 'none';
+        state.isLoading = false;
     }
 };
 
